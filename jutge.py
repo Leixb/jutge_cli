@@ -92,7 +92,7 @@ parser_update.set_defaults(func=update)
 
 parser_new = subparsers.add_parser('new', help='Create new file')
 parser_new.add_argument('code', type=str, help='Problem code')
-parser_new.add_argument('-t' '--type', type=str, help='Extension', default='cpp')
+parser_new.add_argument('-t', '--type', type=str, help='Extension', default='cpp')
 parser_new.set_defaults(func=new)
 
 parser_download = subparsers.add_parser('download', help='Download to DB')
