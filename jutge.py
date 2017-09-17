@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import sys
+import logging
 
 def test(args):
     import jtest
@@ -35,7 +36,7 @@ parser.add_argument('--cookie', metavar='PHPSESSID', type=str, help='Cookie used
 
 parser_verbosity = parser.add_mutually_exclusive_group()
 parser_verbosity.add_argument('-q','--quiet', action='store_true')
-parser_verbosity.add_argument('-v','--verbosity', action='count')
+parser_verbosity.add_argument('-v','--verbosity', action='count', default=0)
 
 subparsers = parser.add_subparsers(dest='cmd')
 subparsers.required = True
@@ -89,4 +90,14 @@ parser_new.add_argument('-t' '--type', type=str, help='Extension', default='cpp'
 parser_new.set_defaults(func=new)
 
 args = parser.parse_args()
+
+if args.verbosity >= 3: log_lvl = logging.DEBUG
+elif args.verbosity == 2: log_lvl = logging.INFO
+elif args.verbosity == 1: log_lvl = logging.WARNING
+elif args.quiet: log_lvl = logging.CRITICAL
+else: log_lvl = logging.ERROR
+
+logging.basicConfig(format='%(name)s; %(levelname)s: %(message)s',level=log_lvl)
+log = logging.getLogger('jutge')
+
 args.func(args)
