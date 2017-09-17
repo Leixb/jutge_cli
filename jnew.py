@@ -22,7 +22,7 @@ class jnew:
     def __init__(self,args):
         code = jgetcode.jgetcode(args).code
         title = jprint.jprint(args).title
-
-        new_file = open('{}.{}'.format(title,args.type),'a')
+        file_name = '{}.{}'.format(title,args.type)
+        if not isfile(file_name) or args.overwrite: new_file = open(file_name,'a')
 
         if (template[args.type] != None ): new_file.write(template[args.type])
