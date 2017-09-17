@@ -23,9 +23,12 @@ class jdownload:
         if args.cookie != '': cookies = dict(PHPSESSID=args.cookie)
         else: cookies = {}
 
+        try: overwrite = args.overwrite
+        except AttributeError: overwrite = False
+
         # Check if already in DB
         db_folder = expanduser('{}/{}'.format(args.database,code))
-        if isdir(db_folder) and not args.overwrite:
+        if isdir(db_folder) and not overwrite:
             if isfile('{}/problem.html'.format(db_folder,code)):
                 log.info('File already in DB, continue')
                 return
