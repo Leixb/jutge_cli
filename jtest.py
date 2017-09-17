@@ -35,7 +35,9 @@ class jtest:
             test_input = open(sample_inp,'r')
             test_output = NamedTemporaryFile()
 
-            p = Popen(args.prog.name, stdin=test_input,stdout=test_output,stderr=PIPE)
+            cont += 1
+
+            p = Popen('./' + args.prog.name, stdin=test_input,stdout=test_output,stderr=PIPE)
             return_code = p.wait()
 
             if return_code: log.warning("Program returned {}".format(return_code))
@@ -57,3 +59,8 @@ class jtest:
                 print(err.output.decode('UTF-8'))
 
             test_output.close()
+        if cont == 0: print("Program has no test-cases yet")
+        elif cont == cor: 
+            print(ansi.OKGREEN, ansi.BOLD, '*** ({}/{}) ALL OK :)'.format(cor,cont), ansi.ENDC, ansi.ENDC)
+        else:
+            print(ansi.FAIL, ansi.BOLD, '*** ({}/{}) :('.format(cor,cont), ansi.ENDC, ansi.ENDC)
