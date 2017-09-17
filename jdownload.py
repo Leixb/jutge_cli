@@ -18,9 +18,10 @@ class jdownload:
             exit(3)
 
         code = jgetcode.jgetcode(args).code
+        log.debug(code)
         web = 'https://jutge.org/problems/{}'.format(code)
 
-        if args.cookie != '': cookies = dict(PHPSESSID=args.cookie)
+        if args.cookie != None: cookies = dict(PHPSESSID=args.cookie)
         else: cookies = {}
 
         try: overwrite = args.overwrite
@@ -37,6 +38,7 @@ class jdownload:
             from zipfile import ZipFile
 
             zip_url = "{}/zip".format(web)
+            log.debug(zip_url)
 
             response = requests.get(zip_url, cookies=cookies, stream=True)
             temp_zip = NamedTemporaryFile('r+b',suffix='.zip',delete=False)
