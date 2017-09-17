@@ -70,6 +70,8 @@ parser_print.add_argument('mode',type=str, choices=['title','stat','cases'])
 parser_print = parser_print.add_mutually_exclusive_group(required=True)
 parser_print.add_argument('-p','--prog',metavar='prog.cpp',type=argparse.FileType('rx'), help='Program to test')
 parser_print.add_argument('-c','--code', type=str, help='Code to use instead of searching in the filename')
+parser_print.add_argument('--inp-suffix', type=str, help='Suffix of test input files', default='inp')
+parser_print.add_argument('--cor-suffix', type=str, help='Suffix of test correct output files', default='cor')
 parser_print.set_defaults(func=jprint)
 
 parser_archive = subparsers.add_parser('archive', help='Move program to archived folder')
