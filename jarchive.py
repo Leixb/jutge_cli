@@ -4,13 +4,16 @@ import logging
 
 log = logging.getLogger('jutge.jarchive')
 
-from os.path import isdir,expanduser,isfile
+from os.path import isdir,expanduser,isfile,basename
 from shutil import move
+
+import jprint
 
 class jarchive:
     def __init__(self,args):
         title = jprint.jprint(args).title
-        dest = '{}/{}'.format(expanduser(args.folder),title)
+        ext = basename(args.prog.name).split('.')[-1]
+        dest = '{}/{}.{}'.format(expanduser(args.folder),title,ext)
 
-        if not isfile(dest) or args.overwrite: move(args.prog,dest)
+        if not isfile(dest) or args.overwrite: move(args.prog.name,dest)
 

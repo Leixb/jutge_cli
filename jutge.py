@@ -75,9 +75,10 @@ parser_print.add_argument('--cor-suffix', type=str, help='Suffix of test correct
 parser_print.set_defaults(func=jprint)
 
 parser_archive = subparsers.add_parser('archive', help='Move program to archived folder')
-parser_archive.add_argument('prog',metavar='prog.cpp',type=argparse.FileType('rw'),help='File to move')
+parser_archive.add_argument('prog',metavar='prog.cpp',type=argparse.FileType('r+'),help='File to move')
 parser_archive.add_argument('-f','--folder', type=str, help='Archived folder',default='~/Documents/Universitat/PROG/Done')
 parser_archive.add_argument('--overwrite',action='store_true',default=False)
+parser_archive.add_argument('-c','--code',type=str)
 parser_archive.set_defaults(func=archive)
 
 parser_upload = subparsers.add_parser('upload', help='Upload program for jutge evaluation')
