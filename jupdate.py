@@ -7,15 +7,21 @@ from glob import glob
 from os.path import basename,isdir,expanduser
 from os import mkdir
 from shutil import copyfile
-from tempfile import gettempdir
+from tempfile import TemporaryDirectory
 
-def getname(code):
+from time import sleep
+
+def getname(code,cookie):
     web = 'https://jutge.org/problems/{}'.format(code)
 
-    if args.cookie != None: cookies = dict(PHPSESSID=args.cookie)
+    if cookie != None: cookies = dict(PHPSESSID=cookie)
     else: cookies = {}
 
+    import requests
+
     response = requests.get(web,cookies=cookies)
+
+    from bs4 import BeautifulSoup
 
     soup = BeautifulSoup(response.text,'lxml')
 
@@ -28,10 +34,9 @@ class jupdate:
     def __init__(self,args):
         from zipfile import ZipFile
 
-        extract_to = gettempdir() + '/process_jutge_TMP'
+        extract_to = TemporaryDirectory().name
 
         zip = ZipFile(args.zip.name, 'r')
-        mkdir(extract_to)
         zip.extractall(extract_to)
         zip.close()
 
@@ -42,7 +47,7 @@ class jupdate:
         count = 0
 
         for folder in glob(extract_to + '/*') :
-            try:
+            # try:
                 code = basename(folder)
 
                 sources = []
@@ -56,11 +61,11 @@ class jupdate:
                     ext = source[1]
                     if ext == 'cc': ext = 'cpp' # Use cpp over cc for c++ files
 
-                    if not glob('{}/{}*.{}'.format(expanduser(args.folder),code,ext)) or args.overwritte:
+                    if not glob('{}/{}*.{}'.format(expanduser(args.folder),code,ext)) or args.overwrite:
                         if args.no_download:
                             name = code
                         else:
-                            name = getname(code)
+                            name = getname(code,args.cookie)
 
                             if name == 'Error': name = code # If name cannot be found default to code to avoid collisions
 
@@ -74,6 +79,6 @@ class jupdate:
                         if args.delay > 0:
                             sleep(args.delay / 1000.0)
 
-            except: log.warning('Skipping {}'.format(folder))
+            # except: log.warning('Skipping {}'.format(folder))
 
         log.info('FINISHED; Added {} programs'.format(count))
