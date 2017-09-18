@@ -3,6 +3,8 @@
 import logging
 log = logging.getLogger('jutge.jnew')
 
+from os.path import isfile
+
 import jgetcode
 import jprint
 
