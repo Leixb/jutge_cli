@@ -30,10 +30,14 @@ def download(args):
 
 import argparse
 
+from jdefaults import jconfig
+
+config = jconfig().param
+
 parser = argparse.ArgumentParser(prog='jutge')
 
-parser.add_argument('-d','--database', type=str, help='Directory containing the test samples', default='~/Documents/Universitat/PROG/DB')
-parser.add_argument('-r','--regex',type=str, help='Regex used to find the code from filename', default='[PGQX][0-9]{5}_[a-z]{2}')
+parser.add_argument('-d','--database', type=str, help='Directory containing the test samples', default=config['database'])
+parser.add_argument('-r','--regex',type=str, help='Regex used to find the code from filename', default=config['regex'])
 parser.add_argument('--no-download', action='store_true', help='Do not attempt to fetch data from jutge.org')
 parser.add_argument('--cookie', metavar='PHPSESSID', type=str, help='Cookie used to fetch data from jutge.org')
 
@@ -47,11 +51,11 @@ subparsers.required = True
 parser_test = subparsers.add_parser('test', help='Test program using cases from database')
 parser_test.add_argument('prog',metavar='prog.cpp',type=argparse.FileType('r'), help='Program to test')
 parser_test.add_argument('-c','--code', type=str, help='Code to use instead of searching in the filename')
-parser_test.add_argument('--diff-prog', type=str, help='Diff shell command to compare tests', default='colordiff')
-parser_test.add_argument('--diff-flags', type=str, help='Diff shell command flags used to compare tests (comma separated)', default='-y')
-parser_test.add_argument('--inp-suffix', type=str, help='Suffix of test input files', default='inp')
-parser_test.add_argument('--cor-suffix', type=str, help='Suffix of test correct output files', default='cor')
-parser_test.add_argument('--no-custom', action='store_true', help='Suffix of test correct output files')
+parser_test.add_argument('--diff-prog', type=str, help='Diff shell command to compare tests', default=config['diff-prog'])
+parser_test.add_argument('--diff-flags', type=str, help='Diff shell command flags used to compare tests (comma separated)', default=config['diff-flags'])
+parser_test.add_argument('--inp-suffix', type=str, help='Suffix of test input files', default=config['inp-suffix'])
+parser_test.add_argument('--cor-suffix', type=str, help='Suffix of test correct output files', default=config['cor-suffix'])
+parser_test.add_argument('--no-custom', action='store_true', help='Do not test custom cases')
 parser_test.set_defaults(func=test)
 
 parser_add_cases = subparsers.add_parser('add-cases', help='Add custom test-cases in database')
@@ -60,8 +64,8 @@ parser_add_cases_code.add_argument('-p','--prog',metavar='prog.cpp',type=argpars
 parser_add_cases_code.add_argument('-c','--code', type=str, help='Code to use instead of searching in the filename')
 parser_add_cases.add_argument('-i','--input-file', metavar='test1.inp', type=argparse.FileType('r'), help='Input file', default=sys.stdin)
 parser_add_cases.add_argument('-o','--output-file', metavar='test1.cor', type=argparse.FileType('r'), help='Expected output file', default=sys.stdin)
-parser_add_cases.add_argument('--inp-suffix', type=str, help='Suffix of test input files', default='inp')
-parser_add_cases.add_argument('--cor-suffix', type=str, help='Suffix of test correct output files', default='cor')
+parser_add_cases.add_argument('--inp-suffix', type=str, help='Suffix of test input files', default=config['inp-suffix'])
+parser_add_cases.add_argument('--cor-suffix', type=str, help='Suffix of test correct output files', default=config['cor-suffix'])
 parser_add_cases.add_argument('--delete', action='store_true', help='Delete all custom tests for problem', default=False)
 parser_add_cases.set_defaults(func=add_cases)
 
@@ -70,13 +74,13 @@ parser_print.add_argument('mode',type=str, choices=['title','stat','cases'])
 parser_print = parser_print.add_mutually_exclusive_group(required=True)
 parser_print.add_argument('-p','--prog',metavar='prog.cpp',type=argparse.FileType('r'), help='Program to test')
 parser_print.add_argument('-c','--code', type=str, help='Code to use instead of searching in the filename')
-parser_print.add_argument('--inp-suffix', type=str, help='Suffix of test input files', default='inp')
-parser_print.add_argument('--cor-suffix', type=str, help='Suffix of test correct output files', default='cor')
+parser_print.add_argument('--inp-suffix', type=str, help='Suffix of test input files', default=config['inp-suffix'])
+parser_print.add_argument('--cor-suffix', type=str, help='Suffix of test correct output files', default=config['cor-suffix'])
 parser_print.set_defaults(func=jprint)
 
 parser_archive = subparsers.add_parser('archive', help='Move program to archived folder')
 parser_archive.add_argument('prog',metavar='prog.cpp',type=argparse.FileType('r+'),help='File to move')
-parser_archive.add_argument('-f','--folder', type=str, help='Archived folder',default='~/Documents/Universitat/PROG/Done')
+parser_archive.add_argument('-f','--folder', type=str, help='Archived folder',default=config['folder'])
 parser_archive.add_argument('--overwrite',action='store_true',default=False)
 parser_archive.add_argument('-c','--code',type=str)
 parser_archive.set_defaults(func=archive)
@@ -87,7 +91,7 @@ parser_upload.set_defaults(func=upload)
 
 parser_update = subparsers.add_parser('update', help='Add programs to Archived folder fom zip file')
 parser_update.add_argument('zip', type=argparse.FileType('r'), help='Zip file containing the problems')
-parser_update.add_argument('-f','--folder', type=str, help='Archived folder',default='~/Documents/Universitat/PROG/Done')
+parser_update.add_argument('-f','--folder', type=str, help='Archived folder',default=config['folder'])
 parser_update.add_argument('--delay', type=int, metavar='milliseconds', default=100)
 parser_update.add_argument('--overwrite',action='store_true')
 parser_update.set_defaults(func=update)
@@ -115,5 +119,8 @@ else: log_lvl = logging.ERROR
 
 logging.basicConfig(format='%(name)s; %(levelname)s: %(message)s',level=log_lvl)
 log = logging.getLogger('jutge')
+
+log.debug(args.regex)
+log.debug(args.database)
 
 args.func(args)
