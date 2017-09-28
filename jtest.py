@@ -64,3 +64,4 @@ class jtest:
             print(ansi.OKGREEN, ansi.BOLD, '*** ({}/{}) ALL OK :)'.format(cor,cont), ansi.ENDC, ansi.ENDC)
         else:
             print(ansi.FAIL, ansi.BOLD, '*** ({}/{}) :('.format(cor,cont), ansi.ENDC, ansi.ENDC)
+        exit(cont-cor)
