@@ -43,6 +43,19 @@ begins with the code. The code must match the following regular expression:
 `[PGQX][0-9]{5}_[a-z]{2}` (note that the code includes the language). You can provide a custom regular expression
 through the `--regex` flag.
 
+Configuration
+-------------
+
+You can configure default parameters through the config file: `~/.jutge_cli.conf`
+using the following syntax:
+
+```ini
+[DEFAULT]
+regex=P[0-9]{5}_ca
+database=~/Documents/my_db
+folder=~/Documents/done
+```
+
 Cookie handling
 ---------------
 
@@ -188,7 +201,6 @@ TODO
 
 - Label custom tests in jutge_test
 - jutge_test should return 1 if tests fail and 0 otherwise
-- Add support for configuration files in `$XDG_CONFIG`
 - Improve cookie handling
 - `jutge upload`
 - Better documentation
