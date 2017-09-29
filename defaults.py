@@ -1,5 +1,8 @@
 #!/usr/bin/python3
 
+import logging
+log = logging.getLogger('jutge.defaults')
+
 import configparser
 from os.path import expanduser
 

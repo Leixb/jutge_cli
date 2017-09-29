@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 
 import logging
-
 log = logging.getLogger('jutge.archive')
 
 from os.path import isdir,expanduser,isfile,basename

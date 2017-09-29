@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 import logging
-log = logging.getLogger('jutge.add_cases')
+log = logging.getLogger('jutge.add_test')
 
 from os.path import isdir, expanduser,basename
 from os import mkdir,remove
