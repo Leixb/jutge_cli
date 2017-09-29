@@ -23,10 +23,6 @@ bs4
 pypandoc # optional, only used with print command
 ```
 
-Although you can specify a custom diff command when testing the cases,
-jutge_cli defaults to `colordiff` that provides colored diff output, it is
-recommended to install it.
-
 Usage
 -----
 
@@ -40,8 +36,8 @@ python3 jutge.py [COMMAND] [COMMAND_OPTIONS]
 For the program to work you will have to either specify the code of the
 problem you want to test (`-c` flag) or rename the program file so that it
 begins with the code. The code must match the following regular expression:
-`[PGQX][0-9]{5}_[a-z]{2}` (note that the code includes the language). You can provide a custom regular expression
-through the `--regex` flag.
+`[PGQX]\d{5}_(ca|en|es)` (note that the code includes the language). You can
+provide a custom regular expression through the `--regex` flag.
 
 Configuration
 -------------
@@ -53,7 +49,7 @@ default values:
 ```ini
 [DEFAULT]
 database = ~/Documents/jutge/DB
-regex = [PGQX][0-9]{5}_(ca|en|es)
+regex = [PGQX]\d{5}_(ca|en|es)
 diff-prog = diff
 diff-flags = -y
 inp-suffix = inp
@@ -64,10 +60,11 @@ folder = ~/Documents/jutge/Done
 Cookie handling
 ---------------
 
-Some problem from jutge.org (the ones which code starts with X) are
-only accessible to logged users and therefore if you want to download the required
-information from jutge.org of those problems you'll have to provide a valid PHPSSID cookie through the `--cookie` flag. This flag must appear before
-the command:
+Some problem from jutge.org (the ones which code starts with X) are only
+accessible to logged users and therefore if you want to download the required
+information from jutge.org of those problems you'll have to provide a valid
+PHPSSID cookie through the `--cookie` flag. This flag must appear before the
+command:
 
 ```sh
 jutge.py --cookie MY_COOKIE download -c X00000
@@ -147,7 +144,8 @@ the title. The `-p` flag can be used to specify the extension of the file.
 
 #### Example
 
-This command will populate create a new python file named `P87523_ca_-_Hola-adéu.py`
+This command will populate create a new python file named
+`P87523_ca_-_Hola-adéu.py`
 
 ```
 jutge.py new P87523_ca -p py
@@ -174,20 +172,21 @@ jutge.py print cases -c P87523_ca
 
 This is the most useful command in the tool set. It allows to test your code
 against all the test cases found in the database and output side by side
-differences using `colordiff`.
+differences using `diff`.
 
 The command takes an executable file as parameter and tests it against
-the test cases in the database folder. You can specify a custom diff program
+the test cases in the database folder. You can specify an alternate diff program
 to use and its flags (separated by commas) through `--diff-prog` and
 `--diff-flags`.
 
 #### Example
 
 This command will test the executable `P87523_ca_prog.x` against the test
-cases for problem P87523_ca.
+cases for problem P87523_ca. The expected output and the output of the
+program will be shown side by side using `colordiff`.
 
 ```
-jutge.py test P87523_ca_prog.x
+jutge.py test P87523_ca_prog.x --diff-prog colordiff
 ```
 
 ### Update ###
@@ -206,5 +205,4 @@ TODO
 
 - Improve cookie handling
 - `jutge upload`
-- Better documentation
 

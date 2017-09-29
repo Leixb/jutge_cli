@@ -14,7 +14,7 @@ class config:
         self.param = {}
 
         self.param['database'] = '~/Documents/jutge/DB'
-        self.param['regex'] = '[PGQX][0-9]{5}_(ca|en|es)'
+        self.param['regex'] = '[PGQX]\d{5}_(ca|en|es)'
         self.param['diff-prog'] = 'diff'
         self.param['diff-flags'] = '-y'
         self.param['inp-suffix'] = 'inp'
