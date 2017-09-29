@@ -1,11 +1,10 @@
 jutge_cli: a command line client for jutge.org
 ==============================================
 
-Intro
------
+Disclaimer
+----------
 
-`jutge_cli` provides different commands to speed up the organization and
-test of jutge.org problems.
+This is a work in progress. I will not take any responsibility if things break.
 
 Installation
 ------------
