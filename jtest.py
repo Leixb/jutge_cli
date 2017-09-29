@@ -35,6 +35,11 @@ class jtest:
             test_input = open(sample_inp,'r')
             test_output = NamedTemporaryFile()
 
+            if basename(sample_inp).startswith("custom"):
+                if args.no_custom: continue
+                is_custom = "(custom)"
+            else: is_custom = ""
+
             cont += 1
 
             p = Popen('./' + args.prog.name, stdin=test_input,stdout=test_output,stderr=PIPE)
@@ -43,7 +48,7 @@ class jtest:
             if return_code: log.warning("Program returned {}".format(return_code))
 
             test_input.seek(0)
-            print(ansi.OKBLUE, ansi.BOLD, '*** Input {}'.format(cont), ansi.ENDC, ansi.HEADER)
+            print(ansi.OKBLUE, ansi.BOLD, '*** Input {} {}'.format(cont,is_custom), ansi.ENDC, ansi.HEADER)
             print(test_input.read(), ansi.ENDC)
             test_input.close()
 

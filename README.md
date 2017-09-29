@@ -199,8 +199,6 @@ jutge.py update problems.zip
 TODO
 ----
 
-- Label custom tests in jutge_test
-- jutge_test should return 1 if tests fail and 0 otherwise
 - Improve cookie handling
 - `jutge upload`
 - Better documentation
