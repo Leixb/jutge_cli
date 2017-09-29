@@ -46,14 +46,19 @@ through the `--regex` flag.
 Configuration
 -------------
 
-You can configure default parameters through the config file: `~/.jutge_cli.conf`
-using the following syntax:
+You can configure default parameters through the configuration file:
+`~/.jutge_cli.conf`. The following example lists all the options and their
+default values:
 
 ```ini
 [DEFAULT]
-regex=P[0-9]{5}_ca
-database=~/Documents/my_db
-folder=~/Documents/done
+database = ~/Documents/jutge/DB
+regex = [PGQX][0-9]{5}_(ca|en|es)
+diff-prog = diff
+diff-flags = -y
+inp-suffix = inp
+cor-suffix = cor
+folder = ~/Documents/jutge/Done
 ```
 
 Cookie handling
