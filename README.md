@@ -70,6 +70,16 @@ command:
 jutge.py --cookie MY_COOKIE download -c X00000
 ```
 
+Alternatively you can issue the command:
+
+```sh
+jutge.py cookie MY_COOKIE
+```
+
+Which will save the cookie in a temporary file and will be used in all other
+commands. Please note that this is not ideal since the file and therefore the
+cookie is accessible in plain text by any user till next reboot.
+
 Global flags
 ------------
 
