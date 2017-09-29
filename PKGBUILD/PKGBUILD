@@ -1,6 +1,6 @@
 # Maintainer: Aleix Boné <abone9999@gmail.com>
 pkgname=jutge_cli-git 
-pkgver=r21.bd7c83e
+pkgver=r27.d022fe2
 pkgrel=1
 pkgdesc="Command line utilities for jutge.org online jutge"
 arch=('any')
