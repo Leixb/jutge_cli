@@ -3,7 +3,7 @@
 import configparser
 from os.path import expanduser
 
-class jconfig:
+class config:
     def __init__(self):
 
         config_file = expanduser('~/.jutge_cli.conf')
@@ -35,3 +35,4 @@ class jconfig:
         except configparser.NoOptionError: pass
         try: self.param['folder'] = config.get('DEFAULT', 'folder')
         except configparser.NoOptionError: pass
+

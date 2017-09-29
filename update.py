@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 import logging
-log = logging.getLogger('jutge.jupdate')
+log = logging.getLogger('jutge.update')
 
 from glob import glob
 from os.path import basename,isdir,expanduser
@@ -30,7 +30,7 @@ def getname(code,cookie):
 
     return name
 
-class jupdate:
+class update:
     def __init__(self,args):
         from zipfile import ZipFile
 
@@ -82,3 +82,4 @@ class jupdate:
             # except: log.warning('Skipping {}'.format(folder))
 
         log.info('FINISHED; Added {} programs'.format(count))
+

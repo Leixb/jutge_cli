@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 import logging
-log = logging.getLogger('jutge.jadd_cases')
+log = logging.getLogger('jutge.add_cases')
 
 from os.path import isdir, expanduser,basename
 from os import mkdir,remove
@@ -10,12 +10,12 @@ import sys
 
 import re
 
-import jgetcode
+import get_code
 
-class jadd_cases:
+class add_cases:
     def __init__(self,args):
 
-        code = jgetcode.jgetcode(args).code
+        code = get_code.get_code(args).code
         dest_folder = expanduser('{}/{}'.format(args.database,code))
 
         if args.delete:

@@ -1,12 +1,12 @@
 #!/usr/bin/python3
 
 import logging
-log = logging.getLogger('jutge.jgetcode')
+log = logging.getLogger('jutge.get_code')
 
 import re
 from os.path import basename
 
-class jgetcode:
+class get_code:
     def __init__(self,args):
         if args.code != None:
             self.code = args.code
@@ -24,3 +24,4 @@ class jgetcode:
             except AttributeError:
                 log.error("Code not found, regex failed")
                 exit(26)
+

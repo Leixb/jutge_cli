@@ -1,21 +1,21 @@
 #!/usr/bin/python3
 
 import logging
-log = logging.getLogger('jutge.jprint')
+log = logging.getLogger('jutge.show')
 
 from os.path import expanduser
 from glob import glob
 
-import jgetcode
-import jdownload
+import get_code
+import download
 
 from bs4 import BeautifulSoup
 
-class jprint:
+class show:
     def __init__(self,args):
-        code = jgetcode.jgetcode(args).code
+        code = get_code.get_code(args).code
 
-        jdownload.jdownload(args) # Download problem.html if necessary
+        download.download(args) # Download problem.html if necessary
 
         html = open('{}/{}/problem.html'.format(expanduser(args.database),code),'r')
         soup = BeautifulSoup(html,'lxml')
@@ -50,3 +50,4 @@ class jprint:
                     print(open(sample_cor,'r').read())
         except AttributeError:
             pass
+

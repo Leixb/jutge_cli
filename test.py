@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 import logging
-log = logging.getLogger('jutge.jtest')
+log = logging.getLogger('jutge.test')
 
 from glob import glob
 from os.path import expanduser, basename
@@ -9,8 +9,8 @@ from subprocess import Popen, PIPE, check_output,CalledProcessError
 
 from tempfile import NamedTemporaryFile
 
-import jgetcode
-import jdownload
+import get_code
+import download
 
 class ansi:
     HEADER = '\033[95m'
@@ -22,12 +22,12 @@ class ansi:
     UNDERLINE = '\033[4m'
     ENDC = '\033[0m'
 
-class jtest:
+class test:
     def __init__(self,args):
         cont,cor = 0,0
 
-        code = jgetcode.jgetcode(args).code
-        jdownload.jdownload(args)
+        code = get_code.get_code(args).code
+        download.download(args)
 
         for sample_inp in sorted(glob('{}/{}/*.{}'.format(expanduser(args.database),code,args.inp_suffix))):
             sample_cor = ''.join(sample_inp.split('.')[:-1]) + '.' + args.cor_suffix
@@ -70,3 +70,4 @@ class jtest:
         else:
             print(ansi.FAIL, ansi.BOLD, '*** ({}/{}) :('.format(cor,cont), ansi.ENDC, ansi.ENDC)
         exit(cont-cor)
+

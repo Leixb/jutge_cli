@@ -2,8 +2,9 @@
 
 import logging
 
-log = logging.getLogger('jutge.jupload')
+log = logging.getLogger('jutge.upload')
 
-class jupload:
+class upload:
     def __init__(self,args):
         pass
+

@@ -2,16 +2,16 @@
 
 import logging
 
-log = logging.getLogger('jutge.jarchive')
+log = logging.getLogger('jutge.archive')
 
 from os.path import isdir,expanduser,isfile,basename
 from shutil import move
 
-import jprint
+import print
 
-class jarchive:
+class archive:
     def __init__(self,args):
-        title = jprint.jprint(args).title
+        title = show.show(args).title
         ext = basename(args.prog.name).split('.')[-1]
         dest = '{}/{}.{}'.format(expanduser(args.folder),title,ext)
 

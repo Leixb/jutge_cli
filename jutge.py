@@ -4,35 +4,35 @@ import sys
 import logging
 
 def test(args):
-    import jtest
-    jtest.jtest(args)
-def add_cases(args):
-    import jadd_cases
-    jadd_cases.jadd_cases(args)
-def jprint(args):
-    import jprint
-    jprint.jprint(args)
+    import test
+    test.test(args)
+def add_test(args):
+    import add_test
+    add_test.add_test(args)
+def show(args):
+    import show
+    show.show(args)
 def archive(args):
-    import jarchive
-    jarchive.jarchive(args)
+    import archive
+    archive.archive(args)
 def upload(args):
-    import jupload
-    jupload.jupload(args)
+    import upload
+    upload.upload(args)
 def update(args):
-    import jupdate
-    jupdate.jupdate(args)
+    import update
+    update.update(args)
 def new(args):
-    import jnew
-    jnew.jnew(args)
+    import new
+    new.new(args)
 def download(args):
-    import jdownload
-    jdownload.jdownload(args)
+    import download
+    download.download(args)
 
 import argparse
 
-from jdefaults import jconfig
+from defaults import config
 
-config = jconfig().param
+config = config().param
 
 parser = argparse.ArgumentParser(prog='jutge')
 
@@ -58,25 +58,25 @@ parser_test.add_argument('--cor-suffix', type=str, help='Suffix of test correct 
 parser_test.add_argument('--no-custom', action='store_true', help='Do not test custom cases')
 parser_test.set_defaults(func=test)
 
-parser_add_cases = subparsers.add_parser('add-cases', help='Add custom test-cases in database')
-parser_add_cases_code = parser_add_cases.add_mutually_exclusive_group(required=True)
-parser_add_cases_code.add_argument('-p','--prog',metavar='prog.cpp',type=argparse.FileType('r'), help='Program to test')
-parser_add_cases_code.add_argument('-c','--code', type=str, help='Code to use instead of searching in the filename')
-parser_add_cases.add_argument('-i','--input-file', metavar='test1.inp', type=argparse.FileType('r'), help='Input file', default=sys.stdin)
-parser_add_cases.add_argument('-o','--output-file', metavar='test1.cor', type=argparse.FileType('r'), help='Expected output file', default=sys.stdin)
-parser_add_cases.add_argument('--inp-suffix', type=str, help='Suffix of test input files', default=config['inp-suffix'])
-parser_add_cases.add_argument('--cor-suffix', type=str, help='Suffix of test correct output files', default=config['cor-suffix'])
-parser_add_cases.add_argument('--delete', action='store_true', help='Delete all custom tests for problem', default=False)
-parser_add_cases.set_defaults(func=add_cases)
+parser_add_test = subparsers.add_parser('add-test', help='Add custom test-case to database')
+parser_add_test_code = parser_add_test.add_mutually_exclusive_group(required=True)
+parser_add_test_code.add_argument('-p','--prog',metavar='prog.cpp',type=argparse.FileType('r'), help='Program to test')
+parser_add_test_code.add_argument('-c','--code', type=str, help='Code to use instead of searching in the filename')
+parser_add_test.add_argument('-i','--input-file', metavar='test1.inp', type=argparse.FileType('r'), help='Input file', default=sys.stdin)
+parser_add_test.add_argument('-o','--output-file', metavar='test1.cor', type=argparse.FileType('r'), help='Expected output file', default=sys.stdin)
+parser_add_test.add_argument('--inp-suffix', type=str, help='Suffix of test input files', default=config['inp-suffix'])
+parser_add_test.add_argument('--cor-suffix', type=str, help='Suffix of test correct output files', default=config['cor-suffix'])
+parser_add_test.add_argument('--delete', action='store_true', help='Delete all custom tests for problem', default=False)
+parser_add_test.set_defaults(func=add_test)
 
-parser_print = subparsers.add_parser('print', help='Print title,statement or public cases corresponding to problem code')
-parser_print.add_argument('mode',type=str, choices=['title','stat','cases'])
-parser_print = parser_print.add_mutually_exclusive_group(required=True)
-parser_print.add_argument('-p','--prog',metavar='prog.cpp',type=argparse.FileType('r'), help='Program to test')
-parser_print.add_argument('-c','--code', type=str, help='Code to use instead of searching in the filename')
-parser_print.add_argument('--inp-suffix', type=str, help='Suffix of test input files', default=config['inp-suffix'])
-parser_print.add_argument('--cor-suffix', type=str, help='Suffix of test correct output files', default=config['cor-suffix'])
-parser_print.set_defaults(func=jprint)
+parser_show = subparsers.add_parser('show', help='Show title,statement or public cases corresponding to problem code')
+parser_show.add_argument('mode',type=str, choices=['title','stat','cases'])
+parser_show = parser_show.add_mutually_exclusive_group(required=True)
+parser_show.add_argument('-p','--prog',metavar='prog.cpp',type=argparse.FileType('r'), help='Program to test')
+parser_show.add_argument('-c','--code', type=str, help='Code to use instead of searching in the filename')
+parser_show.add_argument('--inp-suffix', type=str, help='Suffix of test input files', default=config['inp-suffix'])
+parser_show.add_argument('--cor-suffix', type=str, help='Suffix of test correct output files', default=config['cor-suffix'])
+parser_show.set_defaults(func=show)
 
 parser_archive = subparsers.add_parser('archive', help='Move program to archived folder')
 parser_archive.add_argument('prog',metavar='prog.cpp',type=argparse.FileType('r+'),help='File to move')
@@ -124,3 +124,4 @@ log.debug(args.regex)
 log.debug(args.database)
 
 args.func(args)
+

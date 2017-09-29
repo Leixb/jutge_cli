@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 import logging
-log = logging.getLogger('jutge.jdownload')
+log = logging.getLogger('jutge.download')
 
 from os.path import isdir,isfile,expanduser
 from os import mkdir
@@ -9,15 +9,15 @@ from tempfile import NamedTemporaryFile
 
 import requests
 
-import jgetcode
+import get_code
 
-class jdownload:
+class download:
     def __init__(self,args):
         if args.no_download:
             log.error('Remove --no-download flag to download')
             exit(3)
 
-        code = jgetcode.jgetcode(args).code
+        code = get_code.get_code(args).code
         log.debug(code)
         web = 'https://jutge.org/problems/{}'.format(code)
 
@@ -64,3 +64,4 @@ class jdownload:
             exit (25)
 
         open('{}/problem.html'.format(db_folder,code),'a').write(str(soup))
+
