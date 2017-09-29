@@ -27,6 +27,9 @@ def new(args):
 def download(args):
     import download
     download.download(args)
+def cookie(args):
+    import cookie
+    cookie.cookie(args)
 
 import argparse
 
@@ -108,6 +111,11 @@ parser_download_mex.add_argument('-p','--prog',metavar='prog.cpp',type=argparse.
 parser_download_mex.add_argument('-c','--code', type=str, help='Code to use instead of searching in the filename')
 parser_download.add_argument('--overwrite',action='store_true', default=False)
 parser_download.set_defaults(func=download)
+
+parser_cookie = subparsers.add_parser('cookie', help='Save cookie to tmp')
+parser_cookie.add_argument('cookie', metavar='PHPSESSID')
+parser_cookie.add_argument('--delete', action='store_true', default=False)
+parser_cookie.set_defaults(func=cookie)
 
 args = parser.parse_args()
 

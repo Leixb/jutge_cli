@@ -203,6 +203,5 @@ jutge.py update problems.zip
 TODO
 ----
 
-- Improve cookie handling
 - `jutge upload`
 

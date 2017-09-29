@@ -21,8 +21,14 @@ class download:
         log.debug(code)
         web = 'https://jutge.org/problems/{}'.format(code)
 
-        if args.cookie != None: cookies = dict(PHPSESSID=args.cookie)
+        import cookie
+
+        cookie_container = cookie.cookie(args)
+
+        if cookie_container.has_cookie: cookies = dict(PHPSESSID=cookie_container.cookie)
         else: cookies = {}
+
+        log.debug(cookies)
 
         try: overwrite = args.overwrite
         except AttributeError: overwrite = False

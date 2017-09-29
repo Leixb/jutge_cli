@@ -65,7 +65,8 @@ class update:
                         if args.no_download:
                             name = code
                         else:
-                            name = getname(code,args.cookie)
+                            import cookie
+                            name = getname(code,cookie.cookie().cookie)
 
                             if name == 'Error': name = code # If name cannot be found default to code to avoid collisions
 
