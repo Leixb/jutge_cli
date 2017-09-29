@@ -24,6 +24,22 @@ class ansi:
 
 class test:
     def __init__(self,args):
+        if args.prog.name.endswith('.cpp') or args.prog.name.endswith('.cc'):
+
+            prog_name = '.'.join(args.prog.name.split('.')[:-1]) + '.x'
+            log.debug("Compiling to {}".format(prog_name))
+
+            p = Popen(['g++', '-std=c++11', '-g', args.prog.name, '-o', prog_name])
+            return_code = p.wait()
+
+            if return_code: 
+                log.error("Compilation returned {}, aborting".format(return_code))
+                exit(return_code)
+
+        else: prog_name = args.prog.name
+
+        if prog_name[0]!='.' and prog_name[0]!='/': prog_name = './' + prog_name
+
         cont,cor = 0,0
 
         code = get_code.get_code(args).code
@@ -42,7 +58,7 @@ class test:
 
             cont += 1
 
-            p = Popen('./' + args.prog.name, stdin=test_input,stdout=test_output,stderr=PIPE)
+            p = Popen(prog_name, stdin=test_input,stdout=test_output,stderr=PIPE)
             return_code = p.wait()
 
             if return_code: log.warning("Program returned {}".format(return_code))
