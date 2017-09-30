@@ -12,7 +12,7 @@ import re
 
 import get_code
 
-class add_cases:
+class add_test:
     def __init__(self,args):
 
         code = get_code.get_code(args).code
