@@ -64,26 +64,27 @@ class test:
             if return_code: log.warning("Program returned {}".format(return_code))
 
             test_input.seek(0)
-            print(ansi.OKBLUE, ansi.BOLD, '*** Input {} {}'.format(cont,is_custom), ansi.ENDC, ansi.HEADER)
-            print(test_input.read(), ansi.ENDC)
+            if not args.quiet: print(ansi.OKBLUE, ansi.BOLD, '*** Input {} {}'.format(cont,is_custom), ansi.ENDC, ansi.HEADER)
+            if not args.quiet: print(test_input.read(), ansi.ENDC)
             test_input.close()
 
             try:
                 out  = check_output([args.diff_prog]+args.diff_flags.split(',')+[test_output.name,sample_cor])
-                print(ansi.OKGREEN, ansi.BOLD, '*** The results match :)', ansi.ENDC, ansi.ENDC)
-                print(out.decode('UTF-8'))
+                if not args.quiet: print(ansi.OKGREEN, ansi.BOLD, '*** The results match :)', ansi.ENDC, ansi.ENDC)
+                if not args.quiet: print(out.decode('UTF-8'))
 
                 cor+=1
 
             except CalledProcessError as err:   # Thrown if files doesn't match
-                print(ansi.FAIL, ansi.BOLD, '*** The results do NOT match :(', ansi.ENDC, ansi.ENDC)
-                print(err.output.decode('UTF-8'))
+                if not args.quiet: print(ansi.FAIL, ansi.BOLD, '*** The results do NOT match :(', ansi.ENDC, ansi.ENDC)
+                if not args.quiet: print(err.output.decode('UTF-8'))
 
             test_output.close()
-        if cont == 0: print("Program has no test-cases yet")
+        if cont == 0: 
+            if not args.quiet: print("Program has no test-cases yet")
         elif cont == cor: 
-            print(ansi.OKGREEN, ansi.BOLD, '*** ({}/{}) ALL OK :)'.format(cor,cont), ansi.ENDC, ansi.ENDC)
+            if not args.quiet: print(ansi.OKGREEN, ansi.BOLD, '*** ({}/{}) ALL OK :)'.format(cor,cont), ansi.ENDC, ansi.ENDC)
         else:
-            print(ansi.FAIL, ansi.BOLD, '*** ({}/{}) :('.format(cor,cont), ansi.ENDC, ansi.ENDC)
+            if not args.quiet: print(ansi.FAIL, ansi.BOLD, '*** ({}/{}) :('.format(cor,cont), ansi.ENDC, ansi.ENDC)
         exit(cont-cor)
 
