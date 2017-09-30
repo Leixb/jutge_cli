@@ -1,6 +1,6 @@
 # Maintainer: Aleix Boné <abone9999@gmail.com>
 pkgname=python-jutge_cli-git 
-pkgver=r45.7eeae64
+pkgver=r48.5b75e05
 pkgrel=1
 pkgdesc="Command line utilities for jutge.org online jutge"
 arch=('any')

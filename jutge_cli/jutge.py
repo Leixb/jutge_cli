@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+
 import sys
 import logging
 
@@ -17,17 +18,20 @@ def run_cookie(args): cookie.cookie(args)
 
 import argparse
 
+jutge_cli_version = '0.1.5'
+
 config = defaults.config().param
 
 parser = argparse.ArgumentParser(prog='jutge',
         description='''
-     ██╗██╗   ██╗████████╗ ██████╗ ███████╗     ██████╗██╗     ██╗
-     ██║██║   ██║╚══██╔══╝██╔════╝ ██╔════╝    ██╔════╝██║     ██║
-     ██║██║   ██║   ██║   ██║  ███╗█████╗      ██║     ██║     ██║
-██   ██║██║   ██║   ██║   ██║   ██║██╔══╝      ██║     ██║     ██║
-╚█████╔╝╚██████╔╝   ██║   ╚██████╔╝███████╗    ╚██████╗███████╗██║
- ╚════╝  ╚═════╝    ╚═╝    ╚═════╝ ╚══════╝     ╚═════╝╚══════╝╚═╝
-        '''
+     ██╗██╗   ██╗████████╗ ██████╗ ███████╗
+     ██║██║   ██║╚══██╔══╝██╔════╝ ██╔════╝
+     ██║██║   ██║   ██║   ██║  ███╗█████╗  
+██   ██║██║   ██║   ██║   ██║   ██║██╔══╝  
+╚█████╔╝╚██████╔╝   ██║   ╚██████╔╝███████╗
+ ╚════╝  ╚═════╝    ╚═╝    ╚═════╝ ╚══════╝
+        ''',
+        version=jutge_cli_version
         )
 
 parser.add_argument('-d','--database', type=str, help='Directory containing the test samples', default=config['database'])
