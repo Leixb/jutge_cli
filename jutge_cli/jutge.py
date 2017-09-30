@@ -29,9 +29,8 @@ parser = argparse.ArgumentParser(prog='jutge',
      ██║██║   ██║   ██║   ██║  ███╗█████╗  
 ██   ██║██║   ██║   ██║   ██║   ██║██╔══╝  
 ╚█████╔╝╚██████╔╝   ██║   ╚██████╔╝███████╗
- ╚════╝  ╚═════╝    ╚═╝    ╚═════╝ ╚══════╝
-        ''',
-        version=jutge_cli_version
+ ╚════╝  ╚═════╝    ╚═╝    ╚═════╝ ╚══════╝ v{}
+        '''.format(jutge_cli_version),
         )
 
 parent_parser = argparse.ArgumentParser(add_help=False)
