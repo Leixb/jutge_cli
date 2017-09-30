@@ -1,6 +1,6 @@
 # Maintainer: Aleix Boné <abone9999@gmail.com>
-pkgname=jutge_cli-git 
-pkgver=r44.2790ee4
+pkgname=python-jutge_cli-git 
+pkgver=r45.7eeae64
 pkgrel=1
 pkgdesc="Command line utilities for jutge.org online jutge"
 arch=('any')
@@ -14,13 +14,15 @@ source=("git+https://github.com/Leixb/jutge_cli")
 md5sums=('SKIP')
 
 pkgver() {
-    cd "$srcdir/${pkgname%-git}"
+    name="${pkgname#python-}"
+    cd "$srcdir/${name%-git}"
 
     printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
 }
 
 package() {
-    cd "$srcdir/${pkgname%-git}"
+    name="${pkgname#python-}"
+    cd "$srcdir/${name%-git}"
 
     python setup.py install --root="${pkgdir}" --optimize=1
 }
