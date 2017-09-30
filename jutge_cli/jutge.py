@@ -30,7 +30,7 @@ parser = argparse.ArgumentParser(prog='jutge',
        ██║██║   ██║   ██║   ██║  ███╗█████╗   | |   | |    | | 
   ██   ██║██║   ██║   ██║   ██║   ██║██╔══╝   | |___| |___ | | 
   ╚█████╔╝╚██████╔╝   ██║   ╚██████╔╝███████╗  \____|_____|___|
-   ╚════╝  ╚═════╝    ╚═╝    ╚═════╝ ╚══════╝  v{}
+   ╚════╝  ╚═════╝    ╚═╝    ╚═════╝ ╚══════╝  v{} by Leix_b
 
 '''.format(jutge_cli_version),
         formatter_class=argparse.RawDescriptionHelpFormatter
@@ -47,7 +47,7 @@ parent_parser_verbosity = parent_parser.add_mutually_exclusive_group()
 parent_parser_verbosity.add_argument('-q','--quiet', action='store_true')
 parent_parser_verbosity.add_argument('-v','--verbosity', action='count', default=0)
 
-subparsers = parser.add_subparsers(dest='cmd')
+subparsers = parser.add_subparsers(dest='SUBCOMMAND')
 subparsers.required = True
 
 parser_test = subparsers.add_parser('test', help='test program using cases from database', parents=[parent_parser])
@@ -133,3 +133,4 @@ def main():
     args.func(args)
 
 if __name__ == '__main__': main()
+
