@@ -1,12 +1,12 @@
 # Maintainer: Aleix Boné <abone9999@gmail.com>
 pkgname=jutge_cli-git 
-pkgver=r27.d022fe2
+pkgver=r44.2790ee4
 pkgrel=1
 pkgdesc="Command line utilities for jutge.org online jutge"
 arch=('any')
 url="https://github.com/Leixb/jutgeutils"
 license=('GPL3')
-depends=('python' 'python-beautifulsoup4' 'python-requests' 'python-argparse')
+depends=('python' 'python-beautifulsoup4' 'python-requests' 'python-argparse' 'python-pypandoc')
 makedepends=('git') 
 provides=("${pkgname%-git}")
 conflicts=("jutgeutils-git" "${pkgname%-git}")
@@ -22,13 +22,5 @@ pkgver() {
 package() {
     cd "$srcdir/${pkgname%-git}"
 
-    # Create installation folders
-    install -d "${pkgdir}/opt/${pkgname%-git}"
-    install -d "${pkgdir}/usr/bin"
-
-    # Copy script files to installation folder
-    install -D "${srcdir}/${pkgname%-git}/"*.py "${pkgdir}/opt/${pkgname%-git}"
-
-    # Create link to /usr/bin
-    ln -s "/opt/${pkgname%-git}/jutge.py" "${pkgdir}/usr/bin/jutge"
+    python setup.py install --root="${pkgdir}" --optimize=1
 }
