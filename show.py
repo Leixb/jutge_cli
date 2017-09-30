@@ -3,7 +3,7 @@
 import logging
 log = logging.getLogger('jutge.show')
 
-from os.path import expanduser
+from os.path import expanduser, basename
 from glob import glob
 
 import get_code
@@ -19,7 +19,7 @@ class show:
 
         html = open('{}/{}/problem.html'.format(expanduser(args.database),code),'r')
         soup = BeautifulSoup(html,'lxml')
-        self.title = "-".join(soup.find('title').text.split('-')[1:])
+        self.title = '-'.join(soup.find('title').text.split('-')[1:])
         self.title = self.title[1:].replace(' ','_').split()[0]
 
         try:
@@ -27,10 +27,10 @@ class show:
             elif args.mode == 'stat':
                 import pypandoc
                 # Find statements in html. First paragraph removed cause it contains junk
-                txt = soup.find('div',id="txt").find_all('p')[1:] 
+                txt = soup.find('div',id='txt').find_all('p')[1:] 
 
                 # Merge into a plain html string
-                txt = " ".join([str(i) for i in txt])
+                txt = ' '.join([str(i) for i in txt])
 
                 # Convert html to plain text using pandoc
                 txt = pypandoc.convert_text(txt,'plain','html')
@@ -42,9 +42,12 @@ class show:
                 for sample_inp in sorted(glob('{}/{}/*.{}'.format(expanduser(args.database),code,args.inp_suffix))):
                     sample_cor = ''.join(sample_inp.split('.')[:-1]) + '.' + args.cor_suffix
 
+                    if basename(sample_inp).startswith('custom'): is_custom = '(custom)'
+                    else: is_custom = ''
+
                     cont+=1
 
-                    print('### Input {}'.format(cont))
+                    print('### Input {} {}'.format(cont, is_custom))
                     print(open(sample_inp,'r').read())
                     print('### Output {}'.format(cont))
                     print(open(sample_cor,'r').read())
