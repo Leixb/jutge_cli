@@ -19,7 +19,16 @@ import argparse
 
 config = defaults.config().param
 
-parser = argparse.ArgumentParser(prog='jutge')
+parser = argparse.ArgumentParser(prog='jutge',
+        description='''
+     ██╗██╗   ██╗████████╗ ██████╗ ███████╗     ██████╗██╗     ██╗
+     ██║██║   ██║╚══██╔══╝██╔════╝ ██╔════╝    ██╔════╝██║     ██║
+     ██║██║   ██║   ██║   ██║  ███╗█████╗      ██║     ██║     ██║
+██   ██║██║   ██║   ██║   ██║   ██║██╔══╝      ██║     ██║     ██║
+╚█████╔╝╚██████╔╝   ██║   ╚██████╔╝███████╗    ╚██████╗███████╗██║
+ ╚════╝  ╚═════╝    ╚═╝    ╚═════╝ ╚══════╝     ╚═════╝╚══════╝╚═╝
+        '''
+        )
 
 parser.add_argument('-d','--database', type=str, help='Directory containing the test samples', default=config['database'])
 parser.add_argument('-r','--regex',type=str, help='Regex used to find the code from filename', default=config['regex'])
