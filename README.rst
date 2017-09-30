@@ -9,27 +9,23 @@ This is a work in progress. I will not take any responsibility if things break.
 Installation
 ------------
 
-Clone the repository and install the dependencies.
+To install python module run:
 
-### Dependencies ###
-
-This program is build in python3 and depends on the following libraries:
-
-```bash
-requests
-zipfile
-bs4
-pypandoc # optional, only used with print command
+```sh
+sudo python3 setup.py install
 ```
+
+This should install all dependencies and create an executable named `jutge` in
+your `$PATH`.
 
 Usage
 -----
 
-To use `jutge_cli` run the main file `jutge.py` with the command you want
+To use `jutge_cli` run the command `jutge` followed by the subcommand you want
 to execute:
 
 ```
-python3 jutge.py [COMMAND] [COMMAND_OPTIONS]
+jutge [SUBCOMMAND] [SUBCOMMAND_OPTIONS]
 ```
 
 For the program to work you will have to either specify the code of the
@@ -66,13 +62,13 @@ PHPSSID cookie through the `--cookie` flag. This flag must appear before the
 command:
 
 ```sh
-jutge.py --cookie MY_COOKIE download -c X00000
+jutge --cookie MY_COOKIE download -c X00000
 ```
 
 Alternatively you can issue the command:
 
 ```sh
-jutge.py cookie MY_COOKIE
+jutge cookie MY_COOKIE
 ```
 
 Which will save the cookie in a temporary file and will be used in all other
@@ -108,7 +104,7 @@ This command will add the contents of files `inp` and `cor` to the
 database as test cases for the problem `P00001_ca`
 
 ```
-jutge.py add_cases -i inp -o cor P00001_ca_prog.cpp
+jutge add_cases -i inp -o cor P00001_ca_prog.cpp
 ```
 
 ### Archive ###
@@ -122,7 +118,7 @@ use the `--overwrite` flag.
 This command will move the file `P00001_ca_prog.cpp` to the folder `Accepted` and overwrite if necessary.
 
 ```
-jutge.py archive --folder Accepted/ P00001_ca_prog.cpp --overwrite
+jutge archive --folder Accepted/ P00001_ca_prog.cpp --overwrite
 ```
 
 ### Download ###
@@ -141,7 +137,7 @@ useful when populating the database in advance.
 This command will populate the local database for problem `P00001_en`:
 
 ```
-jutge.py download -c P00001_en
+jutge download -c P00001_en
 ```
 
 
@@ -157,7 +153,7 @@ This command will populate create a new python file named
 `P87523_ca_-_Hola-adéu.py`
 
 ```
-jutge.py new P87523_ca -p py
+jutge new P87523_ca -p py
 ```
 
 ### Print ###
@@ -174,7 +170,7 @@ Those are:
 This command will print all cases in the database for the problem `P87523_ca` (if any).
 
 ```
-jutge.py print cases -c P87523_ca
+jutge print cases -c P87523_ca
 ```
 
 ### Test ###
@@ -195,7 +191,7 @@ cases for problem P87523_ca. The expected output and the output of the
 program will be shown side by side using `colordiff`.
 
 ```
-jutge.py test P87523_ca_prog.x --diff-prog colordiff
+jutge test P87523_ca_prog.x --diff-prog colordiff
 ```
 
 ### Update ###
@@ -206,7 +202,7 @@ Note that the zip file must be the one downloaded from your jutge.org
 profile.
 
 ```
-jutge.py update problems.zip
+jutge update problems.zip
 ```
 
 TODO
