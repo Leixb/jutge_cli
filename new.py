@@ -10,14 +10,14 @@ import show
 
 template = {
     'cpp':
-"""#include <bits/stdc++.h>
+'''#include <bits/stdc++.h>
 using namespace std;
 
 int main () {
-}""",
+}''',
     'py':
-"""#!/usr/bin/python3
-"""
+'''#!/usr/bin/python3
+'''
         }
 
 class new:

@@ -14,14 +14,14 @@ class get_code:
             log.debug(args.code)
             return
         try:
-            self.code = re.search("({})".format(args.regex),basename(args.prog.name)).group(1)
+            self.code = re.search('({})'.format(args.regex),basename(args.prog.name)).group(1)
             log.debug(self.code)
         except AttributeError:
-            log.warning("Code not found falling back to normal regex")
+            log.warning('Code not found falling back to normal regex')
             try:
-                self.code = re.search("({})".format(args.regex.split('_')[0]),basename(args.prog.name)).group(1) + '_ca'
+                self.code = re.search('({})'.format(args.regex.split('_')[0]),basename(args.prog.name)).group(1) + '_ca'
                 return
             except AttributeError:
-                log.error("Code not found, regex failed")
+                log.error('Code not found, regex failed')
                 exit(26)
 

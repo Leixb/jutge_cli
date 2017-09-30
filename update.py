@@ -25,7 +25,7 @@ def getname(code,cookie):
 
     soup = BeautifulSoup(response.text,'lxml')
 
-    name = "-".join(soup.find('title').text.split('-')[1:])
+    name = '-'.join(soup.find('title').text.split('-')[1:])
     name = name[1:].replace(' ','_').split()[0]
 
     return name

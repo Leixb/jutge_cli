@@ -27,13 +27,13 @@ class test:
         if args.prog.name.endswith('.cpp') or args.prog.name.endswith('.cc'):
 
             prog_name = '.'.join(args.prog.name.split('.')[:-1]) + '.x'
-            log.debug("Compiling to {}".format(prog_name))
+            log.debug('Compiling to {}'.format(prog_name))
 
             p = Popen(['g++', '-std=c++11', '-g', args.prog.name, '-o', prog_name])
             return_code = p.wait()
 
             if return_code: 
-                log.error("Compilation returned {}, aborting".format(return_code))
+                log.error('Compilation returned {}, aborting'.format(return_code))
                 exit(return_code)
 
         else: prog_name = args.prog.name
@@ -51,10 +51,10 @@ class test:
             test_input = open(sample_inp,'r')
             test_output = NamedTemporaryFile()
 
-            if basename(sample_inp).startswith("custom"):
+            if basename(sample_inp).startswith('custom'):
                 if args.no_custom: continue
-                is_custom = "(custom)"
-            else: is_custom = ""
+                is_custom = '(custom)'
+            else: is_custom = ''
 
             cont += 1
 

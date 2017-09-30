@@ -43,7 +43,7 @@ class download:
             mkdir(db_folder)
             from zipfile import ZipFile
 
-            zip_url = "{}/zip".format(web)
+            zip_url = '{}/zip'.format(web)
             log.debug(zip_url)
 
             response = requests.get(zip_url, cookies=cookies, stream=True)
@@ -63,7 +63,7 @@ class download:
         from bs4 import BeautifulSoup
         soup = BeautifulSoup(response.text,'lxml')
 
-        name = "-".join(soup.find('title').text.split('-')[1:])
+        name = '-'.join(soup.find('title').text.split('-')[1:])
         name = name[1:].replace(' ','_').split()[0]
         if name == 'Error':
             log.error("Couldn't download page, aborting...")
