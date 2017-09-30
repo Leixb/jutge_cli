@@ -5,8 +5,8 @@ log = logging.getLogger('jutge.new')
 
 from os.path import isfile
 
-import getcode
-import show
+from . import get_code
+from . import show
 
 template = {
     'cpp':

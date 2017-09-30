@@ -9,8 +9,8 @@ from subprocess import Popen, PIPE, check_output,CalledProcessError
 
 from tempfile import NamedTemporaryFile
 
-import get_code
-import download
+from . import get_code
+from . import download
 
 class ansi:
     HEADER = '\033[95m'

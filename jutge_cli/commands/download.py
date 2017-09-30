@@ -9,7 +9,7 @@ from tempfile import NamedTemporaryFile
 
 import requests
 
-import get_code
+from . import get_code
 
 class download:
     def __init__(self,args):
@@ -21,7 +21,7 @@ class download:
         log.debug(code)
         web = 'https://jutge.org/problems/{}'.format(code)
 
-        import cookie
+        from . import cookie
 
         cookie_container = cookie.cookie(args)
 

@@ -10,7 +10,7 @@ import sys
 
 import re
 
-import get_code
+from . import get_code
 
 class add_test:
     def __init__(self,args):

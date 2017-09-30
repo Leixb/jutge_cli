@@ -6,8 +6,8 @@ log = logging.getLogger('jutge.show')
 from os.path import expanduser, basename
 from glob import glob
 
-import get_code
-import download
+from . import get_code
+from . import download
 
 from bs4 import BeautifulSoup
 
