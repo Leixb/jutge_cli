@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 
-
 import sys
 import logging
 
@@ -24,13 +23,15 @@ config = defaults.config().param
 
 parser = argparse.ArgumentParser(prog='jutge',
         description='''
-     ██╗██╗   ██╗████████╗ ██████╗ ███████╗
-     ██║██║   ██║╚══██╔══╝██╔════╝ ██╔════╝
-     ██║██║   ██║   ██║   ██║  ███╗█████╗  
-██   ██║██║   ██║   ██║   ██║   ██║██╔══╝  
-╚█████╔╝╚██████╔╝   ██║   ╚██████╔╝███████╗
- ╚════╝  ╚═════╝    ╚═╝    ╚═════╝ ╚══════╝ v{}
-        '''.format(jutge_cli_version),
+       ██╗██╗   ██╗████████╗ ██████╗ ███████╗
+       ██║██║   ██║╚══██╔══╝██╔════╝ ██╔════╝
+       ██║██║   ██║   ██║   ██║  ███╗█████╗  
+  ██   ██║██║   ██║   ██║   ██║   ██║██╔══╝  
+  ╚█████╔╝╚██████╔╝   ██║   ╚██████╔╝███████╗
+   ╚════╝  ╚═════╝    ╚═╝    ╚═════╝ ╚══════╝ v{}
+
+'''.format(jutge_cli_version),
+        formatter_class=RawDescriptionHelpFormatter
         )
 
 parent_parser = argparse.ArgumentParser(add_help=False)
