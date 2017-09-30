@@ -17,7 +17,7 @@ class cookie:
             return
 
         try:
-            if not (args.cookie is None):
+            if not (args.cookie is None) and args.cookie != 'print':
                 self.cookie = args.cookie
                 self.has_cookie = True
                 self.make_file()
@@ -29,6 +29,9 @@ class cookie:
             self.has_cookie = True
             file.close()
             log.debug(self.cookie)
+        if args.cookie == 'print':
+            if self.has_cookie: print(self.cookie)
+            else: print('No saved cookie')
 
     def make_file(self):
         file = open(self.file_name,'w')
