@@ -31,7 +31,7 @@ parser = argparse.ArgumentParser(prog='jutge',
    ╚════╝  ╚═════╝    ╚═╝    ╚═════╝ ╚══════╝ v{}
 
 '''.format(jutge_cli_version),
-        formatter_class=RawDescriptionHelpFormatter
+        formatter_class=argparse.RawDescriptionHelpFormatter
         )
 
 parent_parser = argparse.ArgumentParser(add_help=False)
