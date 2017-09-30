@@ -12,10 +12,9 @@ class cookie:
         self.file_name = '{}/jutge_cli_cookie'.format(gettempdir())
         self.has_cookie = False
 
-        try: 
-            if args.delete: remove(self.file_name)
+        if args.cookie == 'delete': 
+            remove(self.file_name)
             return
-        except AttributeError: pass
 
         try:
             if not (args.cookie is None):
@@ -33,6 +32,5 @@ class cookie:
 
     def make_file(self):
         file = open(self.file_name,'w')
-        file.write(self.cookie)
-        file.write('\n')
+        file.write(self.cookie + '\n')
         file.close()
