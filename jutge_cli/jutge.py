@@ -47,7 +47,7 @@ parent_parser_verbosity = parent_parser.add_mutually_exclusive_group()
 parent_parser_verbosity.add_argument('-q','--quiet', action='store_true')
 parent_parser_verbosity.add_argument('-v','--verbosity', action='count', default=0)
 
-subparsers = parser.add_subparsers(dest='SUBCOMMAND')
+subparsers = parser.add_subparsers(title='subcommands', dest='SUBCOMMAND')
 subparsers.required = True
 
 parser_test = subparsers.add_parser('test', help='test program using cases from database', parents=[parent_parser])
