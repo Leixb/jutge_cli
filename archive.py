@@ -6,7 +6,7 @@ log = logging.getLogger('jutge.archive')
 from os.path import isdir,expanduser,isfile,basename
 from shutil import move
 
-import print
+import show
 
 class archive:
     def __init__(self,args):
