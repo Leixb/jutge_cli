@@ -231,9 +231,10 @@ This command uploads a file to jutge.org to be evaluated. Note that you must
 have a valid cookie previously saved by ``jutge cookie PHPSSID`` or you
 can provide it through the ``--cookie`` flag. As of now, the program cannot
 report if the upload was successful so you will have to check your submissions
-page manually.
+page manually. The compiler to use will be determined by the filename extension
+but you can specify another one through the ``--compiler`` flag.
 
 ::
 
-    jutge upload P00001_ca_prog.cpp
+    jutge upload P00001_ca_prog.cpp --compiler 'G++'
 

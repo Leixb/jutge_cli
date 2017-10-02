@@ -18,7 +18,7 @@ def run_cookie(args): cookie.cookie(args)
 
 import argparse
 
-jutge_cli_version = '1.0.0'
+jutge_cli_version = '1.0.1'
 
 config = defaults.config().param
 
@@ -89,6 +89,7 @@ parser_archive.set_defaults(func=run_archive)
 parser_upload = subparsers.add_parser('upload', help='Upload program for jutge evaluation', parents=[parent_parser])
 parser_upload.add_argument('prog',metavar='prog.cpp',type=argparse.FileType('r'),help='program file to upload')
 parser_upload.add_argument('-c','--code',metavar='CODE',type=str ,help='code of problem to submit')
+parser_upload.add_argument('--compiler',metavar='COMPILER_ID',type=str ,help='jutge.org compiler_id to use')
 parser_upload.set_defaults(func=run_upload)
 
 parser_update = subparsers.add_parser('update', help='add programs to archived folder from zip file', parents=[parent_parser])

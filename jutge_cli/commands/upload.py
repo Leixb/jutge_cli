@@ -70,6 +70,8 @@ class upload:
                 ws = 'WS',
                 )
 
+        if not args.compiler is None: compiler[extension] = args.compiler
+
         data = {
                 'annotation' : 'Uploaded by jutge_cli', 
                 'compiler_id' : compiler[extension], 
