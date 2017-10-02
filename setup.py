@@ -39,7 +39,7 @@ setup(
             'requests',
             'bs4',
             'argparse',
-            'yaml'
+            'pyyaml'
             ],
 
         entry_points = {
