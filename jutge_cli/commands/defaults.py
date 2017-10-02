@@ -16,7 +16,6 @@ class config:
             log.warning('No config file round')
             settings = {}
 
-
         self.param = {}
 
         self.param['database'] = '~/Documents/jutge/DB'
@@ -26,6 +25,8 @@ class config:
         self.param['inp-suffix'] = 'inp'
         self.param['cor-suffix'] = 'cor'
         self.param['folder'] = '~/Documents/jutge/Done'
+
+        self.subfolders = {}
 
         try: self.param['regex'] = settings['regex']
         except KeyError: pass
@@ -40,5 +41,7 @@ class config:
         try: self.param['cor-suffix'] = settings['cor-suffix']
         except KeyError: pass
         try: self.param['folder'] = settings['folder']
+        except KeyError: pass
+        try: self.subfolders = settings['problem_sets']
         except KeyError: pass
 

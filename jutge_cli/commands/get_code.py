@@ -8,11 +8,14 @@ from os.path import basename
 
 class get_code:
     def __init__(self,args):
-        if args.code != None:
-            self.code = args.code
-            log.debug('code in args')
-            log.debug(args.code)
-            return
+        try:
+            if args.code != None:
+                self.code = args.code
+                log.debug('code in args')
+                log.debug(args.code)
+                return
+        except AttributeError: pass
+
         try:
             self.code = re.search('({})'.format(args.regex),basename(args.prog.name)).group(1)
             log.debug(self.code)

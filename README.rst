@@ -53,6 +53,20 @@ their default values:
     cor-suffix : cor
     folder : ~/Documents/jutge/Done
 
+You can also add problem sets with the ``problem_sets`` setting. These will
+make the commands ``new``, ``archive`` and ``update`` classify problems into
+folders:
+
+.. code:: yaml
+
+    problem_sets:
+        P1: [P19724, P34279, P37297, P37469, P42042, P51126, P51352, P61634, P66529, P67171, P70955, P82374, P89265, P92351, P98960, P99182, X54725, X59678, X64734, X89070]
+        P2: [P27341, P28754, P29448, P32046, P34451, P35547, P37500, P55622, P59539, P59875, P60816, P64976, P65171, P74398, P79784, P85370, P97156, X30229, X32391, X80452]
+        P3: [P13623, P19991, P29973, P32533, P61061, P79817, P80660, P87323, P96767, X01646, X08783, X26853, X29759, X59091, X84338, X98097]
+
+The above configuration file will save problems ``P19724``, ``P34279``... into
+folder ``P1`` and so on.
+
 Cookie handling
 ---------------
 

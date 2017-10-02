@@ -6,7 +6,7 @@ log = logging.getLogger('jutge.update')
 from glob import glob
 from os.path import basename,isdir,expanduser
 from os import mkdir
-from shutil import copyfile
+from shutil import copyfile, symlink
 from tempfile import TemporaryDirectory
 
 from time import sleep
@@ -69,11 +69,29 @@ class update:
                             name = getname(code,cookie.cookie().cookie)
 
                             if name == 'Error': name = code # If name cannot be found default to code to avoid collisions
+                        
+                        dest_folder = expanduser(args.folder)
 
-                        file_name = '{}/{}.{}'.format(expanduser(args.folder),name,ext)
+                        file_name = '{}/{}.{}'.format(dest_folder,name,ext)
 
                         log.info('Copying {} to {} ...'.format(source[0],file_name))
                         copyfile(source[0],file_name)
+
+                        sub_code = code.split('_')[0]
+                        sym_link = '.'
+
+                        for sub_folder, problems in defaults.config().subfolders.items():
+                            if sub_code in problems:
+                                sym_link = '{}/{}'.format(dest_folder,sub_folder)
+                                if not isdir(sym_link): mkdir(sym_link)
+
+                        if sym_link != '.':
+                            sym_link = '{}/{}.{}'.format(sym_link,name,ext)
+                            try:
+                                symlink(source, sym_link)
+                                log.debug('Symlink {} -> {}'.format(sym_link,source[0]))
+                            except FileExistsError:
+                                log.warning('Symlink already exists')
 
                         count += 1
 
