@@ -38,7 +38,7 @@ class archive:
             try:
                 symlink(source, sym_link)
                 log.debug('Symlink {} -> {}'.format(sym_link,source))
-                if not args.no_delete: remove(args.prog.name)
+                if isfile(args.prog.name) and not args.no_delete: remove(args.prog.name)
             except FileExistsError:
                 log.error('Symlink already exists')
 
