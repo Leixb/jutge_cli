@@ -39,20 +39,19 @@ language). You can provide a custom regular expression through the
 Configuration
 -------------
 
-You can configure default parameters through the configuration file:
-``~/.jutge_cli.conf``. The following example lists all the options and
+You can configure default parameters through the YAML configuration file:
+``~/.jutge_cli.yaml``. The following example lists all the options and
 their default values:
 
-.. code:: ini
+.. code:: yaml
 
-    [DEFAULT]
-    database = ~/Documents/jutge/DB
-    regex = [PGQX]\d{5}_(ca|en|es)
-    diff-prog = diff
-    diff-flags = -y
-    inp-suffix = inp
-    cor-suffix = cor
-    folder = ~/Documents/jutge/Done
+    database : ~/Documents/jutge/DB
+    regex : '[PGQX]\d{5}_(ca|en|es)'
+    diff-prog : diff
+    diff-flags : -y
+    inp-suffix : inp
+    cor-suffix : cor
+    folder : ~/Documents/jutge/Done
 
 Cookie handling
 ---------------

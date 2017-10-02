@@ -12,7 +12,7 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
 
 setup(
         name='jutge_cli',
-        version='1.0.1',
+        version='1.1.0',
 
         description='CLI to manage jutge.org problems',
         long_description=long_description,
@@ -38,7 +38,8 @@ setup(
             'pypandoc',
             'requests',
             'bs4',
-            'argparse'
+            'argparse',
+            'yaml'
             ],
 
         entry_points = {
