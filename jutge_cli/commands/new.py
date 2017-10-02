@@ -25,7 +25,6 @@ int main () {
 class new:
     def __init__(self,args):
         code = get_code.get_code(args).code
-        if not '_' in code: code += '_ca'
         sub_code = code.split('_')[0]
         title = show.show(args).title
 

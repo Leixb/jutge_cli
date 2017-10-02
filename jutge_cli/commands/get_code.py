@@ -11,6 +11,9 @@ class get_code:
         try:
             if args.code != None:
                 self.code = args.code
+
+                if not '_' in self.code:
+                    self.code += '_ca'
                 log.debug('code in args')
                 log.debug(args.code)
                 return
