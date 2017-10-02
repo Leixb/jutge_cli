@@ -18,7 +18,7 @@ def run_cookie(args): cookie.cookie(args)
 
 import argparse
 
-jutge_cli_version = '0.1.5'
+jutge_cli_version = '1.0.0'
 
 config = defaults.config().param
 

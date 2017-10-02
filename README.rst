@@ -224,7 +224,16 @@ your jutge.org profile.
 
     jutge update problems.zip
 
-TODO
-----
+Upload
+~~~~~~
 
--  ``jutge upload``
+This command uploads a file to jutge.org to be evaluated. Note that you must
+have a valid cookie previously saved by ``jutge cookie PHPSSID`` or you
+can provide it through the ``--cookie`` flag. As of now, the program cannot
+report if the upload was successful so you will have to check your submissions
+page manually.
+
+::
+
+    jutge upload P00001_ca_prog.cpp
+
