@@ -5,8 +5,8 @@ log = logging.getLogger('jutge.update')
 
 from glob import glob
 from os.path import basename,isdir,expanduser
-from os import mkdir
-from shutil import copyfile, symlink
+from os import mkdir, symlink
+from shutil import copyfile
 from tempfile import TemporaryDirectory
 
 from time import sleep
