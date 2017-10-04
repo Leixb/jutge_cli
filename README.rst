@@ -19,6 +19,8 @@ To install python module run:
 This should install all dependencies and create an executable named
 ``jutge`` in your ``$PATH``.
 
+There is also a ``PKGBUILD`` included in the repository for arch linux users.
+
 Usage
 -----
 
