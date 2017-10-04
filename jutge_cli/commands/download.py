@@ -96,5 +96,5 @@ class download:
         if cookie_container.check_cookie() != None: 
             soup.find('input', {'name' : 'token_uid'})['value'] = ''
 
-        open('{}/problem.html'.format(db_folder,code),'a').write(str(soup))
+        open('{}/problem.html'.format(db_folder,code),'w').write(str(soup))
 
