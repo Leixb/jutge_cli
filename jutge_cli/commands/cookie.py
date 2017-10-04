@@ -87,7 +87,7 @@ class cookie:
 
             self.check_done = True
             return self.username
-        except FileExistsError:
+        except AttributeError:
             self.username = None
             log.debug('Invalid cookie: {}'.format(self.cookie))
 
