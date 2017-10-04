@@ -111,7 +111,7 @@ Commands
 ``jutge_cli`` consists of different commands that achieve different
 things.
 
-Add cases
+Add cases (add)
 ~~~~~~~~~
 
 This command adds a custom test case into the database. The case can be
@@ -128,7 +128,7 @@ database as test cases for the problem ``P00001_ca``
 
     jutge add_cases -i inp -o cor P00001_ca_prog.cpp
 
-Archive
+Archive (done)
 ~~~~~~~
 
 This command moves a file to the ``Done`` folder. This folder can be
@@ -145,7 +145,7 @@ This command will move the file ``P00001_ca_prog.cpp`` to the folder
 
     jutge archive --folder Accepted/ P00001_ca_prog.cpp --overwrite
 
-Download
+Download (down)
 ~~~~~~~~
 
 This command will attempt to download the html page and zip file
@@ -166,7 +166,7 @@ This command will populate the local database for problem ``P00001_en``:
 
     jutge download -c P00001_en
 
-New
+New (create)
 ~~~
 
 This command must be followed by a code. It will fetch the problem title
@@ -184,7 +184,7 @@ This command will populate create a new python file named
 
     jutge new P87523_ca -p py
 
-Print
+Show (print)
 ~~~~~
 
 This command provides 3 sub commands to print to stdout information
@@ -227,7 +227,7 @@ the program will be shown side by side using ``colordiff``.
 
     jutge test P87523_ca_prog.x --diff-prog colordiff
 
-Update
+Update (import)
 ~~~~~~
 
 This command extracts all accepted submissions from a jutge.org zip
@@ -239,7 +239,7 @@ your jutge.org profile.
 
     jutge update problems.zip
 
-Upload
+Upload (up)
 ~~~~~~
 
 This command uploads a file to jutge.org to be evaluated. Note that you must
@@ -253,7 +253,7 @@ but you can specify another one through the ``--compiler`` flag.
 
     jutge upload P00001_ca_prog.cpp --compiler 'G++'
 
-Check-submissions
+Check-submissions (check)
 ~~~~~~~~~~~~~~~~~
 
 This command checks the last submissions to jutge.org and displays them in the
