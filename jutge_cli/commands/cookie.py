@@ -53,7 +53,7 @@ class cookie:
             log.debug(self.cookie)
         if args.cookie == 'print' or args.cookie == 'show':
             if self.has_cookie: print(self.cookie)
-            else: print('No saved cookie')
+            else: log.warning('No cookie saved')
 
     def make_file(self):
         file = open(self.file_name,'w')
