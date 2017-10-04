@@ -137,6 +137,7 @@ parser_check_submissions.set_defaults(func=run_check_submissions)
 
 parser_cookie = subparsers.add_parser('cookie', help='save cookie to temporary file for later use to delete cookie isse the command: jutge cookie delete', parents=[parent_parser])
 parser_cookie.add_argument('cookie', metavar='PHPSESSID', help='cookie to save (special values: delete -> deletes saved cookie; print -> print current saved cookie)')
+parser_cookie.add_argument('--skip-check', action='store_true', help='Save cookie file even if not valid', default=False)
 parser_cookie.set_defaults(func=run_cookie)
 
 def main():

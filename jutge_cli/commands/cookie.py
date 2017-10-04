@@ -35,9 +35,13 @@ class cookie:
             return
 
         try:
-            if not (args.cookie is None) and args.cookie != 'print':
+            if not (args.cookie is None) and args.cookie != 'print' and args.cookie != 'show':
                 self.cookie = args.cookie
                 self.has_cookie = True
+                if not args.skip_check:
+                    if self.check_cookie() == None:
+                        log.error('Invalid cookie, if you want to skip the check use --skip-check')
+                        exit(3)
                 self.make_file()
                 return
         except AttributeError: pass
@@ -47,7 +51,7 @@ class cookie:
             self.has_cookie = True
             file.close()
             log.debug(self.cookie)
-        if args.cookie == 'print':
+        if args.cookie == 'print' or args.cookie == 'show':
             if self.has_cookie: print(self.cookie)
             else: print('No saved cookie')
 
