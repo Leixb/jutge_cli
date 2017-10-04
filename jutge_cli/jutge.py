@@ -30,6 +30,7 @@ def run_update(args): update.update(args)
 def run_new(args): new.new(args)
 def run_download(args): download.download(args)
 def run_cookie(args): cookie.cookie(args)
+def run_check_submissions(args): check_submissions.check_submissions(args)
 
 import argparse
 
@@ -127,6 +128,12 @@ parser_download_mex.add_argument('-p','--prog',metavar='prog.cpp',type=argparse.
 parser_download_mex.add_argument('-c','--code', type=str, help='problem code')
 parser_download.add_argument('--overwrite',action='store_true', help='overwrite existing files in database', default=False)
 parser_download.set_defaults(func=run_download)
+
+parser_check_submissions = subparsers.add_parser('check-submissions', help='check last sent submissions', parents=[parent_parser])
+parser_check_submissions_mode = parser_check_submissions.add_mutually_exclusive_group()
+parser_check_submissions_mode.add_argument('--last', action='store_true', help='only show last submission', default=False)
+parser_check_submissions_mode.add_argument('--reverse', action='store_true', help='show last submission on top', default=False)
+parser_check_submissions.set_defaults(func=run_check_submissions)
 
 parser_cookie = subparsers.add_parser('cookie', help='save cookie to temporary file for later use to delete cookie isse the command: jutge cookie delete', parents=[parent_parser])
 parser_cookie.add_argument('cookie', metavar='PHPSESSID', help='cookie to save (special values: delete -> deletes saved cookie; print -> print current saved cookie)')
