@@ -33,7 +33,7 @@ def run_cookie(args): cookie.cookie(args)
 
 import argparse
 
-jutge_cli_version = '1.2.0'
+jutge_cli_version = '1.2.1'
 
 config = defaults.config().param
 
