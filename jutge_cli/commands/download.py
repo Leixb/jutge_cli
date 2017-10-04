@@ -45,6 +45,14 @@ class download:
 
         log.debug(cookies)
 
+        if code[0] == 'X':
+            if cookies == {}:
+                log.error('Cookie needed to download problem')
+                exit(25)
+            elif cookie_container.check_cookie() == None:
+                log.error('Invalid cookie')
+                exit(26)
+
         try: overwrite = args.overwrite
         except AttributeError: overwrite = False
 
@@ -83,6 +91,10 @@ class download:
         if name == 'Error':
             log.error("Couldn't download page, aborting...")
             exit (25)
+
+        # Delete token uid from database
+        if cookie_container.check_cookie() != None: 
+            soup.find('input', {'name' : 'token_uid'})['value'] = ''
 
         open('{}/problem.html'.format(db_folder,code),'a').write(str(soup))
 

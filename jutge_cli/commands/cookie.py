@@ -26,6 +26,9 @@ class cookie:
     def __init__(self,args):
         self.file_name = '{}/jutge_cli_cookie'.format(gettempdir())
         self.has_cookie = False
+        self.check_done = False
+
+        self.no_download = args.no_download
 
         if args.cookie == 'delete': 
             remove(self.file_name)
@@ -52,3 +55,42 @@ class cookie:
         file = open(self.file_name,'w')
         file.write(self.cookie + '\n')
         file.close()
+
+    def check_cookie(self):
+
+        if self.check_done: return self.username
+
+        if self.no_download:
+            log.debug('Cannot check cookie if no-download active')
+            return None
+
+        import requests
+        from bs4 import BeautifulSoup
+
+        cookies = { 'PHPSESSID' : self.cookie }
+        web = 'https://jutge.org/dashboard'
+
+        response = requests.get(web, cookies=cookies)
+        soup = BeautifulSoup(response.text,'lxml')
+
+        try:
+            tags = soup.findAll('a', {'href' : '/profile'})
+            for tag in tags:
+                log.debug(tag.b)
+                if tag.b != None:
+                    self.username = tag.b.contents[0]
+                    log.debug(tag.b)
+                    break
+
+            log.debug(self.username)
+            log.debug('Logged in as: {}'.format(self.username))
+
+            self.check_done = True
+            return self.username
+        except FileExistsError:
+            self.username = None
+            log.debug('Invalid cookie: {}'.format(self.cookie))
+
+            self.check_done = True
+            return self.username
+

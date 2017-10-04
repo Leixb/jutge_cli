@@ -43,8 +43,12 @@ class upload:
 
         if cookie_container.has_cookie: cookies = dict(PHPSESSID=cookie_container.cookie)
         else:
-            log.error("We need cookie to upload")
+            log.error('We need cookie to upload')
             exit(25)
+
+        if cookie_container.check_cookie() == None:
+            log.error('Invalid cookie')
+            exit(26)
 
         # We need token_uid for POST to work
 
