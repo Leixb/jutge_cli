@@ -251,3 +251,15 @@ but you can specify another one through the ``--compiler`` flag.
 
     jutge upload P00001_ca_prog.cpp --compiler 'G++'
 
+Check-submissions
+~~~~~~~~~~~~~~~~~
+
+This command checks the last submissions to jutge.org and displays them in the
+terminal. The program will return 0 if the last submission's veredict is ``AC``
+and 1 otherwise. This subcommand accept 2 flags: ``--last`` that tells it to
+show only the last submission and ``--reverse`` that shows the last submission 
+on top of the list:
+
+::
+    
+    jutge check-submissions --last
