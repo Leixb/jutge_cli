@@ -34,7 +34,7 @@ def run_check_submissions(args): check_submissions.check_submissions(args)
 
 import argparse
 
-jutge_cli_version = '1.3.0'
+jutge_cli_version = '1.3.1'
 
 config = defaults.config().param
 
