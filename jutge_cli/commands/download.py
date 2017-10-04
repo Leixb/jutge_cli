@@ -63,7 +63,7 @@ class download:
                 log.info('File already in DB, continue')
                 return
         else:
-            mkdir(db_folder)
+            if not isdir(db_folder): mkdir(db_folder)
             from zipfile import ZipFile
 
             zip_url = '{}/zip'.format(web)
