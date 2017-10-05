@@ -27,14 +27,15 @@ from . import show
 from . import defaults
 
 template = {
-    'cpp':
-'''#include <bits/stdc++.h>
+    'cpp': '''\
+#include <bits/stdc++.h>
 using namespace std;
 
 int main () {
-}''',
-    'py':
-'''#!/usr/bin/python3
+}
+''',
+    'py': '''\
+#!/usr/bin/python3
 '''
         }
 
