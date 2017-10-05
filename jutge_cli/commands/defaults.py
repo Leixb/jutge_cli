@@ -31,15 +31,15 @@ class config:
             log.warning('No config file round')
             settings = {}
 
-        self.param = {}
-
-        self.param['database'] = '~/Documents/jutge/DB'
-        self.param['regex'] = '[PGQX]\d{5}_(ca|en|es)'
-        self.param['diff-prog'] = 'diff'
-        self.param['diff-flags'] = '-y'
-        self.param['inp-suffix'] = 'inp'
-        self.param['cor-suffix'] = 'cor'
-        self.param['folder'] = '~/Documents/jutge/Done'
+        self.param = dict(
+            database = '~/Documents/jutge/DB',
+            regex = '[PGQX]\d{5}_(ca|en|es)',
+            diff-prog = 'diff',
+            diff-flags = '-y',
+            inp-suffix = 'inp',
+            cor-suffix = 'cor',
+            folder = '~/Documents/jutge/Done',
+        )
 
         self.subfolders = {}
 
