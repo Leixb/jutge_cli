@@ -1,6 +1,6 @@
 # Maintainer: Aleix Boné <abone9999@gmail.com>
 pkgname=python-jutge_cli-git 
-pkgver=r83.580c202
+pkgver=r89.ba912cf
 pkgrel=1
 pkgdesc="Command line utilities for jutge.org online jutge"
 arch=('any')
@@ -27,5 +27,5 @@ package() {
     python setup.py install --root="${pkgdir}" --optimize=1
 
     # Add completion for zsh
-    cp zsh_completion/_jutge "${pkgdir}/usr/share/zsh/functions/Completion/Unix/_jutge"
+    install -Dm644 "zsh_completion/_jutge" "${pkgdir}/usr/share/zsh/functions/Completion/Unix/_jutge"
 }
