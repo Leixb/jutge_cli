@@ -102,7 +102,7 @@ class upload:
         log.debug(data)
 
         files= {
-                'file' : open(args.prog.name,'r')
+                'file' : [ '{}.{}'.format(code,extension)  , open(args.prog.name,'r')]
                 }
 
         requests.post(web, data=data, files=files, cookies=cookies)
