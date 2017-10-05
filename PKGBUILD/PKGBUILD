@@ -27,8 +27,5 @@ package() {
     python setup.py install --root="${pkgdir}" --optimize=1
 
     # Add completion for zsh
-    completion_folder="${pkgdir}/usr/share/zsh/functions/Completion/Unix"
-    mkdir -p "${completion_folder}"
-
-    cp zsh_completion/_jutge "${completion_folder}/_jutge"
+    install -Dm644 "zsh_completion/_jutge" "${pkgdir}/usr/share/zsh/functions/Completion/Unix/_jutge"
 }
