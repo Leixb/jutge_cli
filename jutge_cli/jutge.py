@@ -120,6 +120,7 @@ parser_new = subparsers.add_parser('new', aliases=['create'], help='create new f
 parser_new.add_argument('code', type=str, help='problem code')
 parser_new.add_argument('-t', '--type', type=str, help='file extension', default='cpp')
 parser_new.add_argument('--overwrite',action='store_true', help='overwrite existing files', default=False)
+parser_new.add_argument('--problem-set',action='store_true', help='Create all files in problem set', default=False)
 parser_new.set_defaults(func=run_new)
 
 parser_download = subparsers.add_parser('download', aliases=['down'], help='download problem files to local database', parents=[parent_parser])
