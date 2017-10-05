@@ -27,19 +27,24 @@ from . import show
 from . import defaults
 
 template = {
-    'cpp':
-'''#include <bits/stdc++.h>
+    'cpp': '''\
+#include <bits/stdc++.h>
 using namespace std;
 
 int main () {
-}''',
-    'py':
-'''#!/usr/bin/python3
+}
+''',
+    'py': '''\
+#!/usr/bin/python3
 '''
         }
 
 class new:
     def __init__(self,args):
+        if args.problem_set: self.problem_set(args)
+        else: self.standalone_file(args)
+
+    def standalone_file(self,args):
         code = get_code.get_code(args).code
         sub_code = code.split('_')[0]
         title = show.show(args).title
@@ -55,6 +60,29 @@ class new:
         file_name = '{}/{}.{}'.format(dest_folder,title,args.type)
         if not isfile(file_name) or args.overwrite: new_file = open(file_name,'a')
 
-
         if (template[args.type] != None ): new_file.write(template[args.type])
+
+    def problem_set(self,args):
+        try: problems = defaults.config().subfolders[args.code]
+        except KeyError:
+            log.error('Problem set not found')
+            exit(20)
+
+        dest_folder = args.code
+        if not isdir(dest_folder): mkdir(dest_folder)
+
+        args_dict = vars(args)
+
+        for subcode in problems:
+            args_dict['code'] = subcode
+            code = get_code.get_code(args).code
+
+            log.debug(code)
+
+            title = show.show(args).title
+            file_name = '{}/{}.{}'.format(dest_folder,title,args.type)
+
+            if not isfile(file_name) or args.overwrite: new_file = open(file_name,'a')
+
+            if (template[args.type] != None ): new_file.write(template[args.type])
 

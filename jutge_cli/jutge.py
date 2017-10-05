@@ -34,7 +34,7 @@ def run_check_submissions(args): check_submissions.check_submissions(args)
 
 import argparse
 
-jutge_cli_version = '1.3.2'
+jutge_cli_version = '1.4.0'
 
 config = defaults.config().param
 
@@ -104,9 +104,12 @@ parser_archive.add_argument('--no-delete',action='store_true',help='do not delet
 parser_archive.set_defaults(func=run_archive)
 
 parser_upload = subparsers.add_parser('upload', aliases=['up'], help='Upload program for jutge evaluation', parents=[parent_parser])
-parser_upload.add_argument('prog',metavar='prog.cpp',type=argparse.FileType('r'),help='program file to upload')
+parser_upload.add_argument('prog',metavar='prog.cpp',type=str ,help='program file to upload')
 parser_upload.add_argument('-c','--code',metavar='CODE',type=str ,help='code of problem to submit')
 parser_upload.add_argument('--compiler',metavar='COMPILER_ID',type=str ,help='jutge.org compiler_id to use')
+parser_upload.add_argument('--problem-set',action='store_true', help='upload all files in problem set', default=False)
+parser_upload.add_argument('--delay', type=int, metavar='milliseconds', help='delay between jutge.org upload requests', default=100)
+parser_upload.add_argument('-f','--folder', type=str, help='folder where programs are archived',default=config['folder'])
 parser_upload.set_defaults(func=run_upload)
 
 parser_update = subparsers.add_parser('update', aliases=['import'], help='add programs to archived folder from zip file', parents=[parent_parser])
@@ -120,6 +123,7 @@ parser_new = subparsers.add_parser('new', aliases=['create'], help='create new f
 parser_new.add_argument('code', type=str, help='problem code')
 parser_new.add_argument('-t', '--type', type=str, help='file extension', default='cpp')
 parser_new.add_argument('--overwrite',action='store_true', help='overwrite existing files', default=False)
+parser_new.add_argument('--problem-set',action='store_true', help='Create all files in problem set', default=False)
 parser_new.set_defaults(func=run_new)
 
 parser_download = subparsers.add_parser('download', aliases=['down'], help='download problem files to local database', parents=[parent_parser])

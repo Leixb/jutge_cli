@@ -162,7 +162,9 @@ case $state in
                     '--no-download[do not attempt to fetch data from jutge.org]' \
                     \
                     + '(code)' {-c,--code}'[problem code]:code' \
-                    '--compiler[compiler id to use]:compiler:_jutge_compilers'
+                    '--compiler[compiler id to use]:compiler:_jutge_compilers'\
+                    '--problem-set[upload all files from a problem set]'\
+                    '--delay[delay between jutge-org upload requests]:milliseconds'
             ;;
             (update|import)
                 _arguments \
@@ -193,6 +195,7 @@ case $state in
                     '--no-download[do not attempt to fetch data from jutge.org]' \
                     \
                     '--overwrite[overwrite program if already in archive]' \
+                    '--problem-set[upload all files from a problem set]'\
                     + '(type)' {-t,--type}'[file extension]:ext'
             ;;
             (download|down)
