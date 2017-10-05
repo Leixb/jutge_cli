@@ -35,7 +35,7 @@ def run_login(args): login.login(args)
 
 import argparse
 
-jutge_cli_version = '1.4.1'
+jutge_cli_version = '1.5.0'
 
 config = defaults.config().param
 
