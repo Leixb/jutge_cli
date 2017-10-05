@@ -104,9 +104,12 @@ parser_archive.add_argument('--no-delete',action='store_true',help='do not delet
 parser_archive.set_defaults(func=run_archive)
 
 parser_upload = subparsers.add_parser('upload', aliases=['up'], help='Upload program for jutge evaluation', parents=[parent_parser])
-parser_upload.add_argument('prog',metavar='prog.cpp',type=argparse.FileType('r'),help='program file to upload')
+parser_upload.add_argument('prog',metavar='prog.cpp',type=str ,help='program file to upload')
 parser_upload.add_argument('-c','--code',metavar='CODE',type=str ,help='code of problem to submit')
 parser_upload.add_argument('--compiler',metavar='COMPILER_ID',type=str ,help='jutge.org compiler_id to use')
+parser_upload.add_argument('--problem-set',action='store_true', help='upload all files in problem set', default=False)
+parser_upload.add_argument('--delay', type=int, metavar='milliseconds', help='delay between jutge.org upload requests', default=100)
+parser_upload.add_argument('-f','--folder', type=str, help='folder where programs are archived',default=config['folder'])
 parser_upload.set_defaults(func=run_upload)
 
 parser_update = subparsers.add_parser('update', aliases=['import'], help='add programs to archived folder from zip file', parents=[parent_parser])

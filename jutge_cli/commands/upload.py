@@ -22,11 +22,40 @@ log = logging.getLogger('jutge.upload')
 import requests
 from bs4 import BeautifulSoup
 
+from os.path import expanduser
+from glob import glob
+
+from time import sleep
+
 from . import get_code
+from . import defaults
 
 class upload:
     def __init__(self,args):
+        if args.problem_set:
+            set_name = args.prog
+            try: problems = defaults.config().subfolders[set_name]
+            except KeyError:
+                log.error('Problem set not found')
+                exit(20)
 
+            args_dict = vars(args)
+
+            log.debug(problems)
+
+            for subcode in problems:
+                log.debug('uploading ' + subcode)
+
+                args_dict['code'] = subcode
+                args_dict['prog'] = (glob('{}/{}*'.format(expanduser(args.folder),subcode)) +
+                    glob('{}/{}*'.format(set_name,subcode)))[0]
+                self.upload(args)
+
+                sleep(args.delay/1000.0)
+
+        else: upload(args)
+
+    def upload(self,args):
         if args.no_download:
             log.error('Remove --no-download flag to upload')
             exit(4)
@@ -58,7 +87,7 @@ class upload:
         token_uid = soup.find('input', {'name' : 'token_uid'})['value']
         log.debug(token_uid)
 
-        extension = args.prog.name.split('.')[-1] # To determine compiler
+        extension = args.prog.split('.')[-1] # To determine compiler
 
         compiler = dict(
                 ada = 'GNAT',
@@ -102,7 +131,7 @@ class upload:
         log.debug(data)
 
         files= {
-                'file' : [ '{}.{}'.format(code,extension)  , open(args.prog.name,'r')]
+                'file' : [ '{}.{}'.format(code,extension)  , open(args.prog,'r')]
                 }
 
         requests.post(web, data=data, files=files, cookies=cookies)
