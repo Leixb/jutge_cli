@@ -63,8 +63,7 @@ class download:
                 log.info('File already in DB, continue')
                 return
         else:
-            if not isdir(db_folder): mkdir(db_folder)
-            from zipfile import ZipFile
+            from zipfile import ZipFile, BadZipFile
 
             zip_url = '{}/zip'.format(web)
             log.debug(zip_url)
@@ -77,7 +76,13 @@ class download:
 
             temp_zip.close()
 
-            zip_file = ZipFile(temp_zip.name, 'r')
+            try: zip_file = ZipFile(temp_zip.name, 'r')
+            except BadZipFile:
+                log.error('Could not download zip file')
+                exit(23)
+
+            if not isdir(db_folder): mkdir(db_folder)
+
             zip_file.extractall(db_folder + '/..')
             zip_file.close()
 
