@@ -35,7 +35,7 @@ def run_login(args): login.login(args)
 
 import argparse
 
-jutge_cli_version = '1.5.4'
+jutge_cli_version = '1.5.5'
 
 config = defaults.config().param
 
@@ -139,6 +139,9 @@ parser_check_submissions = subparsers.add_parser('check-submissions', aliases=['
 parser_check_submissions_mode = parser_check_submissions.add_mutually_exclusive_group()
 parser_check_submissions_mode.add_argument('--last', action='store_true', help='only show last submission', default=False)
 parser_check_submissions_mode.add_argument('--reverse', action='store_true', help='show last submission on top', default=False)
+parser_check_submissions_mex = parser_check_submissions.add_mutually_exclusive_group()
+parser_check_submissions_mex.add_argument('-p','--prog',metavar='prog.cpp',type=argparse.FileType('r'), help='filename from which we can extract the problem code')
+parser_check_submissions_mex.add_argument('-c','--code', type=str, help='problem code')
 parser_check_submissions.set_defaults(func=run_check_submissions)
 
 parser_cookie = subparsers.add_parser('cookie', help='save cookie to temporary file for later use to delete cookie isse the command: jutge cookie delete', parents=[parent_parser])

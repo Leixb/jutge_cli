@@ -22,6 +22,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from . import cookie
+from . import get_code
 
 class check_submissions:
     def __init__(self,args):
@@ -36,10 +37,40 @@ class check_submissions:
             log.error('Invalid cookie')
             exit(25)
 
-        cookies = { 'PHPSESSID' : cookie_container.cookie }
-        web = 'https://jutge.org/submissions'
+        self.cookies = { 'PHPSESSID' : cookie_container.cookie }
 
-        response = requests.get(web, cookies=cookies)
+        log.debug(args.SUBCOMMAND)
+
+        if args.SUBCOMMAND == 'check_submissions' or args.SUBCOMMAND == 'check': 
+            if args.code == None:
+                self.check_last(args)
+            else:
+                code = get_code.get_code(args).code
+                veredict = self.check_problem(code)
+
+                if not args.quiet: print(veredict)
+
+                if veredict == 'accepted': exit(0)
+                else: exit(1)
+
+    def check_problem(self, code):
+        url = 'https://jutge.org/problems/{}'.format(code)
+
+        response = requests.get(url, cookies=self.cookies)
+        soup = BeautifulSoup(response.text,'lxml')
+
+        open('shit.txt','w').write(response.text)
+
+        for div in soup.findAll('div', {'class' : 'panel-heading'}):
+            contents = div.contents[0].strip()
+            log.debug(contents)
+            if contents.startswith('Problem'):
+                return contents.split(':')[1].strip()
+
+    def check_last(self,args):
+        url = 'https://jutge.org/submissions'
+
+        response = requests.get(url, cookies=self.cookies)
         soup = BeautifulSoup(response.text,'lxml')
 
         submissions_list = soup.find('ul', {'class' : 'timeline'})
