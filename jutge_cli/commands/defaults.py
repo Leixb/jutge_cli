@@ -38,7 +38,9 @@ class config:
             'diff-flags' : '-y',
             'inp-suffix' : 'inp',
             'cor-suffix' : 'cor',
-            'folder' : '~/Documents/jutge/Done'
+            'folder' : '~/Documents/jutge/Done',
+            'email' : None,
+            'password' : None
         }
 
         self.subfolders = {}
@@ -58,5 +60,9 @@ class config:
         try: self.param['folder'] = settings['folder']
         except KeyError: pass
         try: self.subfolders = settings['problem_sets']
+        except KeyError: pass
+        try: self.param['email'] = settings['login']['email']
+        except KeyError: pass
+        try: self.param['password'] = settings['login']['password']
         except KeyError: pass
 

@@ -146,6 +146,8 @@ parser_cookie.add_argument('--skip-check', action='store_true', help='Save cooki
 parser_cookie.set_defaults(func=run_cookie)
 
 parser_login = subparsers.add_parser('login', help='login to jutge.org and save cookie', parents=[parent_parser])
+parser_login.add_argument('--email', help='jutge.org email', default=config['email'])
+parser_login.add_argument('--password', help='jutge.org password', default=config['password'])
 parser_login.set_defaults(func=run_login)
 
 def main():

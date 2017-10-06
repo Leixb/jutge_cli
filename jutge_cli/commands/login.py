@@ -26,10 +26,18 @@ from . import cookie
 class login:
     def __init__(self,args):
 
+        if args.email == None: email = input('Email: ')
+        else : 
+            email = args.email
+            if not args.quiet: print('Email :', email)
+
+        if args.password == None: password = getpass('Password: ')
+        else : password = args.password
+
         url = 'https://jutge.org/'
         login_data = {
-            'email': 'aleix.bone@est.fib.upc.edu',
-            'password': getpass('Password: '),
+            'email': email,
+            'password': password,
             'submit': ''
         }
         s = requests.Session()
