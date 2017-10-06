@@ -230,6 +230,9 @@ case $state in
                     \
                         '--last[only show last submission]' \
                         '--reverse[only show last submission]' \
+                    + '(code)' \
+                        {-p,--prog}'[filename from which we can extract the problem code]:prog:_files' \
+                        {-c,--code}'[code]:code'
             ;;
             (cookie)
                 _arguments \
