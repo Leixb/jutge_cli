@@ -28,9 +28,36 @@ class get_code:
                 self.code = args.code
 
                 if not '_' in self.code:
-                    self.code += '_ca'
+                    if args.no_download:
+                        log.error('Invalid code')
+                        exit(3)
+
+                    import requests
+                    from . import cookie
+                    from bs4 import BeautifulSoup
+
+                    url = 'https://jutge.org/problems/' + args.code
+
+                    cookie_container = cookie.cookie(args)
+
+                    if cookie_container.has_cookie: 
+                        cookies = dict(PHPSESSID=cookie_container.cookie)
+                    else: cookies = {}
+
+                    try:
+                        self.code = BeautifulSoup(
+                                requests.get(url,cookies=cookies).text,'lxml'
+                            ).find('title').text.split('-')[1].strip()
+                    except KeyError:
+                        log.error('Invalid code')
+                        exit(4)
+
+                    if self.code == 'Error':
+                        log.error('Invalid code')
+                        exit(3)
+
                 log.debug('code in args')
-                log.debug(args.code)
+                log.debug(self.code)
                 return
         except AttributeError: pass
 
