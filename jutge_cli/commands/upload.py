@@ -43,21 +43,30 @@ class upload:
 
             log.debug(problems)
 
-            if len(problems) > 20:
-                print('Problem set exceds contains more than 20 problems ({}) continue? [Ny]'.format(len(problems)) )
-                if not input().lower() in ('y','ye','yes'):
-                    exit(130)
-            elif len(problems) > 10:
-                print('Problem set contains {} elements, continue? [Ny]'.format(len(problems)))
-                if not input().lower() in ('y','ye','yes'):
-                    exit(130)
+            submit_queue = []
 
             for subcode in problems:
-                log.debug('uploading ' + subcode)
 
-                args_dict['code'] = subcode
-                args_dict['prog'] = (glob('{}/{}*'.format(expanduser(args.folder),subcode)) +
-                    glob('{}/{}*'.format(set_name,subcode)))[0]
+                files = glob('{}*'.format(subcode)) + glob('{}/{}*'.format(set_name,subcode))
+                if len(files) > 0: 
+                    submit_queue += [files[0]]
+                else: log.warning(subcode + ' solution not found, skiping ...')
+
+            log.debug(submit_queue)
+
+            if len(submit_queue) > 20:
+                print('Submit queue contains more than 20 problems ({}) continue? [Ny]'.format(len(submit_queue)) )
+                if not input().lower() in ('y','ye','yes'):
+                    exit(130)
+            elif len(submit_queue) > 10:
+                print('Submit queue contains {} elements, continue? [Ny]'.format(len(submit_queue)))
+                if not input().lower() in ('y','ye','yes'):
+                    exit(130)
+
+            for problem in submit_queue:
+
+                args_dict['prog'] = problem
+            
                 self.upload(args)
 
                 sleep(args.delay/1000.0)

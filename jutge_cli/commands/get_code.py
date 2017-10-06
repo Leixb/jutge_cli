@@ -34,13 +34,16 @@ class get_code:
                 return
         except AttributeError: pass
 
+        if isinstance(args.prog,str): prog_name = args.prog
+        else: prog_name = args.prog.name
+
         try:
-            self.code = re.search('({})'.format(args.regex),basename(args.prog.name)).group(1)
+            self.code = re.search('({})'.format(args.regex),basename(prog_name)).group(1)
             log.debug(self.code)
         except AttributeError:
             log.warning('Code not found falling back to normal regex')
             try:
-                self.code = re.search('({})'.format(args.regex.split('_')[0]),basename(args.prog.name)).group(1) + '_ca'
+                self.code = re.search('({})'.format(args.regex.split('_')[0]),basename(prog_name)).group(1) + '_ca'
                 return
             except AttributeError:
                 log.error('Code not found, regex failed')
