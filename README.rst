@@ -42,7 +42,12 @@ Configuration
 -------------
 
 You can configure default parameters through the YAML configuration file:
-``~/.jutge_cli.yaml``. The following example lists all the options and
+``~/.jutge_cli.yaml``. 
+
+Basic options
+~~~~~~~~~~~~~
+
+The following example lists all the basic options and
 their default values:
 
 .. code:: yaml
@@ -54,6 +59,9 @@ their default values:
     inp-suffix : inp
     cor-suffix : cor
     folder : ~/Documents/jutge/Done
+
+Problem sets
+~~~~~~~~~~~~
 
 You can also add problem sets with the ``problem_sets`` setting. These will
 make the commands ``new``, ``archive`` and ``update`` classify problems into
@@ -69,29 +77,50 @@ folders:
 The above configuration file will save problems ``P19724``, ``P34279``... into
 folder ``P1`` and so on.
 
-Cookie handling
----------------
+Login information
+~~~~~~~~~~~~~~~~~
+
+You can also provide login credentials in the configuration file inside
+the group ``login``:
+
+.. code:: yaml
+
+    login:
+        email: myemail@mydomain.com
+        password: mypassword
+
+You can omit either email, password or both and the login command will
+prompt the user for input when issued.
+
+Login to jutge.org
+------------------
 
 Some problem from jutge.org (the ones which code starts with X) are only
 accessible to logged users and therefore if you want to download the
 required information from jutge.org of those problems you'll have to
-provide a valid PHPSSID cookie through the ``--cookie`` flag. This flag
-must appear before the command:
+provide a valid PHPSSID cookie there are 3 different ways to provide it.
+
+login command
+~~~~~~~~~~~~~
+
+Issuing the command ``jutge login`` will prompt the user for their email and
+password and save the session cookie for next use.
+
+cookie command
+~~~~~~~~~~~~~~
+
+The command ``jutge cookie`` accepts a cookie as a parameter and will
+store it for next use.
+
+cookie flag
+~~~~~~~~~~~
+
+You can also manually provide a cookie to each subcommand call through the ``--cookie`` flag:
 
 .. code:: sh
 
     jutge --cookie MY_COOKIE download -c X00000
 
-Alternatively you can issue the command:
-
-.. code:: sh
-
-    jutge cookie MY_COOKIE
-
-Which will save the cookie in a temporary file and will be used in all
-other commands. Please note that this is not ideal since the file and
-therefore the cookie is accessible in plain text by any user till next
-reboot.
 
 Global flags
 ------------
@@ -174,6 +203,9 @@ from the code and create a new file whose name is the code followed by
 the title. The ``-p`` flag can be used to specify the extension of the
 file.
 
+If flag ``--problem-set`` is provided, all programs in the specified problem
+set will be created
+
 Example
 ^^^^^^^
 
@@ -252,6 +284,11 @@ but you can specify another one through the ``--compiler`` flag.
 ::
 
     jutge upload P00001_ca_prog.cpp --compiler 'G++'
+
+If the flag ``--problem-set`` the command will upload all problems from the
+specified set. (Keep in mind that jutge.org limits the number of submissions
+to 20 per hour so it is discouraged to use this flag with large problem
+sets)
 
 Check-submissions (check)
 ~~~~~~~~~~~~~~~~~
