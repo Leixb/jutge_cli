@@ -43,6 +43,12 @@ class upload:
             args_dict['diff_flags'] = config.param['diff-flags']
             args_dict['diff_prog']  = config.param['diff-prog']
             args_dict['no_custom']  = True
+        if args.check:
+            # Add for check
+            args_dict = vars(args)
+            args_dict['last'] = True
+            args_dict['reverse'] = False
+
         if args.problem_set:
             set_name = args.prog
             try: problems = config.subfolders[set_name]
@@ -178,5 +184,22 @@ class upload:
                 'file' : [ '{}.{}'.format(code,extension)  , open(args.prog,'r')]
                 }
 
+        if args.check:
+            prev_veredict = check_submissions.check_submissions(args).check_last(args)
+
         requests.post(web, data=data, files=files, cookies=cookies)
+
+        if args.check:
+            for i in range(0,6):
+                sleep(5)
+                veredict = check_submissions.check_submissions(args).check_last(args)
+                log.debug(veredict)
+                if prev_veredict != veredict and veredict['code'] == code:
+                    if veredict['veredict'] == 'Pending': continue
+                    else :
+                        if not args.quiet: print(veredict['veredict'])
+                        if veredict['veredict'] in ('AC', '100/100'): exit(0)
+                        else : exit(1)
+            log.error('Check timed out')
+            exit(2)
 

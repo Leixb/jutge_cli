@@ -35,7 +35,7 @@ def run_login(args): login.login(args)
 
 import argparse
 
-jutge_cli_version = '1.5.6'
+jutge_cli_version = '1.6.0'
 
 config = defaults.config().param
 
@@ -113,6 +113,7 @@ parser_upload.add_argument('--delay', type=int, metavar='milliseconds', help='de
 parser_upload.add_argument('-f','--folder', type=str, help='folder where programs are archived',default=config['folder'])
 parser_upload.add_argument('--skip-test', action='store_true', help='do not test public cases before uploading', default=False)
 parser_upload.add_argument('--no-skip-accepted', action='store_true', help='do not skip accepted problems when uploading', default=False)
+parser_upload.add_argument('--check', action='store_true', help='wait for veredict after uploading', default=False)
 parser_upload.set_defaults(func=run_upload)
 
 parser_update = subparsers.add_parser('update', aliases=['import'], help='add programs to archived folder from zip file', parents=[parent_parser])

@@ -166,7 +166,8 @@ case $state in
                     '--compiler[compiler id to use]:compiler:_jutge_compilers'\
                     '--problem-set[upload all files from a problem set]'\
                     '--skip-check[do not test against public test cases before upload]'\
-                    '--delay[delay between jutge-org upload requests]:milliseconds'
+                    '--delay[delay between jutge-org upload requests]:milliseconds'\
+                    '--check[wait for veredict from jutge]'
             ;;
             (update|import)
                 _arguments \

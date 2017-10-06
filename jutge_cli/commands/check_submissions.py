@@ -43,7 +43,8 @@ class check_submissions:
 
         if args.SUBCOMMAND == 'check_submissions' or args.SUBCOMMAND == 'check': 
             if args.code == None:
-                self.check_last(args)
+                if self.check_last(args)['veredict'] in ('AC', '100/100') : exit(0)
+                else: exit(1)
             else:
                 code = get_code.get_code(args).code
                 veredict = self.check_problem(code)
@@ -79,7 +80,7 @@ class check_submissions:
             submissions_list = [submissions_list.li]
         elif args.reverse:
             submissions_list = submissions_list.findAll('li')[:-1]
-            first_veredict = None
+            last_veredict = None
         else :
             submissions_list = submissions_list.findAll('li')[-2::-1]
 
@@ -89,16 +90,16 @@ class check_submissions:
             time = table[0].small.contents[0].strip()
             veredict = table[1].small.a.contents[0].strip()
 
-            if args.reverse and first_veredict == None:
-                first_veredict = veredict
-
             problem_code = submission.a['href'].split('/')[2].strip()
             problem_name = submission.div.p.contents[0].strip()
 
+            if args.reverse and last_veredict == None:
+                last_veredict = dict(veredict=veredict, code=problem_code, time=time)
+
             if not args.quiet: print(time, '\t', veredict, problem_code, problem_name)
 
-        if not args.reverse: first_veredict = veredict
+        if not args.reverse:
+            last_veredict = dict(veredict=veredict, code=problem_code, time=time)
 
-        if first_veredict == 'AC': exit(0)
-        else : exit(1)
+        return last_veredict
 

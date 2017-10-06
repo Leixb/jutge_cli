@@ -1,12 +1,6 @@
 jutge\_cli: a command line client for jutge.org
 ===============================================
 
-Disclaimer
-----------
-
-This is a work in progress. I will not take any responsibility if things
-break.
-
 Installation
 ------------
 
@@ -294,6 +288,9 @@ problem sets)
 By default upload will test all problems against public test cases in the
 database (not including custom ones). You can skip those checks with the flag
 ``--skip-check``
+
+If you want to check the submitted problem verdict directly after upload, use
+the flag ``--check`` which will wait for the jutge verdict and output it.
 
 Check-submissions (check)
 ~~~~~~~~~~~~~~~~~
