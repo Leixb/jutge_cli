@@ -286,9 +286,14 @@ but you can specify another one through the ``--compiler`` flag.
     jutge upload P00001_ca_prog.cpp --compiler 'G++'
 
 If the flag ``--problem-set`` the command will upload all problems from the
-specified set. (Keep in mind that jutge.org limits the number of submissions
-to 20 per hour so it is discouraged to use this flag with large problem
-sets)
+specified set found in the current working directory or in the set folder in
+the current working directory. (Keep in mind that jutge.org limits the number
+of submissions to 20 per hour so it is discouraged to use this flag with large
+problem sets)
+
+By default upload will test all problems against public test cases in the
+database (not including custom ones). You can skip those checks with the flag
+``--skip-check``
 
 Check-submissions (check)
 ~~~~~~~~~~~~~~~~~

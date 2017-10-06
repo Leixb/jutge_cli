@@ -40,35 +40,46 @@ class ansi:
 
 class test:
     def __init__(self,args):
-        if args.prog.name.endswith('.cpp') or args.prog.name.endswith('.cc'):
+        self.args = args
+        if args.SUBCOMMAND == 'test': 
+            self.quiet = self.args.quiet
+            exit(self.eval(args))
+        self.quiet = True
 
-            prog_name = '.'.join(args.prog.name.split('.')[:-1]) + '.x'
+    def eval(self):
+
+        if isinstance(self.args.prog,str): source_file = self.args.prog
+        else : source_file = self.args.prog.name
+
+        if source_file.endswith('.cpp') or source_file.endswith('.cc'):
+
+            prog_name = '.'.join(source_file.split('.')[:-1]) + '.x'
             log.debug('Compiling to {}'.format(prog_name))
 
-            p = Popen(['g++', '-std=c++11', '-g', args.prog.name, '-o', prog_name])
+            p = Popen(['g++', '-std=c++11', '-g', source_file, '-o', prog_name])
             return_code = p.wait()
 
             if return_code: 
                 log.error('Compilation returned {}, aborting'.format(return_code))
                 exit(return_code)
 
-        else: prog_name = args.prog.name
+        else: prog_name = source_file
 
         if prog_name[0]!='.' and prog_name[0]!='/': prog_name = './' + prog_name
 
         cont,cor = 0,0
 
-        code = get_code.get_code(args).code
-        download.download(args)
+        code = get_code.get_code(self.args).code
+        download.download(self.args)
 
-        for sample_inp in sorted(glob('{}/{}/*.{}'.format(expanduser(args.database),code,args.inp_suffix))):
-            sample_cor = ''.join(sample_inp.split('.')[:-1]) + '.' + args.cor_suffix
+        for sample_inp in sorted(glob('{}/{}/*.{}'.format(expanduser(self.args.database),code,self.args.inp_suffix))):
+            sample_cor = ''.join(sample_inp.split('.')[:-1]) + '.' + self.args.cor_suffix
 
             test_input = open(sample_inp,'r')
             test_output = NamedTemporaryFile()
 
             if basename(sample_inp).startswith('custom'):
-                if args.no_custom: continue
+                if self.args.no_custom: continue
                 is_custom = '(custom)'
             else: is_custom = ''
 
@@ -80,27 +91,28 @@ class test:
             if return_code: log.warning("Program returned {}".format(return_code))
 
             test_input.seek(0)
-            if not args.quiet: print(ansi.OKBLUE, ansi.BOLD, '*** Input {} {}'.format(cont,is_custom), ansi.ENDC, ansi.HEADER)
-            if not args.quiet: print(test_input.read(), ansi.ENDC)
+            if not self.quiet: print(ansi.OKBLUE, ansi.BOLD, '*** Input {} {}'.format(cont,is_custom), ansi.ENDC, ansi.HEADER)
+            if not self.quiet: print(test_input.read(), ansi.ENDC)
             test_input.close()
 
             try:
-                out  = check_output([args.diff_prog]+args.diff_flags.split(',')+[test_output.name,sample_cor])
-                if not args.quiet: print(ansi.OKGREEN, ansi.BOLD, '*** The results match :)', ansi.ENDC, ansi.ENDC)
-                if not args.quiet: print(out.decode('UTF-8'))
+                out  = check_output([self.args.diff_prog]+self.args.diff_flags.split(',')+[test_output.name,sample_cor])
+                if not self.quiet: print(ansi.OKGREEN, ansi.BOLD, '*** The results match :)', ansi.ENDC, ansi.ENDC)
+                if not self.quiet: print(out.decode('UTF-8'))
 
                 cor+=1
 
             except CalledProcessError as err:   # Thrown if files doesn't match
-                if not args.quiet: print(ansi.FAIL, ansi.BOLD, '*** The results do NOT match :(', ansi.ENDC, ansi.ENDC)
-                if not args.quiet: print(err.output.decode('UTF-8'))
+                if not self.quiet: print(ansi.FAIL, ansi.BOLD, '*** The results do NOT match :(', ansi.ENDC, ansi.ENDC)
+                if not self.quiet: print(err.output.decode('UTF-8'))
 
             test_output.close()
         if cont == 0: 
-            if not args.quiet: print("Program has no test-cases yet")
+            if not self.quiet: print("Program has no test-cases yet")
         elif cont == cor: 
-            if not args.quiet: print(ansi.OKGREEN, ansi.BOLD, '*** ({}/{}) ALL OK :)'.format(cor,cont), ansi.ENDC, ansi.ENDC)
+            if not self.quiet: print(ansi.OKGREEN, ansi.BOLD, '*** ({}/{}) ALL OK :)'.format(cor,cont), ansi.ENDC, ansi.ENDC)
         else:
-            if not args.quiet: print(ansi.FAIL, ansi.BOLD, '*** ({}/{}) :('.format(cor,cont), ansi.ENDC, ansi.ENDC)
-        exit(cont-cor)
+            if not self.quiet: print(ansi.FAIL, ansi.BOLD, '*** ({}/{}) :('.format(cor,cont), ansi.ENDC, ansi.ENDC)
+
+        return cont-cor
 

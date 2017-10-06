@@ -29,12 +29,22 @@ from time import sleep
 
 from . import get_code
 from . import defaults
+from . import test
 
 class upload:
     def __init__(self,args):
+        config = defaults.config()
+        if not args.skip_test:
+            # Add defaults for test
+            args_dict = vars(args)
+            args_dict['inp_suffix'] = config.param['inp-suffix']
+            args_dict['cor_suffix'] = config.param['cor-suffix']
+            args_dict['diff_flags'] = config.param['diff-flags']
+            args_dict['diff_prog']  = config.param['diff-prog']
+            args_dict['no_custom']  = True
         if args.problem_set:
             set_name = args.prog
-            try: problems = defaults.config().subfolders[set_name]
+            try: problems = config.subfolders[set_name]
             except KeyError:
                 log.error('Problem set not found')
                 exit(20)
@@ -47,7 +57,7 @@ class upload:
 
             for subcode in problems:
 
-                files = glob('{}*'.format(subcode)) + glob('{}/{}*'.format(set_name,subcode))
+                files = glob('{}*[!.x]'.format(subcode)) + glob('{}/{}*[!.x]'.format(set_name,subcode))
                 if len(files) > 0: 
                     submit_queue += [files[0]]
                 else: log.warning(subcode + ' solution not found, skiping ...')
@@ -71,12 +81,19 @@ class upload:
 
                 sleep(args.delay/1000.0)
 
-        else: upload(args)
+        else: self.upload(args)
 
     def upload(self,args):
         if args.no_download:
             log.error('Remove --no-download flag to upload')
             exit(4)
+
+        if not args.skip_test:
+            veredict = test.test(args).eval()
+            if veredict != 0:
+                log.error('Problem did not pass public tests, aborting... (use --skip-test to upload anyways)')
+                exit(veredict)
+            else: log.debug('Public tests passed')
 
         code = get_code.get_code(args).code
         log.debug(code)
