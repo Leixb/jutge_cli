@@ -19,7 +19,8 @@ import logging
 log = logging.getLogger('jutge.get_code')
 
 import re
-from os.path import basename
+from os.path import basename, expanduser
+from glob import glob
 
 class get_code:
     def __init__(self,args):
@@ -28,33 +29,39 @@ class get_code:
                 self.code = args.code
 
                 if not '_' in self.code:
-                    if args.no_download:
-                        log.error('Invalid code')
-                        exit(3)
+                    db_folder = glob(expanduser('{}/{}_*'.format(args.database,self.code)))
 
-                    import requests
-                    from . import cookie
-                    from bs4 import BeautifulSoup
+                    if len(db_folder)!=0:
+                        self.code = db_folder[0].split('/')[-1]
+                    else:
 
-                    url = 'https://jutge.org/problems/' + args.code
+                        if args.no_download:
+                            log.error('Invalid code')
+                            exit(3)
 
-                    cookie_container = cookie.cookie(args)
+                        import requests
+                        from . import cookie
+                        from bs4 import BeautifulSoup
 
-                    if cookie_container.has_cookie: 
-                        cookies = dict(PHPSESSID=cookie_container.cookie)
-                    else: cookies = {}
+                        url = 'https://jutge.org/problems/' + args.code
 
-                    try:
-                        self.code = BeautifulSoup(
-                                requests.get(url,cookies=cookies).text,'lxml'
-                            ).find('title').text.split('-')[1].strip()
-                    except KeyError:
-                        log.error('Invalid code')
-                        exit(4)
+                        cookie_container = cookie.cookie(args)
 
-                    if self.code == 'Error':
-                        log.error('Invalid code')
-                        exit(3)
+                        if cookie_container.has_cookie: 
+                            cookies = dict(PHPSESSID=cookie_container.cookie)
+                        else: cookies = {}
+
+                        try:
+                            self.code = BeautifulSoup(
+                                    requests.get(url,cookies=cookies).text,'lxml'
+                                ).find('title').text.split('-')[1].strip()
+                        except KeyError:
+                            log.error('Invalid code')
+                            exit(4)
+
+                        if self.code == 'Error':
+                            log.error('Invalid code')
+                            exit(3)
 
                 log.debug('code in args')
                 log.debug(self.code)
