@@ -43,7 +43,7 @@ class test:
         self.args = args
         if args.SUBCOMMAND == 'test': 
             self.quiet = self.args.quiet
-            exit(self.eval(args))
+            exit(self.eval())
         self.quiet = True
 
     def eval(self):
