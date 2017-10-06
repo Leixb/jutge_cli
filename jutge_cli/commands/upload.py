@@ -30,6 +30,7 @@ from time import sleep
 from . import get_code
 from . import defaults
 from . import test
+from . import check_submissions
 
 class upload:
     def __init__(self,args):
@@ -59,7 +60,15 @@ class upload:
 
                 files = glob('{}*[!.x]'.format(subcode)) + glob('{}/{}*[!.x]'.format(set_name,subcode))
                 if len(files) > 0: 
+                    if not args.no_skip_accepted:
+
+                        veredict = check_submissions.check_submissions(args).check_problem(subcode)
+                        log.debug('{} {}'.format(subcode,veredict))
+
+                        if veredict == 'accepted': continue
+
                     submit_queue += [files[0]]
+
                 else: log.warning(subcode + ' solution not found, skiping ...')
 
             log.debug(submit_queue)
