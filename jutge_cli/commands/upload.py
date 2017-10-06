@@ -43,6 +43,15 @@ class upload:
 
             log.debug(problems)
 
+            if len(problems) > 20:
+                print('Problem set exceds contains more than 20 problems ({}) continue? [Ny]'.format(len(problems)) )
+                if not input().lower() in ('y','ye','yes'):
+                    exit(130)
+            elif len(problems) > 10:
+                print('Problem set contains {} elements, continue? [Ny]'.format(len(problems)))
+                if not input().lower() in ('y','ye','yes'):
+                    exit(130)
+
             for subcode in problems:
                 log.debug('uploading ' + subcode)
 
