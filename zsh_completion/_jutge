@@ -261,7 +261,6 @@ case $state in
                     '--email[email to login to jutge.org]:email'\
                     '--password[password]:password'
             ;;
-        ;;
     esac
     ;;
 esac
