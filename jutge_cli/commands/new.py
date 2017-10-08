@@ -15,16 +15,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-
-import logging
-log = logging.getLogger('jutge.new')
-
-from os.path import isfile,isdir
+from logging import getLogger
 from os import mkdir
+from os.path import isfile, isdir
 
+from . import defaults
 from . import get_code
 from . import show
-from . import defaults
+
+log = getLogger('jutge.new')
 
 template = {
     'cpp': '''\
@@ -40,11 +39,14 @@ int main () {
         }
 
 class new:
-    def __init__(self,args):
-        if args.problem_set: self.problem_set(args)
-        else: self.standalone_file(args)
 
-    def standalone_file(self,args):
+    def __init__(self, args):
+        if args.problem_set:
+            self.problem_set(args)
+        else:
+            self.standalone_file(args)
+
+    def standalone_file(self, args):
         code = get_code.get_code(args).code
         sub_code = code.split('_')[0]
         title = show.show(args).title
@@ -54,22 +56,27 @@ class new:
         for sub_folder, problems in defaults.config().subfolders.items():
             if sub_code in problems:
                 dest_folder = sub_folder
-                if not isdir(dest_folder): mkdir(dest_folder)
+                if not isdir(dest_folder):
+                    mkdir(dest_folder)
                 break
 
-        file_name = '{}/{}.{}'.format(dest_folder,title,args.type)
-        if not isfile(file_name) or args.overwrite: new_file = open(file_name,'a')
+        file_name = '{}/{}.{}'.format(dest_folder, title, args.type)
+        if not isfile(file_name) or args.overwrite:
+            with open(file_name, 'a') as new_file:
+                if template[args.type] != None:
+                    new_file.write(template[args.type])
 
-        if (template[args.type] != None ): new_file.write(template[args.type])
 
-    def problem_set(self,args):
-        try: problems = defaults.config().subfolders[args.code]
+    def problem_set(self, args):
+        try:
+            problems = defaults.config().subfolders[args.code]
         except KeyError:
             log.error('Problem set not found')
             exit(20)
 
         dest_folder = args.code
-        if not isdir(dest_folder): mkdir(dest_folder)
+        if not isdir(dest_folder):
+            mkdir(dest_folder)
 
         args_dict = vars(args)
 
@@ -80,9 +87,10 @@ class new:
             log.debug(code)
 
             title = show.show(args).title
-            file_name = '{}/{}.{}'.format(dest_folder,title,args.type)
+            file_name = '{}/{}.{}'.format(dest_folder, title, args.type)
 
-            if not isfile(file_name) or args.overwrite: new_file = open(file_name,'a')
-
-            if (template[args.type] != None ): new_file.write(template[args.type])
+            if not isfile(file_name) or args.overwrite:
+                with open(file_name, 'a') as new_file:
+                    if (template[args.type] != None):
+                        new_file.write(template[args.type])
 

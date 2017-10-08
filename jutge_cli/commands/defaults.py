@@ -15,18 +15,20 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import logging
-log = logging.getLogger('jutge.defaults')
-
-import yaml
+from logging import getLogger
 from os.path import expanduser
 
+from yaml import load
+
+log = getLogger('jutge.defaults')
+
 class config:
+
     def __init__(self):
 
         try:
-            with open(expanduser('~/.jutge_cli.yaml'),'r') as config_file:
-                settings = yaml.load(config_file)
+            with open(expanduser('~/.jutge_cli.yaml'), 'r') as config_file:
+                settings = load(config_file)
         except FileNotFoundError:
             log.warning('No config file round')
             settings = {}
@@ -45,24 +47,14 @@ class config:
 
         self.subfolders = {}
 
-        try: self.param['regex'] = settings['regex']
-        except KeyError: pass
-        try: self.param['database'] = settings['database']
-        except KeyError: pass
-        try: self.param['diff-prog'] = settings['diff-prog']
-        except KeyError: pass
-        try: self.param['diff-flags'] = settings['diff-flags']
-        except KeyError: pass
-        try: self.param['inp-suffix'] = settings['inp-suffix']
-        except KeyError: pass
-        try: self.param['cor-suffix'] = settings['cor-suffix']
-        except KeyError: pass
-        try: self.param['folder'] = settings['folder']
-        except KeyError: pass
-        try: self.subfolders = settings['problem_sets']
-        except KeyError: pass
-        try: self.param['email'] = settings['login']['email']
-        except KeyError: pass
-        try: self.param['password'] = settings['login']['password']
-        except KeyError: pass
+    for key in self.param.iterkeys() + ['problem_sets']:
+        try:
+            if key in ('email', 'password'):
+                self.param[key] = settings['login'][key]
+            elif key == 'problem_sets':
+                self.subfolders = settings[key]
+            else:
+                self.param[key] = settings[key]
+        except KeyError:
+            pass
 

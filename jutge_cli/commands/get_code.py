@@ -15,21 +15,29 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import logging
-log = logging.getLogger('jutge.get_code')
 
-import re
-from os.path import basename, expanduser
 from glob import glob
+from logging import getLogger
+from os.path import basename, expanduser
+from re import search
+
+from bs4 import BeautifulSoup
+from requests import get
+
+from . import cookie
+
+log = getLogger('jutge.get_code')
 
 class get_code:
-    def __init__(self,args):
+
+    def __init__(self, args):
         try:
             if args.code != None:
                 self.code = args.code
 
                 if not '_' in self.code:
-                    db_folder = glob(expanduser('{}/{}_*'.format(args.database,self.code)))
+                    db_folder = glob(expanduser('{}/{}_*'.format(args.database,
+                        self.code)))
 
                     if len(db_folder)!=0:
                         self.code = db_folder[0].split('/')[-1]
@@ -39,21 +47,19 @@ class get_code:
                             log.error('Invalid code')
                             exit(3)
 
-                        import requests
-                        from . import cookie
-                        from bs4 import BeautifulSoup
 
                         url = 'https://jutge.org/problems/' + args.code
 
                         cookie_container = cookie.cookie(args)
 
-                        if cookie_container.has_cookie: 
+                        if cookie_container.has_cookie:
                             cookies = dict(PHPSESSID=cookie_container.cookie)
-                        else: cookies = {}
+                        else:
+                            cookies = {}
 
                         try:
                             self.code = BeautifulSoup(
-                                    requests.get(url,cookies=cookies).text,'lxml'
+                                    get(url, cookies=cookies).text, 'lxml'
                                 ).find('title').text.split('-')[1].strip()
                         except KeyError:
                             log.error('Invalid code')
@@ -68,16 +74,20 @@ class get_code:
                 return
         except AttributeError: pass
 
-        if isinstance(args.prog,str): prog_name = args.prog
-        else: prog_name = args.prog.name
+        if isinstance(args.prog, str):
+            prog_name = args.prog
+        else:
+            prog_name = args.prog.name
 
         try:
-            self.code = re.search('({})'.format(args.regex),basename(prog_name)).group(1)
+            self.code = re.search('({})'.format(args.regex),
+                    basename(prog_name)).group(1)
             log.debug(self.code)
         except AttributeError:
             log.warning('Code not found falling back to normal regex')
             try:
-                self.code = re.search('({})'.format(args.regex.split('_')[0]),basename(prog_name)).group(1) + '_ca'
+                self.code = re.search('({})'.format(args.regex.split('_')[0]),
+                        basename(prog_name)).group(1) + '_ca'
                 return
             except AttributeError:
                 log.error('Code not found, regex failed')

@@ -15,17 +15,19 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import logging
-log = logging.getLogger('jutge.check_submissions')
+from logging import getLogger
 
-import requests
 from bs4 import BeautifulSoup
+from requests import get
 
 from . import cookie
 from . import get_code
 
+log = getLogger('jutge.check_submissions')
+
 class check_submissions:
-    def __init__(self,args):
+
+    def __init__(self, args):
 
         if args.no_download:
             log.error('Cannot check if --no-download provided')
@@ -41,26 +43,28 @@ class check_submissions:
 
         log.debug(args.SUBCOMMAND)
 
-        if args.SUBCOMMAND == 'check_submissions' or args.SUBCOMMAND == 'check': 
+        if args.SUBCOMMAND in ('check_submissions', 'check'):
             if args.code == None:
-                if self.check_last(args)['veredict'] in ('AC', '100/100') : exit(0)
-                else: exit(1)
+                if self.check_last(args)['veredict'] in ('AC', '100/100') :
+                    exit(0)
+                else:
+                    exit(1)
             else:
                 code = get_code.get_code(args).code
                 veredict = self.check_problem(code)
 
                 if not args.quiet: print(veredict)
 
-                if veredict == 'accepted': exit(0)
-                else: exit(1)
+                if veredict == 'accepted':
+                    exit(0)
+                else:
+                    exit(1)
 
     def check_problem(self, code):
         url = 'https://jutge.org/problems/{}'.format(code)
 
-        response = requests.get(url, cookies=self.cookies)
-        soup = BeautifulSoup(response.text,'lxml')
-
-        open('shit.txt','w').write(response.text)
+        response = get(url, cookies=self.cookies)
+        soup = BeautifulSoup(response.text, 'lxml')
 
         for div in soup.findAll('div', {'class' : 'panel-heading'}):
             contents = div.contents[0].strip()
@@ -68,11 +72,11 @@ class check_submissions:
             if contents.startswith('Problem'):
                 return contents.split(':')[1].strip()
 
-    def check_last(self,args):
+    def check_last(self, args):
         url = 'https://jutge.org/submissions'
 
-        response = requests.get(url, cookies=self.cookies)
-        soup = BeautifulSoup(response.text,'lxml')
+        response = get(url, cookies=self.cookies)
+        soup = BeautifulSoup(response.text, 'lxml')
 
         submissions_list = soup.find('ul', {'class' : 'timeline'})
 
@@ -94,12 +98,15 @@ class check_submissions:
             problem_name = submission.div.p.contents[0].strip()
 
             if args.reverse and last_veredict == None:
-                last_veredict = dict(veredict=veredict, code=problem_code, time=time)
+                last_veredict = dict(
+                        veredict=veredict, code=problem_code, time=time)
 
-            if not args.quiet: print(time, '\t', veredict, problem_code, problem_name)
+            if not args.quiet:
+                print(time, '\t', veredict, problem_code, problem_name)
 
         if not args.reverse:
-            last_veredict = dict(veredict=veredict, code=problem_code, time=time)
+            last_veredict = dict(
+                    veredict=veredict, code=problem_code, time=time)
 
         return last_veredict
 

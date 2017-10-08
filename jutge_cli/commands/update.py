@@ -15,40 +15,42 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-
-import logging
-log = logging.getLogger('jutge.update')
-
 from glob import glob
-from os.path import basename,isdir,expanduser
+from logging import getLogger
 from os import mkdir, symlink
+from os.path import basename, isdir, expanduser
 from shutil import copyfile
 from tempfile import TemporaryDirectory
-
 from time import sleep
 
-def getname(code,cookie):
+from bs4 import BeautifulSoup
+from requests import get
+from zipfile import ZipFile
+
+from . import cookie
+
+log = getLogger('jutge.update')
+
+def getname(code, cookie):
     web = 'https://jutge.org/problems/{}'.format(code)
 
-    if cookie != None: cookies = dict(PHPSESSID=cookie)
-    else: cookies = {}
+    if cookie != None:
+        cookies = dict(PHPSESSID=cookie)
+    else:
+        cookies = {}
 
-    import requests
+    response = get(web, cookies=cookies)
 
-    response = requests.get(web,cookies=cookies)
-
-    from bs4 import BeautifulSoup
-
-    soup = BeautifulSoup(response.text,'lxml')
+    soup = BeautifulSoup(response.text, 'lxml')
 
     name = '-'.join(soup.find('title').text.split('-')[1:])
-    name = name[1:].replace(' ','_').split()[0]
+    name = name[1:].replace(' ', '_').split()[0]
 
     return name
 
 class update:
-    def __init__(self,args):
-        from zipfile import ZipFile
+
+    def __init__(self, args):
 
         extract_to = TemporaryDirectory().name
 
@@ -56,9 +58,10 @@ class update:
         zip.extractall(extract_to)
         zip.close()
 
-        if not isdir(expanduser(args.folder)): mkdir(expanduser(args.folder))
+        if not isdir(expanduser(args.folder)):
+            mkdir(expanduser(args.folder))
 
-        extensions = ['cc','c','hs','php','bf','py']
+        extensions = ['cc', 'c', 'hs', 'php', 'bf', 'py']
 
         count = 0
 
@@ -69,43 +72,42 @@ class update:
                 sources = []
 
                 for ext in extensions :
-                    match = glob('{}/*AC.{}'.format(folder,ext))
+                    match = glob('{}/*AC.{}'.format(folder, ext))
                     if match:
-                        sources.append([match[-1],ext]) # take last AC
+                        sources.append([match[-1], ext]) # take last AC
 
                 for source in sources :
                     ext = source[1]
                     if ext == 'cc': ext = 'cpp' # Use cpp over cc for c++ files
 
-                    if not glob('{}/{}*.{}'.format(expanduser(args.folder),code,ext)) or args.overwrite:
+                    if not glob('{}/{}*.{}'.format(expanduser(args.folder), code, ext)) or args.overwrite:
                         if args.no_download:
                             name = code
                         else:
-                            from . import cookie
-                            name = getname(code,cookie.cookie().cookie)
+                            name = getname(code, cookie.cookie().cookie)
 
                             if name == 'Error': name = code # If name cannot be found default to code to avoid collisions
-                        
+
                         dest_folder = expanduser(args.folder)
 
-                        file_name = '{}/{}.{}'.format(dest_folder,name,ext)
+                        file_name = '{}/{}.{}'.format(dest_folder, name, ext)
 
-                        log.info('Copying {} to {} ...'.format(source[0],file_name))
-                        copyfile(source[0],file_name)
+                        log.info('Copying {} to {} ...'.format(source[0], file_name))
+                        copyfile(source[0], file_name)
 
                         sub_code = code.split('_')[0]
                         sym_link = '.'
 
                         for sub_folder, problems in defaults.config().subfolders.items():
                             if sub_code in problems:
-                                sym_link = '{}/{}'.format(dest_folder,sub_folder)
+                                sym_link = '{}/{}'.format(dest_folder, sub_folder)
                                 if not isdir(sym_link): mkdir(sym_link)
 
                         if sym_link != '.':
-                            sym_link = '{}/{}.{}'.format(sym_link,name,ext)
+                            sym_link = '{}/{}.{}'.format(sym_link, name, ext)
                             try:
                                 symlink(source, sym_link)
-                                log.debug('Symlink {} -> {}'.format(sym_link,source[0]))
+                                log.debug('Symlink {} -> {}'.format(sym_link, source[0]))
                             except FileExistsError:
                                 log.warning('Symlink already exists')
 

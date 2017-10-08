@@ -15,24 +15,30 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import logging
-log = logging.getLogger('jutge.login')
-
 from getpass import getpass
-import requests
+from logging import getLogger
+
+from requests import Session
+from requests.utils import dict_from_cookiejar
 
 from . import cookie
 
-class login:
-    def __init__(self,args):
+log = getLogger('jutge.login')
 
-        if args.email == None: email = input('Email: ')
-        else : 
+class login:
+
+    def __init__(self, args):
+
+        if args.email == None:
+            email = input('Email: ')
+        else:
             email = args.email
             if not args.quiet: print('Email :', email)
 
-        if args.password == None: password = getpass('Password: ')
-        else : password = args.password
+        if args.password == None:
+            password = getpass('Password: ')
+        else:
+            password = args.password
 
         url = 'https://jutge.org/'
         login_data = {
@@ -40,13 +46,13 @@ class login:
             'password': password,
             'submit': ''
         }
-        s = requests.Session()
+        s = Session()
         s.post(url, data=login_data)
 
-        session_cookie = requests.utils.dict_from_cookiejar(s.cookies)['PHPSESSID']
+        session_cookie = dict_from_cookiejar(s.cookies)['PHPSESSID']
 
         log.debug(session_cookie)
-        
+
         vars(args)['cookie'] = session_cookie
         vars(args)['skip-check'] = False
 
