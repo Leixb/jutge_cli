@@ -43,6 +43,7 @@ class upload:
             args_dict['diff_flags'] = config.param['diff-flags']
             args_dict['diff_prog']  = config.param['diff-prog']
             args_dict['no_custom']  = True
+            args_dict['no_color']  = False
         if args.check:
             # Add for check
             args_dict = vars(args)

@@ -27,6 +27,7 @@ from . import get_code
 log = getLogger('jutge.test')
 
 class global_vars:
+
     quiet, no_colors = False, False
 
 ansi_colors = dict(
@@ -51,6 +52,7 @@ def print_color(text, colors=None):
         print(text)
         for color in colors:
             print(ansi_colors['ENDC'],end='')
+
 class test:
 
     def __init__(self, args):
