@@ -25,7 +25,7 @@ try:
 except ModuleNotFoundError:
     pandoc_loaded = False
 else:
-    pandoc = True
+    pandoc_loaded = True
 
 from . import get_code
 from . import download
@@ -57,7 +57,7 @@ class show:
 
                 # Convert html to plain text using pandoc (if loaded)
                 if pandoc_loaded:
-                    txt = pypandoc.convert_text(txt, 'plain', 'html')
+                    txt = convert_text(txt, 'plain', 'html')
 
                 print(self.title + '\n')
                 print(txt)
@@ -67,7 +67,7 @@ class show:
                 for sample_inp in sorted(glob(
                         '{}/{}/*.{}'.format(expanduser(args.database),
                         code, args.inp_suffix))):
-                    sample_cor = ''.join(sample_inp.split('.')[:-1])
+                    sample_cor = ''.join(sample_inp.split('.')[:-1])\
                             + '.' + args.cor_suffix
 
                     if basename(sample_inp).startswith('custom'):

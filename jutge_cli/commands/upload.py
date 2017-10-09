@@ -119,7 +119,6 @@ class upload:
         web = 'https://jutge.org/problems/{}/submissions'.format(code)
         log.debug(web)
 
-
         cookie_container = cookie.cookie(args)
 
         if cookie_container.has_cookie:
@@ -184,29 +183,32 @@ class upload:
 
         log.debug(data)
 
-        files= {
-                'file' : [ '{}.{}'.format(code, extension)  , open(args.prog, 'r')]
-                }
+        with open(args.prog, 'r') as prog_file:
+            files= {
+                    'file' : [ '{}.{}'.format(code, extension), prog_file]
+                    }
 
-        if args.check:
-            prev_veredict = check_submissions.check_submissions(args).check_last(args)
+            if args.check:
+                checker = check_submissions.check_submissions(args).check_last(args)
+                prev_veredict = checker.check_last()
 
-        post(web, data=data, files=files, cookies=cookies)
+            post(web, data=data, files=files, cookies=cookies)
 
         if args.check:
             for i in range(0, 6):
                 sleep(5)
-                veredict = check_submissions.check_submissions(args).check_last(args)
+                veredict = checker.check_last()
                 log.debug(veredict)
-                if prev_veredict != veredict and veredict['code'] == code:
+                if prev_veredict['time'] != veredict['time'] \
+                        and veredict['code'] == code:
                     if veredict['veredict'] == 'Pending':
                         continue
-                    else :
+                    else:
                         if not args.quiet:
                             print(veredict['veredict'])
                         if veredict['veredict'] in ('AC', '100/100'):
                             exit(0)
-                        else :
+                        else:
                             exit(1)
             log.error('Check timed out')
             exit(2)

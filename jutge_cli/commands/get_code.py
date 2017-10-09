@@ -80,13 +80,13 @@ class get_code:
             prog_name = args.prog.name
 
         try:
-            self.code = re.search('({})'.format(args.regex),
+            self.code = search('({})'.format(args.regex),
                     basename(prog_name)).group(1)
             log.debug(self.code)
         except AttributeError:
             log.warning('Code not found falling back to normal regex')
             try:
-                self.code = re.search('({})'.format(args.regex.split('_')[0]),
+                self.code = search('({})'.format(args.regex.split('_')[0]),
                         basename(prog_name)).group(1) + '_ca'
                 return
             except AttributeError:

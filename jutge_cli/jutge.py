@@ -245,18 +245,16 @@ parser_test.add_argument('--diff-flags', type=str,
         default=config['diff-flags'],
         help='diff shell command flags used to compare tests \
                 (comma separated)')
-parser_test.add_argument('--inp-suffix',
-        type=str,
-        help='suffix of test input files',
-        default=config['inp-suffix'])
-parser_test.add_argument('--cor-suffix',
-        type=str,
-        help='suffix of test correct output files',
-        default=config['cor-suffix'])
-parser_test.add_argument('--no-custom',
-        action='store_true',
-        help='do not test custom cases',
-        default=False)
+parser_test.add_argument('--inp-suffix', type=str,
+        default=config['inp-suffix'],
+        help='suffix of test input files')
+parser_test.add_argument('--cor-suffix', type=str,
+        default=config['cor-suffix'],
+        help='suffix of test correct output files')
+parser_test.add_argument('--no-custom', action='store_true', default=False,
+        help='do not test custom cases')
+parser_test.add_argument('--no-color', action='store_true', default=False,
+        help='do not use ansi color sequences')
 
 parser_update = subparsers.add_parser('update', aliases=['import'],
         help='add programs to archived folder from zip file',
@@ -264,15 +262,14 @@ parser_update = subparsers.add_parser('update', aliases=['import'],
 parser_update.set_defaults(func=run_update)
 parser_update.add_argument('zip', type=argparse.FileType('r'),
         help='zip file containing the problems')
-parser_update.add_argument('-f', '--folder', type=str, default=config['folder'],
+parser_update.add_argument('-f', '--folder', type=str,
+        default=config['folder'],
         help='archive folder')
 parser_update.add_argument('--delay', type=int, default=100,
         metavar='milliseconds',
         help='delay between jutge.org GET requests')
-parser_update.add_argument('--overwrite',
-        action='store_true',
-        help='overwrite programs already found in archive',
-        default=False)
+parser_update.add_argument('--overwrite', action='store_true', default=False,
+        help='overwrite programs already found in archive')
 
 parser_upload = subparsers.add_parser('upload', aliases=['up'],
         help='Upload program for jutge evaluation',

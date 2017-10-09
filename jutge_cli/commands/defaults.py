@@ -47,14 +47,14 @@ class config:
 
         self.subfolders = {}
 
-    for key in self.param.iterkeys() + ['problem_sets']:
-        try:
-            if key in ('email', 'password'):
-                self.param[key] = settings['login'][key]
-            elif key == 'problem_sets':
-                self.subfolders = settings[key]
-            else:
-                self.param[key] = settings[key]
-        except KeyError:
-            pass
+        for key in [*self.param, 'problem_sets']:
+            try:
+                if key in ('email', 'password'):
+                    self.param[key] = settings['login'][key]
+                elif key == 'problem_sets':
+                    self.subfolders = settings[key]
+                else:
+                    self.param[key] = settings[key]
+            except KeyError:
+                pass
 

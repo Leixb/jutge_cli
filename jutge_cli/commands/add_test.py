@@ -31,7 +31,7 @@ class add_test:
     def __init__(self, args):
 
         code = get_code.get_code(args).code
-        dest_folder = expanduser('{db}/{code}'.format(args.database, code))
+        dest_folder = expanduser('{}/{}'.format(args.database, code))
 
         if args.delete:
             for custom_test in glob('{}/custom-*'.format(dest_folder)):
@@ -56,8 +56,8 @@ class add_test:
 
         dest = '{folder}/custom-{n}'.format(folder=dest_folder, n=n)
 
-        with open('{}.{}'.format(dest, args.inp_suffix), 'a') as inp_file:
+        with open('{}.{}'.format(dest, args.inp_suffix), 'w') as inp_file:
             inp_file.write(src_inp)
-        with open('{}.{}'.format(dest, args.cor_suffix), 'a') as cor_file:
+        with open('{}.{}'.format(dest, args.cor_suffix), 'w') as cor_file:
             cor_file.write(src_cor)
 

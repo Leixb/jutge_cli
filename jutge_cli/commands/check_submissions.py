@@ -33,7 +33,9 @@ class check_submissions:
             log.error('Cannot check if --no-download provided')
             exit(20)
 
-        cookie_container = cookie.cookie(args)
+        self.args = args
+
+        cookie_container = cookie.cookie(self.args)
 
         if cookie_container.check_cookie() == None:
             log.error('Invalid cookie')
@@ -41,19 +43,19 @@ class check_submissions:
 
         self.cookies = { 'PHPSESSID' : cookie_container.cookie }
 
-        log.debug(args.SUBCOMMAND)
+        log.debug(self.args.SUBCOMMAND)
 
-        if args.SUBCOMMAND in ('check_submissions', 'check'):
-            if args.code == None:
-                if self.check_last(args)['veredict'] in ('AC', '100/100') :
+        if self.args.SUBCOMMAND in ('check_submissions', 'check'):
+            if self.args.code == None:
+                if self.check_last()['veredict'] in ('AC', '100/100') :
                     exit(0)
                 else:
                     exit(1)
             else:
-                code = get_code.get_code(args).code
+                code = get_code.get_code(self.args).code
                 veredict = self.check_problem(code)
 
-                if not args.quiet: print(veredict)
+                if not self.args.quiet: print(veredict)
 
                 if veredict == 'accepted':
                     exit(0)
@@ -72,7 +74,7 @@ class check_submissions:
             if contents.startswith('Problem'):
                 return contents.split(':')[1].strip()
 
-    def check_last(self, args):
+    def check_last(self):
         url = 'https://jutge.org/submissions'
 
         response = get(url, cookies=self.cookies)
@@ -80,9 +82,9 @@ class check_submissions:
 
         submissions_list = soup.find('ul', {'class' : 'timeline'})
 
-        if args.last:
+        if self.args.last:
             submissions_list = [submissions_list.li]
-        elif args.reverse:
+        elif self.args.reverse:
             submissions_list = submissions_list.findAll('li')[:-1]
             last_veredict = None
         else :
@@ -97,14 +99,16 @@ class check_submissions:
             problem_code = submission.a['href'].split('/')[2].strip()
             problem_name = submission.div.p.contents[0].strip()
 
-            if args.reverse and last_veredict == None:
+            if self.args.reverse and last_veredict == None:
                 last_veredict = dict(
                         veredict=veredict, code=problem_code, time=time)
 
-            if not args.quiet:
-                print(time, '\t', veredict, problem_code, problem_name)
+            if not self.args.quiet:
+                print('{:>19} {:^4} {:>8} {}'.format(
+                        time, veredict, problem_code, problem_name
+                        ))
 
-        if not args.reverse:
+        if not self.args.reverse:
             last_veredict = dict(
                     veredict=veredict, code=problem_code, time=time)
 
