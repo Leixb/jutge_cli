@@ -25,34 +25,11 @@ try:
 except ModuleNotFoundError:
     from commands import *
 
-def run_add_test(args):
-    add_test.add_test(args)
-def run_archive(args):
-    archive.archive(args)
-def run_check_submissions(args):
-    check_submissions.check_submissions(args)
-def run_cookie(args):
-    cookie.cookie(args)
-def run_download(args):
-    download.download(args)
-def run_login(args):
-    login.login(args)
-def run_new(args):
-    new.new(args)
-def run_show(args):
-    show.show(args)
-def run_test(args):
-    test.test(args)
-def run_update(args):
-    update.update(args)
-def run_upload(args):
-    upload.upload(args)
+JUTGE_CLI_VERSION = '1.6.3'
 
-jutge_cli_version = '1.6.3'
+CONFIG = defaults.config()['param']
 
-config = defaults.config().param
-
-banner = '''\
+BANNER = '''\
 
        ██╗██╗   ██╗████████╗ ██████╗ ███████╗   ______     ___
        ██║██║   ██║╚══██╔══╝██╔════╝ ██╔════╝  / ___| |   |_ _|
@@ -61,247 +38,253 @@ banner = '''\
   ╚█████╔╝╚██████╔╝   ██║   ╚██████╔╝███████╗  \____|_____|___|
    ╚════╝  ╚═════╝    ╚═╝    ╚═════╝ ╚══════╝  v{} by Leix_b
 
-'''.format(jutge_cli_version)
+'''.format(JUTGE_CLI_VERSION)
 
-parser = argparse.ArgumentParser(
-        description=banner,
-        formatter_class=argparse.RawDescriptionHelpFormatter)
+PARSER = argparse.ArgumentParser(
+    description=BANNER,
+    formatter_class=argparse.RawDescriptionHelpFormatter)
 
-parent_parser = argparse.ArgumentParser(add_help=False)
+PARENT_PARSER = argparse.ArgumentParser(add_help=False)
 
-parent_parser.add_argument('-d', '--database', type=str,
-        default=config['database'],
+PARENT_PARSER.add_argument('-d', '--database', type=str,
+        default=CONFIG['database'],
         help='directory containing the test samples')
-parent_parser.add_argument('-r', '--regex', type=str,
+PARENT_PARSER.add_argument('-r', '--regex', type=str,
         help='regular expression used to find the code from filename',
-        default=config['regex'])
-parent_parser.add_argument('--no-download', action='store_true', default=False,
+        default=CONFIG['regex'])
+PARENT_PARSER.add_argument('--no-download', action='store_true', default=False,
         help='do not attempt to fetch data from jutge.org')
-parent_parser.add_argument('--cookie', type=str,
+PARENT_PARSER.add_argument('--cookie', type=str,
         metavar='PHPSESSID',
-        help='cookie used to fetch data from jutge.org \
-            (this is needed for private problems which code begins with an X)')
+        help='cookie used to fetch data from jutge.org (this is needed for private problems which code begins with an X)')
 
-parent_parser_verbosity = parent_parser.add_mutually_exclusive_group()
-parent_parser_verbosity.add_argument('-q', '--quiet', action='store_true')
-parent_parser_verbosity.add_argument('-v', '--verbosity', action='count',
+PARENT_PARSER_VERBOSITY = PARENT_PARSER.add_mutually_exclusive_group()
+PARENT_PARSER_VERBOSITY.add_argument('-q', '--quiet', action='store_true')
+PARENT_PARSER_VERBOSITY.add_argument('-v', '--verbosity', action='count',
         default=0)
 
-subparsers = parser.add_subparsers(title='subcommands', dest='SUBCOMMAND')
-subparsers.required = True
+SUBPARSERS = PARSER.add_subparsers(title='subcommands', dest='SUBCOMMAND')
+SUBPARSERS.required = True
 
-parser_add_test = subparsers.add_parser('add-test', aliases=['add'],
+PARSER_ADD_TEST = SUBPARSERS.add_parser('add-test', aliases=['add'],
         help='add custom test case to database',
-        parents=[parent_parser])
-parser_add_test.set_defaults(func=run_add_test)
-parser_add_test_code = parser_add_test.add_mutually_exclusive_group(
+        parents=[PARENT_PARSER])
+PARSER_ADD_TEST.set_defaults(subcommand=add_test.add_test)
+PARSER_ADD_TEST_CODE = PARSER_ADD_TEST.add_mutually_exclusive_group(
         required=True)
-parser_add_test_code.add_argument('-p', '--prog', type=argparse.FileType('r'),
+PARSER_ADD_TEST_CODE.add_argument('-p', '--prog', type=argparse.FileType('r'),
         metavar='prog.cpp',
         help='program to test')
-parser_add_test_code.add_argument('-c', '--code', type=str,
+PARSER_ADD_TEST_CODE.add_argument('-c', '--code', type=str,
         help='code to use instead of searching in the filename')
-parser_add_test.add_argument('-i', '--input-file', type=argparse.FileType('r'),
+PARSER_ADD_TEST.add_argument('-i', '--input-file', type=argparse.FileType('r'),
         metavar='test1.inp',
         help='test case input file',
         default=sys.stdin)
-parser_add_test.add_argument('-o', '--output-file', type=argparse.FileType('r'),
+PARSER_ADD_TEST.add_argument('-o', '--output-file', type=argparse.FileType('r'),
         metavar='test1.cor',
         help='test case expected output file',
         default=sys.stdin)
-parser_add_test.add_argument('--inp-suffix', type=str,
-        default=config['inp-suffix'],
+PARSER_ADD_TEST.add_argument('--inp-suffix', type=str,
+        default=CONFIG['inp-suffix'],
         help='suffix of test input files')
-parser_add_test.add_argument('--cor-suffix', type=str,
-        default=config['cor-suffix'],
+PARSER_ADD_TEST.add_argument('--cor-suffix', type=str,
+        default=CONFIG['cor-suffix'],
         help='suffix of test correct output files')
-parser_add_test.add_argument('--delete', action='store_true', default=False,
+PARSER_ADD_TEST.add_argument('--delete', action='store_true', default=False,
         help='delete all custom tests for problem')
 
-parser_archive = subparsers.add_parser('archive', aliases=['done'],
+PARSER_ARCHIVE = SUBPARSERS.add_parser('archive', aliases=['done'],
         help='move program to archived folder',
-        parents=[parent_parser])
-parser_archive.set_defaults(func=run_archive)
-parser_archive.add_argument('prog', type=argparse.FileType('r+'),
+        parents=[PARENT_PARSER])
+PARSER_ARCHIVE.set_defaults(subcommand=archive.archive)
+PARSER_ARCHIVE.add_argument('prog', type=argparse.FileType('r+'),
         metavar='prog.cpp',
         help='file to move')
-parser_archive.add_argument('-f', '--folder', type=str,
-        default=config['folder'],
+PARSER_ARCHIVE.add_argument('-f', '--folder', type=str,
+        default=CONFIG['folder'],
         help='folder where program will be archived')
-parser_archive.add_argument('--overwrite', action='store_true', default=False,
+PARSER_ARCHIVE.add_argument('--overwrite', action='store_true', default=False,
         help='overwrite program if already in archive')
-parser_archive.add_argument('--no-delete', action='store_true', default=False,
+PARSER_ARCHIVE.add_argument('--no-delete', action='store_true', default=False,
         help='do not delete file after archiving')
 
-parser_check_submissions = subparsers.add_parser('check-submissions',
+PARSER_CHECK_SUBMISSIONS = SUBPARSERS.add_parser('check-submissions',
         aliases=['check'],
         help='check last sent submissions',
-        parents=[parent_parser])
-parser_check_submissions.set_defaults(func=run_check_submissions)
-parser_check_submissions_mode = \
-        parser_check_submissions.add_mutually_exclusive_group()
-parser_check_submissions_mode.add_argument('--last', action='store_true',
+        parents=[PARENT_PARSER])
+PARSER_CHECK_SUBMISSIONS.set_defaults(subcommand=check_submissions.check_submissions)
+PARSER_CHECK_SUBMISSIONS_MODE = \
+        PARSER_CHECK_SUBMISSIONS.add_mutually_exclusive_group()
+PARSER_CHECK_SUBMISSIONS_MODE.add_argument('--last', action='store_true',
         default=False,
         help='only show last submission')
-parser_check_submissions_mode.add_argument('--reverse', action='store_true',
+PARSER_CHECK_SUBMISSIONS_MODE.add_argument('--reverse', action='store_true',
         help='show last submission on top',
         default=False)
-parser_check_submissions_mex = \
-        parser_check_submissions.add_mutually_exclusive_group()
-parser_check_submissions_mex.add_argument('-p', '--prog',
+PARSER_CHECK_SUBMISSIONS_MEX = \
+        PARSER_CHECK_SUBMISSIONS.add_mutually_exclusive_group()
+PARSER_CHECK_SUBMISSIONS_MEX.add_argument('-p', '--prog',
         type=argparse.FileType('r'),
         metavar='prog.cpp',
         help='filename from which we can extract the problem code')
-parser_check_submissions_mex.add_argument('-c', '--code', type=str,
+PARSER_CHECK_SUBMISSIONS_MEX.add_argument('-c', '--code', type=str,
         help='problem code')
 
-parser_cookie = subparsers.add_parser('cookie',
+PARSER_COOKIE = SUBPARSERS.add_parser('cookie',
         help='save cookie to temporary file for later use to delete cookie \
                 issue the command: jutge cookie delete',
-        parents=[parent_parser])
-parser_cookie.set_defaults(func=run_cookie)
-parser_cookie.add_argument('cookie',
+        parents=[PARENT_PARSER])
+PARSER_COOKIE.set_defaults(subcommand=cookie.cookie)
+PARSER_COOKIE.add_argument('cookie',
         metavar='PHPSESSID',
         help='cookie to save (special values: delete -> deletes saved cookie; \
                 print -> print current saved cookie)')
-parser_cookie.add_argument('--skip-check', action='store_true', default=False,
+PARSER_COOKIE.add_argument('--skip-check', action='store_true', default=False,
         help='Save cookie file even if not valid')
 
-parser_download = subparsers.add_parser('download', aliases=['down'],
+PARSER_DOWNLOAD = SUBPARSERS.add_parser('download', aliases=['down'],
         help='download problem files to local database',
-        parents=[parent_parser])
-parser_download.set_defaults(func=run_download)
-parser_download_mex = parser_download.add_mutually_exclusive_group(
+        parents=[PARENT_PARSER])
+PARSER_DOWNLOAD.set_defaults(subcommand=download.download)
+PARSER_DOWNLOAD_MEX = PARSER_DOWNLOAD.add_mutually_exclusive_group(
         required=True)
-parser_download_mex.add_argument('-p', '--prog', type=argparse.FileType('r'),
+PARSER_DOWNLOAD_MEX.add_argument('-p', '--prog', type=argparse.FileType('r'),
         metavar='prog.cpp',
         help='filename from which we can extract the problem code')
-parser_download_mex.add_argument('-c', '--code', type=str,
+PARSER_DOWNLOAD_MEX.add_argument('-c', '--code', type=str,
         help='problem code')
-parser_download.add_argument('--overwrite', action='store_true', default=False,
+PARSER_DOWNLOAD.add_argument('--overwrite', action='store_true', default=False,
         help='overwrite existing files in database')
 
-parser_login = subparsers.add_parser('login', parents=[parent_parser],
+PARSER_LOGIN = SUBPARSERS.add_parser('login', parents=[PARENT_PARSER],
         help='login to jutge.org and save cookie')
-parser_login.set_defaults(func=run_login)
-parser_login.add_argument('--email', default=config['email'],
+PARSER_LOGIN.set_defaults(subcommand=login.login)
+PARSER_LOGIN.add_argument('--email', default=CONFIG['email'],
         help='jutge.org email')
-parser_login.add_argument('--password', default=config['password'],
+PARSER_LOGIN.add_argument('--password', default=CONFIG['password'],
         help='jutge.org password')
 
-parser_new = subparsers.add_parser('new', aliases=['create'],
+PARSER_NEW = SUBPARSERS.add_parser('new', aliases=['create'],
         help='create new file',
-        parents=[parent_parser])
-parser_new.set_defaults(func=run_new)
-parser_new.add_argument('code', type=str,
+        parents=[PARENT_PARSER])
+PARSER_NEW.set_defaults(subcommand=new.new)
+PARSER_NEW.add_argument('code', type=str,
         help='problem code')
-parser_new.add_argument('-t', '--type', type=str, default='cpp',
+PARSER_NEW.add_argument('-t', '--type', type=str, default='cpp',
         help='file extension')
-parser_new.add_argument('--overwrite',
+PARSER_NEW.add_argument('--overwrite',
         action='store_true',
         help='overwrite existing files',
         default=False)
-parser_new.add_argument('--problem-set',
+PARSER_NEW.add_argument('--problem-set',
         action='store_true',
         help='Create all files in problem set',
         default=False)
 
-parser_show = subparsers.add_parser('show', aliases=['print'],
+PARSER_SHOW = SUBPARSERS.add_parser('show', aliases=['print'],
         help='show title, statement or test cases corresponding to problem \
                 code',
-        parents=[parent_parser])
-parser_show.set_defaults(func=run_show)
-parser_show.add_argument('mode',
+        parents=[PARENT_PARSER])
+PARSER_SHOW.set_defaults(subcommand=show.show)
+PARSER_SHOW.add_argument('mode',
         type=str,
         choices=['title', 'stat', 'cases'])
-parser_show_code = parser_show.add_mutually_exclusive_group(required=True)
-parser_show_code.add_argument('-p', '--prog',
+PARSER_SHOW_CODE = PARSER_SHOW.add_mutually_exclusive_group(required=True)
+PARSER_SHOW_CODE.add_argument('-p', '--prog',
         metavar='prog.cpp',
         type=argparse.FileType('r'),
         help='filename from which we can extract the problem code')
-parser_show_code.add_argument('-c', '--code',
+PARSER_SHOW_CODE.add_argument('-c', '--code',
         type=str,
         help='problem code to use')
-parser_show.add_argument('--inp-suffix',
+PARSER_SHOW.add_argument('--inp-suffix',
         type=str,
         help='suffix of test input files',
-        default=config['inp-suffix'])
-parser_show.add_argument('--cor-suffix', type=str,
-        default=config['cor-suffix'],
+        default=CONFIG['inp-suffix'])
+PARSER_SHOW.add_argument('--cor-suffix', type=str,
+        default=CONFIG['cor-suffix'],
         help='suffix of test correct output files')
 
-parser_test = subparsers.add_parser('test',
+PARSER_TEST = SUBPARSERS.add_parser('test',
         help='test program using cases from database',
-        parents=[parent_parser])
-parser_test.set_defaults(func=run_test)
-parser_test.add_argument('prog', type=argparse.FileType('r'),
+        parents=[PARENT_PARSER])
+PARSER_TEST.set_defaults(subcommand=test.test)
+PARSER_TEST.add_argument('prog', type=argparse.FileType('r'),
         metavar='prog.cpp',
         help='Program to test')
-parser_test.add_argument('-c', '--code', type=str,
+PARSER_TEST.add_argument('-c', '--code', type=str,
         help='code to use instead of searching in the filename')
-parser_test.add_argument('--diff-prog', type=str, default=config['diff-prog'],
+PARSER_TEST.add_argument('--diff-prog', type=str, default=CONFIG['diff-prog'],
         help='diff shell command to compare tests')
-parser_test.add_argument('--diff-flags', type=str,
-        default=config['diff-flags'],
+PARSER_TEST.add_argument('--diff-flags', type=str,
+        default=CONFIG['diff-flags'],
         help='diff shell command flags used to compare tests \
                 (comma separated)')
-parser_test.add_argument('--inp-suffix', type=str,
-        default=config['inp-suffix'],
+PARSER_TEST.add_argument('--inp-suffix', type=str,
+        default=CONFIG['inp-suffix'],
         help='suffix of test input files')
-parser_test.add_argument('--cor-suffix', type=str,
-        default=config['cor-suffix'],
+PARSER_TEST.add_argument('--cor-suffix', type=str,
+        default=CONFIG['cor-suffix'],
         help='suffix of test correct output files')
-parser_test.add_argument('--no-custom', action='store_true', default=False,
+PARSER_TEST.add_argument('--no-custom', action='store_true', default=False,
         help='do not test custom cases')
-parser_test.add_argument('--no-color', action='store_true', default=False,
+PARSER_TEST.add_argument('--no-color', action='store_true', default=False,
         help='do not use ansi color sequences')
 
-parser_update = subparsers.add_parser('update', aliases=['import'],
+PARSER_UPDATE = SUBPARSERS.add_parser('update', aliases=['import'],
         help='add programs to archived folder from zip file',
-        parents=[parent_parser])
-parser_update.set_defaults(func=run_update)
-parser_update.add_argument('zip', type=argparse.FileType('r'),
+        parents=[PARENT_PARSER])
+PARSER_UPDATE.set_defaults(subcommand=update.update)
+PARSER_UPDATE.add_argument('zip', type=argparse.FileType('r'),
         help='zip file containing the problems')
-parser_update.add_argument('-f', '--folder', type=str,
-        default=config['folder'],
+PARSER_UPDATE.add_argument('-f', '--folder', type=str,
+        default=CONFIG['folder'],
         help='archive folder')
-parser_update.add_argument('--delay', type=int, default=100,
+PARSER_UPDATE.add_argument('--delay', type=int, default=100,
         metavar='milliseconds',
         help='delay between jutge.org GET requests')
-parser_update.add_argument('--overwrite', action='store_true', default=False,
+PARSER_UPDATE.add_argument('--overwrite', action='store_true', default=False,
         help='overwrite programs already found in archive')
 
-parser_upload = subparsers.add_parser('upload', aliases=['up'],
+PARSER_UPLOAD = SUBPARSERS.add_parser('upload', aliases=['up'],
         help='Upload program for jutge evaluation',
-        parents=[parent_parser])
-parser_upload.set_defaults(func=run_upload)
-parser_upload.add_argument('prog', type=str,
+        parents=[PARENT_PARSER])
+PARSER_UPLOAD.set_defaults(subcommand=upload.upload)
+PARSER_UPLOAD.add_argument('prog', type=str,
         metavar='prog.cpp',
         help='program file to upload')
-parser_upload.add_argument('-c', '--code', type=str,
+PARSER_UPLOAD.add_argument('-c', '--code', type=str,
         metavar='CODE',
         help='code of problem to submit')
-parser_upload.add_argument('--compiler', type=str,
+PARSER_UPLOAD.add_argument('--compiler', type=str,
         metavar='COMPILER_ID',
         help='jutge.org compiler_id to use')
-parser_upload.add_argument('--problem-set', action='store_true', default=False,
+PARSER_UPLOAD.add_argument('--problem-set', action='store_true', default=False,
         help='upload all files in problem set')
-parser_upload.add_argument('--delay', type=int, default=100,
+PARSER_UPLOAD.add_argument('--delay', type=int, default=100,
         metavar='milliseconds',
         help='delay between jutge.org upload requests')
-parser_upload.add_argument('-f', '--folder', type=str,
-        default=config['folder'],
+PARSER_UPLOAD.add_argument('-f', '--folder', type=str,
+        default=CONFIG['folder'],
         help='folder where programs are archived')
-parser_upload.add_argument('--skip-test', action='store_true', default=False,
+PARSER_UPLOAD.add_argument('--skip-test', action='store_true', default=False,
         help='do not test public cases before uploading')
-parser_upload.add_argument('--no-skip-accepted', action='store_true',
+PARSER_UPLOAD.add_argument('--no-skip-accepted', action='store_true',
         default=False,
         help='do not skip accepted problems when uploading')
-parser_upload.add_argument('--check', action='store_true', default=False,
+PARSER_UPLOAD.add_argument('--check', action='store_true', default=False,
         help='wait for veredict after uploading')
 
 def main():
-    args = parser.parse_args()
+    args = PARSER.parse_args()
+
+    global DATABASE, REGEX, NO_DOWNLOAD, COOKIE
+
+    DATABASE = args.database
+    REGEX = args.regex
+    NO_DOWNLOAD = args.no_download
+    COOKIE = args.cookie
 
     if args.verbosity >= 3:
         log_lvl = logging.DEBUG
@@ -321,7 +304,13 @@ def main():
     log.debug(args.regex)
     log.debug(args.database)
 
-    args.func(args)
+    # Add code to kwargs
+    args_dict = vars(args)
+    args_dict['code'] = get_code.get_code(args).code
 
-if __name__ == '__main__': main()
+    args.subcommand(**args_dict)  #expand flags to kwargs
+
+
+if __name__ == '__main__':
+    main()
 
