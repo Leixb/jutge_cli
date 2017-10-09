@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+"""Save and read cookie from args or /tmp file
+"""
+
 from logging import getLogger
 from os import remove
 from os.path import isfile
@@ -23,67 +26,96 @@ from tempfile import gettempdir
 from bs4 import BeautifulSoup
 from requests import get
 
-log = getLogger('jutge.cookie')
+LOG = getLogger('jutge.cookie')
 
-class cookie:
 
-    def __init__(self, args):
+def cookie(**kwargs):
+    """Wrapper around cookie class
+
+    :param args: argparse flags
+    :type args: argparse.Namespace
+    """
+    return Cookie(**kwargs)
+
+
+class Cookie:
+
+    """Provides methods to save and read cookie from file or arguments
+    """
+
+    def __init__(self, cookie=None, no_download=False,
+                 skip_check=False, **kwargs):
+        """Save args and initialize class variables
+
+        :param cookie: cookie value
+        :param no_download: do not download from jutge.org
+        :param skip_check: skip cookie check
+
+        :type cookie: str
+        :type no_download: Boolean
+        :type skip_check: Boolean
+        """
+
         self.file_name = '{}/jutge_cli_cookie'.format(gettempdir())
         self.has_cookie = False
         self.check_done = False
+        self.username = None
 
-        log.debug('Cookie')
+        LOG.debug('Cookie')
 
-        self.no_download = args.no_download
+        self.no_download = no_download
 
-        if args.cookie == 'delete':
+        if cookie == 'delete':
             remove(self.file_name)
             return
 
-        try:
-            self.skip_check = args.skip_check
-        except AttributeError:
-            self.skip_check = True
+        LOG.debug('Cookie')
+        LOG.debug(cookie)
 
-        log.debug('Cookie')
-        log.debug(args.cookie)
-
-        if not args.cookie in (None, 'show', 'print'):
-            self.cookie = args.cookie
+        if cookie not in (None, 'show', 'print'):
+            self.cookie = cookie
             self.has_cookie = True
-            if not self.skip_check:
-                if self.check_cookie() == None:
-                    log.error('Invalid cookie (if you want to \
-                            skip the check use --skip-check)')
+            if not skip_check:
+                if self.check_cookie() is None:
+                    LOG.error('Invalid cookie (if you want to \
+skip the check use --skip-check)')
+
                     exit(3)
-            log.debug('Cookie 3')
+            LOG.debug('Cookie 3')
             self.make_file()
         else:
             if isfile(self.file_name):
                 with open(self.file_name) as cookie_file:
                     self.cookie = cookie_file.readline().strip()
                     self.has_cookie = True
-                log.debug(self.cookie)
+                LOG.debug(self.cookie)
 
             if self.has_cookie:
                 print(self.cookie)
             else:
-                log.warning('No cookie saved')
+                LOG.warning('No cookie saved')
 
     def make_file(self):
-        log.debug('writing file ' + self.file_name)
+        """Save cookie to file: /tmp/jutge_cookie (or equivalent)
+        """
+        LOG.debug('writing file ' + self.file_name)
         with open(self.file_name, 'w') as cookie_file:
             cookie_file.write(self.cookie + '\n')
 
     def check_cookie(self):
+        """Check that cookie is valid by downloading dashboard
+
+        :return: username if cookie succesfull or None on failure
+        :rtype: str
+        """
         if self.check_done:
             return self.username
 
         if self.no_download:
-            log.debug('Cannot check cookie if no-download active')
+            LOG.debug('Cannot check cookie if no-download active')
             return None
 
-        cookies = { 'PHPSESSID' : self.cookie }
+        cookies = {'PHPSESSID' : self.cookie}
         web = 'https://jutge.org/dashboard'
 
         response = get(web, cookies=cookies)
@@ -92,19 +124,18 @@ class cookie:
         try:
             tags = soup.findAll('a', {'href' : '/profile'})
             for tag in tags:
-                log.debug(tag.b)
-                if tag.b != None:
+                LOG.debug(tag.b)
+                if tag.b is not None:
                     self.username = tag.b.contents[0]
-                    log.debug(tag.b)
+                    LOG.debug(tag.b)
                     break
 
-            log.debug(self.username)
-            log.debug('Logged in as: {}'.format(self.username))
+            LOG.debug(self.username)
+            LOG.debug('Logged in as: %s', self.username)
 
         except AttributeError:
-            log.debug('Invalid cookie: {}'.format(self.cookie))
+            LOG.debug('Invalid cookie: %s', self.cookie)
             self.username = None
 
         self.check_done = True
         return self.username
-

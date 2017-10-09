@@ -15,46 +15,57 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+"""Wrapper for default settings and settings from config files
+"""
+
 from logging import getLogger
 from os.path import expanduser
 
 from yaml import load
 
-log = getLogger('jutge.defaults')
+LOG = getLogger('jutge.defaults')
 
-class config:
 
-    def __init__(self):
+def config():
+    """Read YAML config and return configuration in dict
 
+    If setting is not in YAML config file or config file is not found
+    it will default to the default values
+
+    :return: dictionary with keys param and subfolders
+    :rtype: dict
+    """
+
+    try:
+        with open(expanduser('~/.jutge_cli.yaml'), 'r') as config_file:
+            settings = load(config_file)
+    except FileNotFoundError:
+        LOG.warning('No config file round')
+        settings = {}
+
+    param = {
+        'database' : '~/Documents/jutge/DB',
+        'regex' : r'[PGQX]\d{5}_(ca|en|es)',
+        'diff-prog' : 'diff',
+        'diff-flags' : '-y',
+        'inp-suffix' : 'inp',
+        'cor-suffix' : 'cor',
+        'folder' : '~/Documents/jutge/Done',
+        'email' : None,
+        'password' : None
+    }
+
+    subfolders = {}
+
+    for key in [*param, 'problem_sets']:
         try:
-            with open(expanduser('~/.jutge_cli.yaml'), 'r') as config_file:
-                settings = load(config_file)
-        except FileNotFoundError:
-            log.warning('No config file round')
-            settings = {}
+            if key in ('email', 'password'):
+                param[key] = settings['login'][key]
+            elif key == 'problem_sets':
+                subfolders = settings[key]
+            else:
+                param[key] = settings[key]
+        except KeyError:
+            pass
 
-        self.param = {
-            'database' : '~/Documents/jutge/DB',
-            'regex' : '[PGQX]\d{5}_(ca|en|es)',
-            'diff-prog' : 'diff',
-            'diff-flags' : '-y',
-            'inp-suffix' : 'inp',
-            'cor-suffix' : 'cor',
-            'folder' : '~/Documents/jutge/Done',
-            'email' : None,
-            'password' : None
-        }
-
-        self.subfolders = {}
-
-        for key in [*self.param, 'problem_sets']:
-            try:
-                if key in ('email', 'password'):
-                    self.param[key] = settings['login'][key]
-                elif key == 'problem_sets':
-                    self.subfolders = settings[key]
-                else:
-                    self.param[key] = settings[key]
-            except KeyError:
-                pass
-
+    return dict(param=param, subfolders=subfolders)

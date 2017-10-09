@@ -26,70 +26,104 @@ from requests import get
 
 from . import cookie
 
-log = getLogger('jutge.get_code')
-
-class get_code:
-
-    def __init__(self, args):
-        try:
-            if args.code != None:
-                self.code = args.code
-
-                if not '_' in self.code:
-                    db_folder = glob(expanduser('{}/{}_*'.format(args.database,
-                        self.code)))
-
-                    if len(db_folder)!=0:
-                        self.code = db_folder[0].split('/')[-1]
-                    else:
-
-                        if args.no_download:
-                            log.error('Invalid code')
-                            exit(3)
+LOG = getLogger('jutge.get_code')
 
 
-                        url = 'https://jutge.org/problems/' + args.code
+def expand_subcode(subcode, database, no_download, **kwargs):
+    """Return code from subcode
 
-                        cookie_container = cookie.cookie(args)
+    Returns subcode with locale appended (_ca,_en,_es ...)
+    None on failure
 
-                        if cookie_container.has_cookie:
-                            cookies = dict(PHPSESSID=cookie_container.cookie)
-                        else:
-                            cookies = {}
+    :param subcode: subcode
+    :param database: database folder path
+    :param no_download: do not connect to jutge.org
 
-                        try:
-                            self.code = BeautifulSoup(
-                                    get(url, cookies=cookies).text, 'lxml'
-                                ).find('title').text.split('-')[1].strip()
-                        except KeyError:
-                            log.error('Invalid code')
-                            exit(4)
+    :return: code
+    :rtype: str
+    """
 
-                        if self.code == 'Error':
-                            log.error('Invalid code')
-                            exit(3)
+    database = expanduser(database)
+    problem_folder = glob('{}/{}_*'.format(database, subcode))
 
-                log.debug('code in args')
-                log.debug(self.code)
-                return
-        except AttributeError: pass
+    if problem_folder:
+        code = problem_folder[0].split('/')[-1]
+    else:
 
-        if isinstance(args.prog, str):
-            prog_name = args.prog
+        if no_download:
+            LOG.error('Invalid code')
+            return None
+
+        url = 'https://jutge.org/problems/' + subcode
+
+        cookie_container = cookie.cookie(no_download=no_download, **kwargs)
+
+        if cookie_container.has_cookie:
+            cookies = dict(PHPSESSID=cookie_container.cookie)
         else:
-            prog_name = args.prog.name
+            cookies = {}
 
         try:
-            self.code = search('({})'.format(args.regex),
-                    basename(prog_name)).group(1)
-            log.debug(self.code)
-        except AttributeError:
-            log.warning('Code not found falling back to normal regex')
-            try:
-                self.code = search('({})'.format(args.regex.split('_')[0]),
-                        basename(prog_name)).group(1) + '_ca'
-                return
-            except AttributeError:
-                log.error('Code not found, regex failed')
-                exit(26)
+            response = get(url, cookies=cookies)
+            soup = BeautifulSoup(response.text, 'lxml')
+            code = soup.find('title').text.split('-')[1].strip()
+        except KeyError:
+            LOG.error('Invalid code')
+            return None
 
+        if code == 'Error':
+            LOG.error('Invalid code')
+            return None
+        return code
+
+
+def get_code(database, regex, no_download, code, prog, **kwargs):
+    """Return problem code
+
+    :param database: database folder path
+    :param regex: regex used to match code
+    :param no_download: do not connect to jutge.org
+
+    :param code: problem code
+    :param prog: problem file
+    """
+
+    try:
+        if code is not None:
+
+            if '_' not in code:
+                code = expand_subcode(
+                    code, database=database,
+                    no_download=no_download, **kwargs)
+
+            LOG.debug('code in args')
+            LOG.debug(code)
+
+            return code
+    except AttributeError:
+        pass
+
+    if isinstance(prog, str):
+        prog_name = basename(prog)
+    else:
+        prog_name = basename(prog.name)
+
+    try:
+        code = search('({})'.format(regex), prog_name).group(1)
+        LOG.debug(code)
+    except AttributeError:
+        LOG.warning('Code not found falling back to normal regex')
+        try:
+            regex_v2 = regex.split('_')[0]
+            subcode = search('({})'.format(regex_v2), prog_name).group(1) + '_ca'
+            code = expand_subcode(
+                subcode, database=database,
+                no_download=no_download, **kwargs)
+
+            if code is None:
+                return subcode
+            return code
+
+        except AttributeError:
+            LOG.error('Code not found, regex failed')
+            return None

@@ -38,6 +38,7 @@ int main () {
 '''
         }
 
+
 class new:
 
     def __init__(self, args):
@@ -63,9 +64,8 @@ class new:
         file_name = '{}/{}.{}'.format(dest_folder, title, args.type)
         if not isfile(file_name) or args.overwrite:
             with open(file_name, 'a') as new_file:
-                if template[args.type] != None:
+                if template[args.type] is not None:
                     new_file.write(template[args.type])
-
 
     def problem_set(self, args):
         try:
@@ -91,6 +91,5 @@ class new:
 
             if not isfile(file_name) or args.overwrite:
                 with open(file_name, 'a') as new_file:
-                    if (template[args.type] != None):
+                    if template[args.type] is not None:
                         new_file.write(template[args.type])
-

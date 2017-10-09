@@ -28,13 +28,15 @@ from requests import get
 from zipfile import ZipFile
 
 from . import cookie
+from . import defaults
 
 log = getLogger('jutge.update')
+
 
 def getname(code, cookie):
     web = 'https://jutge.org/problems/{}'.format(code)
 
-    if cookie != None:
+    if cookie is not None:
         cookies = dict(PHPSESSID=cookie)
     else:
         cookies = {}
@@ -47,6 +49,7 @@ def getname(code, cookie):
     name = name[1:].replace(' ', '_').split()[0]
 
     return name
+
 
 class update:
 
@@ -65,49 +68,60 @@ class update:
 
         count = 0
 
-        for folder in glob(extract_to + '/*') :
-            # try:
+        for folder in glob(extract_to + '/*'):
+            try:
                 code = basename(folder)
 
                 sources = []
 
-                for ext in extensions :
+                for ext in extensions:
                     match = glob('{}/*AC.{}'.format(folder, ext))
                     if match:
-                        sources.append([match[-1], ext]) # take last AC
+                        sources.append([match[-1], ext])    # take last AC
 
-                for source in sources :
+                for source in sources:
                     ext = source[1]
-                    if ext == 'cc': ext = 'cpp' # Use cpp over cc for c++ files
+                    if ext == 'cc':
+                        ext = 'cpp'     # Use cpp over cc for c++ files
 
-                    if not glob('{}/{}*.{}'.format(expanduser(args.folder), code, ext)) or args.overwrite:
+                    if args.overwrite or not glob(
+                                            '{}/{}*.{}'.format(
+                                                    expanduser(args.folder),
+                                                    code, ext)):
                         if args.no_download:
                             name = code
                         else:
                             name = getname(code, cookie.cookie().cookie)
 
-                            if name == 'Error': name = code # If name cannot be found default to code to avoid collisions
+                        # If name cannot be found default to code
+                            if name == 'Error':
+                                name = code
 
                         dest_folder = expanduser(args.folder)
 
                         file_name = '{}/{}.{}'.format(dest_folder, name, ext)
 
-                        log.info('Copying {} to {} ...'.format(source[0], file_name))
                         copyfile(source[0], file_name)
+                        log.info('Copied {} to {} ...'.format(
+                                source[0], file_name))
 
                         sub_code = code.split('_')[0]
                         sym_link = '.'
 
-                        for sub_folder, problems in defaults.config().subfolders.items():
+                        for sub_folder, problems in \
+                                        defaults.config().subfolders.items():
                             if sub_code in problems:
-                                sym_link = '{}/{}'.format(dest_folder, sub_folder)
-                                if not isdir(sym_link): mkdir(sym_link)
+                                sym_link = '{}/{}'.format(
+                                        dest_folder, sub_folder)
+                                if not isdir(sym_link):
+                                    mkdir(sym_link)
 
                         if sym_link != '.':
                             sym_link = '{}/{}.{}'.format(sym_link, name, ext)
                             try:
                                 symlink(source, sym_link)
-                                log.debug('Symlink {} -> {}'.format(sym_link, source[0]))
+                                log.debug('Symlink {} -> {}'.format(
+                                        sym_link, source[0]))
                             except FileExistsError:
                                 log.warning('Symlink already exists')
 
@@ -116,7 +130,7 @@ class update:
                         if args.delay > 0:
                             sleep(args.delay / 1000.0)
 
-            # except: log.warning('Skipping {}'.format(folder))
+            except:
+                log.warning('Skipping {}'.format(folder))
 
         log.info('FINISHED; Added {} programs'.format(count))
-

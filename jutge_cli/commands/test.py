@@ -26,32 +26,36 @@ from . import get_code
 
 log = getLogger('jutge.test')
 
+
 class global_vars:
 
     quiet, no_colors = False, False
 
+
 ansi_colors = dict(
-    HEADER = '\033[95m',
-    BLUE = '\033[94m',
-    GREEN = '\033[92m',
-    WARNING = '\033[93m',
-    FAIL = '\033[91m',
-    BOLD = '\033[1m',
-    UNDERLINE = '\033[4m',
-    ENDC = '\033[0m')
+    HEADER='\033[95m',
+    BLUE='\033[94m',
+    GREEN='\033[92m',
+    WARNING='\033[93m',
+    FAIL='\033[91m',
+    BOLD='\033[1m',
+    UNDERLINE='\033[4m',
+    ENDC='\033[0m')
+
 
 def print_color(text, colors=None):
     if not global_vars.quiet:
-        if colors == None or global_vars.no_colors:
+        if colors is None or global_vars.no_colors:
             print(text)
             return
-        elif not isinstance(colors,list):
+        elif not isinstance(colors, list):
             colors = [colors]
         for color in colors:
-            print(ansi_colors[color],end='')
+            print(ansi_colors[color], end='')
         print(text)
         for color in colors:
-            print(ansi_colors['ENDC'],end='')
+            print(ansi_colors['ENDC'], end='')
+
 
 class test:
 
@@ -84,9 +88,10 @@ class test:
                 log.error('Compilation returned {}'.format(return_code))
                 exit(return_code)
 
-        else: prog_name = source_file
+        else:
+            prog_name = source_file
 
-        if not prog_name[0] in ('.','/'):
+        if not prog_name[0] in ('.', '/'):
             prog_name = './' + prog_name
 
         cont, cor = 0, 0
@@ -130,23 +135,23 @@ class test:
                 test_input.close()
 
             try:
-                out  = check_output(
-                        [self.args.diff_prog]\
-                        + self.args.diff_flags.split(',')\
+                out = check_output(
+                        [self.args.diff_prog]
+                        + self.args.diff_flags.split(',')
                         + [test_output.name, sample_cor]
                         )
-                print_color('{:*<79}'.format('*** OK '),['GREEN', 'BOLD'])
+                print_color('{:*<79}'.format('*** OK '), ['GREEN', 'BOLD'])
                 print_color(out.decode('UTF-8'))
 
-                cor+=1
+                cor += 1
 
             except CalledProcessError as err:   # Thrown if files doesn't match
-                print_color( '{:*<79}'.format('*** WA '), ['BOLD', 'FAIL'])
+                print_color('{:*<79}'.format('*** WA '), ['BOLD', 'FAIL'])
                 print_color(err.output.decode('UTF-8'))
             finally:
                 test_output.close()
 
-        result = ' ({:02}/{:02})'.format(cor,cont)
+        result = ' ({:02}/{:02})'.format(cor, cont)
         if cont == 0:
             print_color('Program has no test-cases yet')
         elif cont == cor:
@@ -157,4 +162,3 @@ class test:
             print_color('{:*^79}'.format(result + ' :( '), ['FAIL', 'BOLD'])
 
         return cont-cor
-

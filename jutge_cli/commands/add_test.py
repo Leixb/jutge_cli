@@ -15,6 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+"""This method provides the function `add_test` that creates the necesary files
+to add a new test case to the database folder
+"""
+
 from glob import glob
 from logging import getLogger
 from os import mkdir, remove
@@ -22,42 +26,56 @@ from os.path import isdir, expanduser, basename
 from re import search
 from sys import stdin
 
-from . import get_code
+LOG = getLogger('jutge.add_test')
 
-log = getLogger('jutge.add_test')
 
-class add_test:
+def add_test(database, code, delete, input_file, output_file, 
+        inp_suffix, cor_suffix, **kwargs):
+    """Add custom test to database
 
-    def __init__(self, args):
+    :param database: database folder
+    :param code: problem code
+    :param delete: delete tests
+    :param input_file: file containing test case input
+    :param output_file: file containing test case output
+    :param inp_suffix: input file suffix
+    :param cor_suffix: output file suffix
 
-        code = get_code.get_code(args).code
-        dest_folder = expanduser('{}/{}'.format(args.database, code))
+    :type database: str
+    :type code: str
+    :type delete: Boolean
+    :type input_file: FileType('r')
+    :type output_file: FileType('r')
+    :type inp_suffix: str
+    :type cor_suffix: str
+    """
 
-        if args.delete:
-            for custom_test in glob('{}/custom-*'.format(dest_folder)):
-                remove(custom_test)
-            return
+    dest_folder = expanduser('{}/{}'.format(database, code))
 
-        if args.input_file == stdin:
-            print('Enter input:')
-        src_inp = args.input_file.read()
-        if args.output_file == stdin:
-            print('Enter output:')
-        src_cor = args.output_file.read()
+    if delete:
+        for custom_test in glob('{}/custom-*'.format(dest_folder)):
+            remove(custom_test)
+        return
 
-        if not isdir(dest_folder):
-            mkdir(dest_folder)
+    if input_file == stdin:
+        print('Enter input:')
+    src_inp = input_file.read()
+    if output_file == stdin:
+        print('Enter output:')
+    src_cor = output_file.read()
 
-        files = sorted(glob('{}/custom-*'.format(dest_folder)))
-        if files:
-            n = 1 + int(search('-([0-9]*).', basename(files[-1])).group(1))
-        else:
-            n = 0
+    if not isdir(dest_folder):
+        mkdir(dest_folder)
 
-        dest = '{folder}/custom-{n}'.format(folder=dest_folder, n=n)
+    files = sorted(glob('{}/custom-*'.format(dest_folder)))
+    if files:
+        num = 1 + int(search('-([0-9]*).', basename(files[-1])).group(1))
+    else:
+        num = 0
 
-        with open('{}.{}'.format(dest, args.inp_suffix), 'w') as inp_file:
-            inp_file.write(src_inp)
-        with open('{}.{}'.format(dest, args.cor_suffix), 'w') as cor_file:
-            cor_file.write(src_cor)
+    dest = '{folder}/custom-{n:02}'.format(folder=dest_folder, n=num)
 
+    with open('{}.{}'.format(dest, inp_suffix), 'w') as inp_file:
+        inp_file.write(src_inp)
+    with open('{}.{}'.format(dest, cor_suffix), 'w') as cor_file:
+        cor_file.write(src_cor)

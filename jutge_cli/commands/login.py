@@ -25,17 +25,19 @@ from . import cookie
 
 log = getLogger('jutge.login')
 
+
 class login:
 
     def __init__(self, args):
 
-        if args.email == None:
+        if args.email is None:
             email = input('Email: ')
         else:
             email = args.email
-            if not args.quiet: print('Email :', email)
+            if not args.quiet:
+                print('Email :', email)
 
-        if args.password == None:
+        if args.password is None:
             password = getpass('Password: ')
         else:
             password = args.password
@@ -57,4 +59,3 @@ class login:
         vars(args)['skip-check'] = False
 
         cookie.cookie(args)
-

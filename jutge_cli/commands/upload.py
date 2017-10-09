@@ -17,7 +17,6 @@
 
 from glob import glob
 from logging import getLogger
-from os.path import expanduser
 from time import sleep
 
 from bs4 import BeautifulSoup
@@ -31,6 +30,7 @@ from . import test
 
 log = getLogger('jutge.upload')
 
+
 class upload:
 
     def __init__(self, args):
@@ -41,9 +41,9 @@ class upload:
             args_dict['inp_suffix'] = config.param['inp-suffix']
             args_dict['cor_suffix'] = config.param['cor-suffix']
             args_dict['diff_flags'] = config.param['diff-flags']
-            args_dict['diff_prog']  = config.param['diff-prog']
-            args_dict['no_custom']  = True
-            args_dict['no_color']  = False
+            args_dict['diff_prog'] = config.param['diff-prog']
+            args_dict['no_custom'] = True
+            args_dict['no_color'] = False
         if args.check:
             # Add for check
             args_dict = vars(args)
@@ -66,11 +66,13 @@ class upload:
 
             for subcode in problems:
 
-                files = glob('{}*[!.x]'.format(subcode)) + glob('{}/{}*[!.x]'.format(set_name, subcode))
+                files = glob('{}*[!.x]'.format(subcode))\
+                        + glob('{}/{}*[!.x]'.format(set_name, subcode))
                 if len(files) > 0:
                     if not args.no_skip_accepted:
 
-                        veredict = check_submissions.check_submissions(args).check_problem(subcode)
+                        veredict = check_submissions.check_submissions(
+                                                args).check_problem(subcode)
                         log.debug('{} {}'.format(subcode, veredict))
 
                         if veredict == 'accepted':
@@ -84,7 +86,7 @@ class upload:
             log.debug(submit_queue)
 
             if len(submit_queue) > 20:
-                print('Submit queue contains more than 20 problems ({}) continue? [Ny]'.format(len(submit_queue)) )
+                print('Submit queue contains more than 20 problems ({}) continue? [Ny]'.format(len(submit_queue)))
                 if not input().lower() in ('y', 'ye', 'yes'):
                     exit(130)
             elif len(submit_queue) > 10:
@@ -128,7 +130,7 @@ class upload:
             log.error('We need cookie to upload')
             exit(25)
 
-        if cookie_container.check_cookie() == None:
+        if cookie_container.check_cookie() is None:
             log.error('Invalid cookie')
             exit(26)
 
@@ -140,39 +142,39 @@ class upload:
         token_uid = soup.find('input', {'name' : 'token_uid'})['value']
         log.debug(token_uid)
 
-        extension = args.prog.split('.')[-1] # To determine compiler
+        extension = args.prog.split('.')[-1]  # To determine compiler
 
         compiler = dict(
-                ada = 'GNAT',
-                bas = 'FBC',
-                bf = 'BEEF',
-                c = 'GCC',
-                cc = 'P1++',
-                cpp = 'G++11',
-                cs = 'MonoCS',
-                d = 'GDC',
-                erl = 'Erlang',
-                f = 'GFortran',
-                go = 'Go',
-                hs = 'GHC',
-                java = 'JDK',
-                js = 'nodejs',
-                lisp = 'CLISP',
-                lua = 'Lua',
-                m = 'GObjC',
-                pas = 'FPC',
-                php = 'PHP',
-                pl = 'Perl',
-                py = 'Python3',
-                py2 = 'Python',
-                r = 'R',
-                rb = 'Ruby',
-                scm = 'Chicken',
-                v = 'Verilog',
-                ws = 'WS',
-                )
+                        ada='GNAT',
+                        bas='FBC',
+                        bf='BEEF',
+                        c='GCC',
+                        cc='P1++',
+                        cpp='G++11',
+                        cs='MonoCS',
+                        d='GDC',
+                        erl='Erlang',
+                        f='GFortran',
+                        go='Go',
+                        hs='GHC',
+                        java='JDK',
+                        js='nodejs',
+                        lisp='CLISP',
+                        lua='Lua',
+                        m='GObjC',
+                        pas='FPC',
+                        php='PHP',
+                        pl='Perl',
+                        py='Python3',
+                        py2='Python',
+                        r='R',
+                        rb='Ruby',
+                        scm='Chicken',
+                        v='Verilog',
+                        ws='WS',
+                        )
 
-        if not args.compiler is None:
+        if args.compiler is not None:
             compiler[extension] = args.compiler
 
         data = {
@@ -185,12 +187,13 @@ class upload:
         log.debug(data)
 
         with open(args.prog, 'r') as prog_file:
-            files= {
-                    'file' : [ '{}.{}'.format(code, extension), prog_file]
+            files = {
+                    'file' : ['{}.{}'.format(code, extension), prog_file]
                     }
 
             if args.check:
-                checker = check_submissions.check_submissions(args).check_last(args)
+                checker = check_submissions.check_submissions(
+                                            args).check_last(args)
                 prev_veredict = checker.check_last()
 
             post(web, data=data, files=files, cookies=cookies)
@@ -213,4 +216,3 @@ class upload:
                             exit(1)
             log.error('Check timed out')
             exit(2)
-

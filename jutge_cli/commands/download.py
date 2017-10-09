@@ -30,6 +30,7 @@ from . import get_code
 
 log = getLogger('jutge.download')
 
+
 class download:
 
     def __init__(self, args):
@@ -40,7 +41,6 @@ class download:
         code = get_code.get_code(args).code
         log.debug(code)
         web = 'https://jutge.org/problems/{}'.format(code)
-
 
         cookie_container = cookie.cookie(args)
 
@@ -55,7 +55,7 @@ class download:
             if cookies == {}:
                 log.error('Cookie needed to download problem')
                 exit(25)
-            elif cookie_container.check_cookie() == None:
+            elif cookie_container.check_cookie() is None:
                 log.error('Invalid cookie')
                 exit(26)
 
@@ -107,10 +107,9 @@ class download:
             exit(25)
 
         # Delete token uid from database
-        if cookie_container.check_cookie() != None:
+        if cookie_container.check_cookie() is not None:
             soup.find('input', {'name' : 'token_uid'})['value'] = ''
 
         with open('{}/problem.html'.format(db_folder, code), 'w') as \
                 problem_file:
             problem_file.write(str(soup))
-

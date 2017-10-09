@@ -32,12 +32,13 @@ from . import download
 
 log = getLogger('jutge.show')
 
+
 class show:
 
     def __init__(self, args):
         code = get_code.get_code(args).code
 
-        download.download(args) # Download problem.html if necessary
+        download.download(args)     # Download problem.html if necessary
 
         with open('{}/{}/problem.html'.format(
                 expanduser(args.database), code), 'r') as html_file:
@@ -65,8 +66,8 @@ class show:
             elif args.mode == 'cases':
                 cont = 0
                 for sample_inp in sorted(glob(
-                        '{}/{}/*.{}'.format(expanduser(args.database),
-                        code, args.inp_suffix))):
+                            '{}/{}/*.{}'.format(expanduser(args.database),
+                            code, args.inp_suffix))):
                     sample_cor = ''.join(sample_inp.split('.')[:-1])\
                             + '.' + args.cor_suffix
 
@@ -75,7 +76,7 @@ class show:
                     else:
                         is_custom = ''
 
-                    cont+=1
+                    cont += 1
 
                     with open(sample_inp, 'r') as inp_file:
                         print('### Input {} {}'.format(cont, is_custom))
@@ -85,4 +86,3 @@ class show:
                         print(cor_file.read())
         except AttributeError:
             pass
-
