@@ -104,7 +104,7 @@ class check_submissions:
                         veredict=veredict, code=problem_code, time=time)
 
             if not self.args.quiet:
-                print('{:>19} {:^4} {:>8} {}'.format(
+                print('{:>19} {:^9} {:>8} {}'.format(
                         time, veredict, problem_code, problem_name
                         ))
 
