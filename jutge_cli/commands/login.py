@@ -56,5 +56,5 @@ class login:
         vars(args)['cookie'] = session_cookie
         vars(args)['skip-check'] = False
 
-        cookie.cookie(args).make_file()
+        cookie.cookie(args)
 

@@ -32,6 +32,8 @@ class cookie:
         self.has_cookie = False
         self.check_done = False
 
+        log.debug('Cookie')
+
         self.no_download = args.no_download
 
         if args.cookie == 'delete':
@@ -39,30 +41,37 @@ class cookie:
             return
 
         try:
-            if not args.cookie in (None, 'show', 'print'):
-                self.cookie = args.cookie
-                self.has_cookie = True
-                if not args.skip_check:
-                    if self.check_cookie() == None:
-                        log.error('Invalid cookie (if you want to \
-                                skip the check use --skip-check)')
-                        exit(3)
-                self.make_file()
-                return
-        except AttributeError: pass
-        if isfile(self.file_name):
-            with open(self.file_name) as cookie_file:
-                self.cookie = cookie_file.readline().strip()
-                self.has_cookie = True
-            log.debug(self.cookie)
+            self.skip_check = args.skip_check
+        except AttributeError:
+            self.skip_check = True
 
-        if args.cookie == 'print' or args.cookie == 'show':
+        log.debug('Cookie')
+        log.debug(args.cookie)
+
+        if not args.cookie in (None, 'show', 'print'):
+            self.cookie = args.cookie
+            self.has_cookie = True
+            if not self.skip_check:
+                if self.check_cookie() == None:
+                    log.error('Invalid cookie (if you want to \
+                            skip the check use --skip-check)')
+                    exit(3)
+            log.debug('Cookie 3')
+            self.make_file()
+        else:
+            if isfile(self.file_name):
+                with open(self.file_name) as cookie_file:
+                    self.cookie = cookie_file.readline().strip()
+                    self.has_cookie = True
+                log.debug(self.cookie)
+
             if self.has_cookie:
                 print(self.cookie)
             else:
                 log.warning('No cookie saved')
 
     def make_file(self):
+        log.debug('writing file ' + self.file_name)
         with open(self.file_name, 'w') as cookie_file:
             cookie_file.write(self.cookie + '\n')
 
