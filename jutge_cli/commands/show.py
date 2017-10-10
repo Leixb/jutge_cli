@@ -15,74 +15,82 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+"""Print title, test-cases or statement of a given problem
+"""
+
 from logging import getLogger
-from os.path import expanduser, basename
+from os.path import basename
 from glob import glob
 
 from bs4 import BeautifulSoup
 try:
     from pypandoc import convert_text
 except ModuleNotFoundError:
-    pandoc_loaded = False
+    PANDOC_LOADED = False
 else:
-    pandoc_loaded = True
+    PANDOC_LOADED = True
 
-from . import get_code
 from . import download
 
-log = getLogger('jutge.show')
+LOG = getLogger('jutge.show')
 
 
-class show:
+def show(code, mode, database, inp_suffix='inp', cor_suffix='cor', **kwargs):
+    """
+    :param code: problem code
+    :param database: database folder
+    :param mode: action to perform, one of : ('title', 'stat', 'cases') if None
+        return title
+    :param inp_suffix: input file suffix for test cases
+    :param cor_suffix: output file suffix for test cases
+    """
 
-    def __init__(self, args):
-        code = get_code.get_code(args).code
+    # Download problem.html if necessary
+    download.download(code=code, database=database, **kwargs)
 
-        download.download(args)     # Download problem.html if necessary
+    with open('{}/{}/problem.html'.format(database, code), 'r') as html_file:
+        soup = BeautifulSoup(html_file, 'lxml')
 
-        with open('{}/{}/problem.html'.format(
-                expanduser(args.database), code), 'r') as html_file:
-            soup = BeautifulSoup(html_file, 'lxml')
-        self.title = '-'.join(soup.find('title').text.split('-')[1:])
-        self.title = self.title[1:].replace(' ', '_').split()[0]
+    title = '-'.join(soup.find('title').text.split('-')[1:])
+    title = title[1:].replace(' ', '_').split()[0]
 
-        try:
-            if args.mode == 'title':
-                print(self.title)
-            elif args.mode == 'stat':
-                # First paragraph removed cause it contains junk
-                txt = soup.find('div', id='txt').find_all('p')[1:]
+    # if mode is None, return title (useful for calls from other modules)
+    if mode is None:
+        return title
 
-                # Merge into a plain html string
-                txt = ' '.join([str(i) for i in txt])
+    if mode == 'title':
+        print(title)
+    elif mode == 'stat':
+        # First paragraph removed cause it contains junk
+        txt = soup.find('div', id='txt').find_all('p')[1:]
 
-                # Convert html to plain text using pandoc (if loaded)
-                if pandoc_loaded:
-                    txt = convert_text(txt, 'plain', 'html')
+        # Merge into a plain html string
+        txt = ' '.join([str(i) for i in txt])
 
-                print(self.title + '\n')
-                print(txt)
+        # Convert html to plain text using pandoc (if loaded)
+        if PANDOC_LOADED:
+            txt = convert_text(txt, 'plain', 'html')
 
-            elif args.mode == 'cases':
-                cont = 0
-                for sample_inp in sorted(glob(
-                            '{}/{}/*.{}'.format(expanduser(args.database),
-                            code, args.inp_suffix))):
-                    sample_cor = ''.join(sample_inp.split('.')[:-1])\
-                            + '.' + args.cor_suffix
+        print(title + '\n')
+        print(txt)
 
-                    if basename(sample_inp).startswith('custom'):
-                        is_custom = '(custom)'
-                    else:
-                        is_custom = ''
+    elif mode == 'cases':
+        cont = 0
+        for sample_inp in sorted(
+                glob('{}/{}/*.{}'.format(database, code, inp_suffix))):
+            sample_cor = ''.join(sample_inp.split('.')[:-1])\
+                    + '.' + cor_suffix
 
-                    cont += 1
+            if basename(sample_inp).startswith('custom'):
+                is_custom = '(custom)'
+            else:
+                is_custom = ''
 
-                    with open(sample_inp, 'r') as inp_file:
-                        print('### Input {} {}'.format(cont, is_custom))
-                        print(inp_file.read())
-                    with open(sample_cor, 'r') as cor_file:
-                        print('### Output ' + cont)
-                        print(cor_file.read())
-        except AttributeError:
-            pass
+            cont += 1
+
+            with open(sample_inp, 'r') as inp_file:
+                print('### Input {} {}'.format(cont, is_custom))
+                print(inp_file.read())
+            with open(sample_cor, 'r') as cor_file:
+                print('### Output ' + cont)
+                print(cor_file.read())

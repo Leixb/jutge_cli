@@ -62,10 +62,10 @@ def config():
             if key in ('email', 'password'):
                 param[key] = settings['login'][key]
             elif key == 'problem_sets':
-                subfolders = settings[key]
+                problem_sets = settings[key]
             else:
                 param[key] = settings[key]
         except KeyError:
             pass
 
-    return dict(param=param, subfolders=subfolders)
+    return dict(param=param, problem_sets=problem_sets)

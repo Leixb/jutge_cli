@@ -17,6 +17,7 @@
 
 import sys
 import logging
+from os.path import expanduser
 
 import argparse
 
@@ -27,7 +28,8 @@ except ModuleNotFoundError:
 
 JUTGE_CLI_VERSION = '1.6.3'
 
-CONFIG = defaults.config()['param']
+CONFIG = defaults.config()
+DEFAULT_PARAM = CONFIG['param']
 
 BANNER = '''\
 
@@ -47,11 +49,11 @@ PARSER = argparse.ArgumentParser(
 PARENT_PARSER = argparse.ArgumentParser(add_help=False)
 
 PARENT_PARSER.add_argument('-d', '--database', type=str,
-        default=CONFIG['database'],
+        default=DEFAULT_PARAM['database'],
         help='directory containing the test samples')
 PARENT_PARSER.add_argument('-r', '--regex', type=str,
         help='regular expression used to find the code from filename',
-        default=CONFIG['regex'])
+        default=DEFAULT_PARAM['regex'])
 PARENT_PARSER.add_argument('--no-download', action='store_true', default=False,
         help='do not attempt to fetch data from jutge.org')
 PARENT_PARSER.add_argument('--cookie', type=str,
@@ -86,10 +88,10 @@ PARSER_ADD_TEST.add_argument('-o', '--output-file', type=argparse.FileType('r'),
         help='test case expected output file',
         default=sys.stdin)
 PARSER_ADD_TEST.add_argument('--inp-suffix', type=str,
-        default=CONFIG['inp-suffix'],
+        default=DEFAULT_PARAM['inp-suffix'],
         help='suffix of test input files')
 PARSER_ADD_TEST.add_argument('--cor-suffix', type=str,
-        default=CONFIG['cor-suffix'],
+        default=DEFAULT_PARAM['cor-suffix'],
         help='suffix of test correct output files')
 PARSER_ADD_TEST.add_argument('--delete', action='store_true', default=False,
         help='delete all custom tests for problem')
@@ -102,7 +104,7 @@ PARSER_ARCHIVE.add_argument('prog', type=argparse.FileType('r+'),
         metavar='prog.cpp',
         help='file to move')
 PARSER_ARCHIVE.add_argument('-f', '--folder', type=str,
-        default=CONFIG['folder'],
+        default=DEFAULT_PARAM['folder'],
         help='folder where program will be archived')
 PARSER_ARCHIVE.add_argument('--overwrite', action='store_true', default=False,
         help='overwrite program if already in archive')
@@ -135,7 +137,7 @@ PARSER_COOKIE = SUBPARSERS.add_parser('cookie',
         help='save cookie to temporary file for later use to delete cookie \
                 issue the command: jutge cookie delete',
         parents=[PARENT_PARSER])
-PARSER_COOKIE.set_defaults(subcommand=cookie.cookie)
+PARSER_COOKIE.set_defaults(subcommand=cookie.Cookie)
 PARSER_COOKIE.add_argument('cookie',
         metavar='PHPSESSID',
         help='cookie to save (special values: delete -> deletes saved cookie; \
@@ -160,9 +162,9 @@ PARSER_DOWNLOAD.add_argument('--overwrite', action='store_true', default=False,
 PARSER_LOGIN = SUBPARSERS.add_parser('login', parents=[PARENT_PARSER],
         help='login to jutge.org and save cookie')
 PARSER_LOGIN.set_defaults(subcommand=login.login)
-PARSER_LOGIN.add_argument('--email', default=CONFIG['email'],
+PARSER_LOGIN.add_argument('--email', default=DEFAULT_PARAM['email'],
         help='jutge.org email')
-PARSER_LOGIN.add_argument('--password', default=CONFIG['password'],
+PARSER_LOGIN.add_argument('--password', default=DEFAULT_PARAM['password'],
         help='jutge.org password')
 
 PARSER_NEW = SUBPARSERS.add_parser('new', aliases=['create'],
@@ -171,7 +173,7 @@ PARSER_NEW = SUBPARSERS.add_parser('new', aliases=['create'],
 PARSER_NEW.set_defaults(subcommand=new.new)
 PARSER_NEW.add_argument('code', type=str,
         help='problem code')
-PARSER_NEW.add_argument('-t', '--type', type=str, default='cpp',
+PARSER_NEW.add_argument('-e', '--extension', type=str, default='cpp',
         help='file extension')
 PARSER_NEW.add_argument('--overwrite',
         action='store_true',
@@ -201,9 +203,9 @@ PARSER_SHOW_CODE.add_argument('-c', '--code',
 PARSER_SHOW.add_argument('--inp-suffix',
         type=str,
         help='suffix of test input files',
-        default=CONFIG['inp-suffix'])
+        default=DEFAULT_PARAM['inp-suffix'])
 PARSER_SHOW.add_argument('--cor-suffix', type=str,
-        default=CONFIG['cor-suffix'],
+        default=DEFAULT_PARAM['cor-suffix'],
         help='suffix of test correct output files')
 
 PARSER_TEST = SUBPARSERS.add_parser('test',
@@ -215,17 +217,17 @@ PARSER_TEST.add_argument('prog', type=argparse.FileType('r'),
         help='Program to test')
 PARSER_TEST.add_argument('-c', '--code', type=str,
         help='code to use instead of searching in the filename')
-PARSER_TEST.add_argument('--diff-prog', type=str, default=CONFIG['diff-prog'],
+PARSER_TEST.add_argument('--diff-prog', type=str, default=DEFAULT_PARAM['diff-prog'],
         help='diff shell command to compare tests')
 PARSER_TEST.add_argument('--diff-flags', type=str,
-        default=CONFIG['diff-flags'],
+        default=DEFAULT_PARAM['diff-flags'],
         help='diff shell command flags used to compare tests \
                 (comma separated)')
 PARSER_TEST.add_argument('--inp-suffix', type=str,
-        default=CONFIG['inp-suffix'],
+        default=DEFAULT_PARAM['inp-suffix'],
         help='suffix of test input files')
 PARSER_TEST.add_argument('--cor-suffix', type=str,
-        default=CONFIG['cor-suffix'],
+        default=DEFAULT_PARAM['cor-suffix'],
         help='suffix of test correct output files')
 PARSER_TEST.add_argument('--no-custom', action='store_true', default=False,
         help='do not test custom cases')
@@ -239,7 +241,7 @@ PARSER_UPDATE.set_defaults(subcommand=update.update)
 PARSER_UPDATE.add_argument('zip', type=argparse.FileType('r'),
         help='zip file containing the problems')
 PARSER_UPDATE.add_argument('-f', '--folder', type=str,
-        default=CONFIG['folder'],
+        default=DEFAULT_PARAM['folder'],
         help='archive folder')
 PARSER_UPDATE.add_argument('--delay', type=int, default=100,
         metavar='milliseconds',
@@ -266,7 +268,7 @@ PARSER_UPLOAD.add_argument('--delay', type=int, default=100,
         metavar='milliseconds',
         help='delay between jutge.org upload requests')
 PARSER_UPLOAD.add_argument('-f', '--folder', type=str,
-        default=CONFIG['folder'],
+        default=DEFAULT_PARAM['folder'],
         help='folder where programs are archived')
 PARSER_UPLOAD.add_argument('--skip-test', action='store_true', default=False,
         help='do not test public cases before uploading')
@@ -278,13 +280,6 @@ PARSER_UPLOAD.add_argument('--check', action='store_true', default=False,
 
 def main():
     args = PARSER.parse_args()
-
-    global DATABASE, REGEX, NO_DOWNLOAD, COOKIE
-
-    DATABASE = args.database
-    REGEX = args.regex
-    NO_DOWNLOAD = args.no_download
-    COOKIE = args.cookie
 
     if args.verbosity >= 3:
         log_lvl = logging.DEBUG
@@ -306,9 +301,28 @@ def main():
 
     # Add code to kwargs
     args_dict = vars(args)
-    args_dict['code'] = get_code.get_code(args).code
+    # if 'code' in args_dict or 'prog' in args_dict:
+        # args_dict['code'] = get_code.get_code(**args_dict)
+    # else:
+        # args_dict['code'] = None
+    if args_dict['SUBCOMMAND'] not in ('login', 'check'):
+        args_dict['code'] = get_code.get_code(**args_dict)
 
-    args.subcommand(**args_dict)  #expand flags to kwargs
+    if 'prog' not in args_dict:
+        args_dict['prog'] = None
+
+    if args_dict['SUBCOMMAND'] != 'cookie':
+        args_dict['cookies'] = cookie.get_cookie(**args_dict)
+        args_dict.pop('cookie', None)
+
+    args_dict['database'] = expanduser(args_dict['database'])
+    if 'folder' in args_dict:
+        args_dict['folder'] = expanduser(args_dict['folder'])
+    args_dict['problem_sets'] = CONFIG['problem_sets']
+
+    log.debug(args_dict)
+
+    args.subcommand(**args_dict)  # expand flags to kwargs
 
 
 if __name__ == '__main__':

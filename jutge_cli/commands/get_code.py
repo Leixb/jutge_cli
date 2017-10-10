@@ -15,35 +15,39 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+"""Module to get code from filename of flags and expand it if needed
+
+Main function is: get_code()
+"""
 
 from glob import glob
 from logging import getLogger
-from os.path import basename, expanduser
+from os.path import basename
 from re import search
 
 from bs4 import BeautifulSoup
 from requests import get
 
-from . import cookie
-
 LOG = getLogger('jutge.get_code')
 
 
-def expand_subcode(subcode, database, no_download, **kwargs):
+def __expand_subcode__(subcode, database, cookies, no_download, **kwargs):
     """Return code from subcode
 
-    Returns subcode with locale appended (_ca,_en,_es ...)
-    None on failure
+    This function uses info from the database if available or connects
+    to jutge.org to retrieve it
+
+    Returns subcode with locale appended (_ca,_en,_es ...) or None on failure
 
     :param subcode: subcode
     :param database: database folder path
+    :param cookie: dict cookies
     :param no_download: do not connect to jutge.org
 
     :return: code
     :rtype: str
     """
 
-    database = expanduser(database)
     problem_folder = glob('{}/{}_*'.format(database, subcode))
 
     if problem_folder:
@@ -56,16 +60,10 @@ def expand_subcode(subcode, database, no_download, **kwargs):
 
         url = 'https://jutge.org/problems/' + subcode
 
-        cookie_container = cookie.cookie(no_download=no_download, **kwargs)
-
-        if cookie_container.has_cookie:
-            cookies = dict(PHPSESSID=cookie_container.cookie)
-        else:
-            cookies = {}
+        response = get(url, cookies=cookies)
+        soup = BeautifulSoup(response.text, 'lxml')
 
         try:
-            response = get(url, cookies=cookies)
-            soup = BeautifulSoup(response.text, 'lxml')
             code = soup.find('title').text.split('-')[1].strip()
         except KeyError:
             LOG.error('Invalid code')
@@ -77,7 +75,26 @@ def expand_subcode(subcode, database, no_download, **kwargs):
         return code
 
 
-def get_code(database, regex, no_download, code, prog, **kwargs):
+def __match_regex__(regex, text):
+    """Return regex match on text
+
+    :param regex: regex to use
+    :param text: text where regex should match
+
+    :return: regex match or None if failed
+    :rtype: str
+    """
+
+    LOG.debug('match regex %s, text %s', regex, text)
+
+    # try:
+    temp = search('(' + regex + ')', text).group(1)
+    # except AttributeError:  # regex failed, return none
+    LOG.debug(temp)
+    return temp
+
+
+def get_code(database, regex, no_download, code=None, prog=None, **kwargs):
     """Return problem code
 
     :param database: database folder path
@@ -88,42 +105,45 @@ def get_code(database, regex, no_download, code, prog, **kwargs):
     :param prog: problem file
     """
 
-    try:
-        if code is not None:
+    LOG.debug('prog %s, code %s', prog, code)
 
-            if '_' not in code:
-                code = expand_subcode(
-                    code, database=database,
-                    no_download=no_download, **kwargs)
+    if code is not None:
 
-            LOG.debug('code in args')
-            LOG.debug(code)
+        if '_' not in code:
+            code = __expand_subcode__(subcode=code, database=database,
+                                      no_download=no_download, **kwargs)
 
-            return code
-    except AttributeError:
-        pass
+        LOG.debug('code in args %s', code)
+
+        return code
 
     if isinstance(prog, str):
         prog_name = basename(prog)
     else:
-        prog_name = basename(prog.name)
-
-    try:
-        code = search('({})'.format(regex), prog_name).group(1)
-        LOG.debug(code)
-    except AttributeError:
-        LOG.warning('Code not found falling back to normal regex')
         try:
-            regex_v2 = regex.split('_')[0]
-            subcode = search('({})'.format(regex_v2), prog_name).group(1) + '_ca'
-            code = expand_subcode(
-                subcode, database=database,
-                no_download=no_download, **kwargs)
-
-            if code is None:
-                return subcode
-            return code
-
+            prog_name = basename(prog.name)
         except AttributeError:
-            LOG.error('Code not found, regex failed')
+            prog_name = None
+
+    if prog_name is None:
+        LOG.error('No code found')
+        return None
+
+    code = __match_regex__(regex=regex, text=prog_name)
+
+    if code is None and '_' in regex:
+
+        LOG.warning('Regex failed, trying to match subcode')
+
+        regex_v2 = regex.split('_')[0]
+        subcode = __match_regex__(regex=regex_v2, text=prog_name)
+        if subcode is None:
+            LOG.error('Cannot find code in filename')
             return None
+
+        code = __expand_subcode__(subcode, database=database,
+                                  no_download=no_download, **kwargs)
+
+        if code is None:
+            return subcode
+    return code

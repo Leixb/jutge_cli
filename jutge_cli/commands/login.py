@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+"""Method to login and save a cookie file
+"""
+
 from getpass import getpass
 from logging import getLogger
 
@@ -23,39 +26,39 @@ from requests.utils import dict_from_cookiejar
 
 from . import cookie
 
-log = getLogger('jutge.login')
+LOG = getLogger('jutge.login')
 
 
-class login:
+def login(email, password, quiet, no_download, **kwargs):
+    """Login to jutge.org
 
-    def __init__(self, args):
+    :param no_download
+    :param quiet:
+    :param email: login email
+    :param password: login password
+    """
 
-        if args.email is None:
-            email = input('Email: ')
-        else:
-            email = args.email
-            if not args.quiet:
-                print('Email :', email)
+    if email is None:
+        email = input('Email: ')
+    else:
+        if not quiet:
+            print('Email :', email)
 
-        if args.password is None:
-            password = getpass('Password: ')
-        else:
-            password = args.password
+    if password is None:
+        password = getpass('Password: ')
 
-        url = 'https://jutge.org/'
-        login_data = {
-            'email': email,
-            'password': password,
-            'submit': ''
-        }
-        s = Session()
-        s.post(url, data=login_data)
+    url = 'https://jutge.org/'
+    login_data = {
+        'email': email,
+        'password': password,
+        'submit': ''
+    }
+    sess = Session()
+    sess.post(url, data=login_data)
 
-        session_cookie = dict_from_cookiejar(s.cookies)['PHPSESSID']
+    session_cookie = dict_from_cookiejar(sess.cookies)['PHPSESSID']
 
-        log.debug(session_cookie)
+    LOG.debug(session_cookie)
 
-        vars(args)['cookie'] = session_cookie
-        vars(args)['skip-check'] = False
-
-        cookie.cookie(args)
+    cookie.Cookie(cookie=session_cookie, no_download=no_download,
+                  skip_check=False, **kwargs)

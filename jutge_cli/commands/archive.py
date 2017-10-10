@@ -22,54 +22,59 @@ This should be used to save a local copy of accepted problems from jutge.org
 
 from logging import getLogger
 from os import mkdir, symlink, remove
-from os.path import isdir, expanduser, isfile, basename
+from os.path import isdir, isfile, basename
 from shutil import move, copyfile
 
 from . import defaults
-from . import get_code
 from . import show
 
 LOG = getLogger('jutge.archive')
 
 
-def archive(args):
+def archive(prog, folder, code, overwrite=False, no_delete=False, **kwargs):
 
     """Move file to the archive
 
-    :param args: argparse flags
-    :type args: argparse.Namespace
+    :param prog: program file to archive
+    :param folder: archive folder
+    :param overwrite: if True, overwrite program file if already in database
+    :param no_delete: if True, copy program instead of moving it
+
+    :type prog: FileType
+    :type folder: str
+    :type overwrite: Boolean
+    :type no_delete: Boolean
     """
 
-    title = show.show(args).title
-    ext = basename(args.prog.name).split('.')[-1]
+    # Show returns title if mode = None
+    title = show.show(code=code, mode=None, **kwargs)
+    ext = basename(prog.name).split('.')[-1]
 
-    dest_folder = expanduser(args.folder)
-    sym_link = '.'
+    sym_link = None
 
-    code = get_code.get_code(args).code
     sub_code = code.split('_')[0]
 
-    for sub_folder, problems in defaults.config().subfolders.items():
+    for sub_folder, problems in defaults.config()['subfolders'].items():
         if sub_code in problems:
-            sym_link = '{}/{}'.format(dest_folder, sub_folder)
+            sym_link = '{}/{}'.format(folder, sub_folder)
             if not isdir(sym_link):
                 mkdir(sym_link)
 
-    source = '{}/{}.{}'.format(dest_folder, title, ext)
-    if not isfile(source) or args.overwrite:
-        if not args.no_delete:
-            move(args.prog.name, source)
+    destination = '{}/{}.{}'.format(folder, title, ext)
+    if not isfile(destination) or overwrite:
+        if not no_delete:
+            move(prog.name, destination)
         else:
-            copyfile(args.prog.name, source)
+            copyfile(prog.name, destination)
 
-    if sym_link != '.':
+    if sym_link is not None:
         sym_link = '{}/{}.{}'.format(sym_link, title, ext)
         try:
-            symlink(source, sym_link)
-            LOG.debug('Symlink %s -> %s', sym_link, source)
-            if isfile(args.prog.name) and not args.no_delete:
-                remove(args.prog.name)
+            symlink(destination, sym_link)
+            LOG.debug('Symlink %s -> %s', sym_link, destination)
+            if isfile(prog.name) and not no_delete:
+                remove(prog.name)
         except FileExistsError:
             LOG.error('Symlink already exists')
 
-    LOG.debug(source)
+    LOG.debug(destination)

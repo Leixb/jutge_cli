@@ -29,13 +29,24 @@ from requests import get
 LOG = getLogger('jutge.cookie')
 
 
-def cookie(**kwargs):
-    """Wrapper around cookie class
+def get_cookie(cookie, no_download, skip_check=False, **kwargs):
+    """Wrapper around Cookie class that returns cookie dict
 
-    :param args: argparse flags
-    :type args: argparse.Namespace
+    :param cookie: cookie value
+    :param no_download: do not download from jutge.org
+    :param skip_check: skip cookie check
+
+    :type cookie: str
+    :type no_download: Boolean
+    :type skip_check: Boolean
+
+    :return: cookie dict with cookie as PHPSESSID (empty if cookie not valid)
     """
-    return Cookie(**kwargs)
+
+    cookie_container = Cookie(cookie, no_download, skip_check, **kwargs)
+    if not skip_check and cookie_container.check_cookie() is None:
+        return {}
+    return dict(PHPSESSID=cookie_container.cookie)
 
 
 class Cookie:
@@ -44,7 +55,7 @@ class Cookie:
     """
 
     def __init__(self, cookie=None, no_download=False,
-                 skip_check=False, **kwargs):
+                 skip_check=False, SUBCOMMAND='cookie', **kwargs):
         """Save args and initialize class variables
 
         :param cookie: cookie value
@@ -60,17 +71,13 @@ class Cookie:
         self.has_cookie = False
         self.check_done = False
         self.username = None
-
-        LOG.debug('Cookie')
+        self.cookie = None
 
         self.no_download = no_download
 
         if cookie == 'delete':
             remove(self.file_name)
             return
-
-        LOG.debug('Cookie')
-        LOG.debug(cookie)
 
         if cookie not in (None, 'show', 'print'):
             self.cookie = cookie
@@ -81,7 +88,6 @@ class Cookie:
 skip the check use --skip-check)')
 
                     exit(3)
-            LOG.debug('Cookie 3')
             self.make_file()
         else:
             if isfile(self.file_name):
@@ -90,7 +96,7 @@ skip the check use --skip-check)')
                     self.has_cookie = True
                 LOG.debug(self.cookie)
 
-            if self.has_cookie:
+            if self.has_cookie and SUBCOMMAND == 'cookie':
                 print(self.cookie)
             else:
                 LOG.warning('No cookie saved')
@@ -130,7 +136,6 @@ skip the check use --skip-check)')
                     LOG.debug(tag.b)
                     break
 
-            LOG.debug(self.username)
             LOG.debug('Logged in as: %s', self.username)
 
         except AttributeError:

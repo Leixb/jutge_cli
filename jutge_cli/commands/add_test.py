@@ -16,21 +16,21 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 """This method provides the function `add_test` that creates the necesary files
-to add a new test case to the database folder
+to add a new custom test case to the database folder
 """
 
 from glob import glob
 from logging import getLogger
 from os import mkdir, remove
-from os.path import isdir, expanduser, basename
+from os.path import isdir, basename
 from re import search
 from sys import stdin
 
 LOG = getLogger('jutge.add_test')
 
 
-def add_test(database, code, delete, input_file, output_file, 
-        inp_suffix, cor_suffix, **kwargs):
+def add_test(database, code, delete, input_file, output_file,
+             inp_suffix, cor_suffix, **kwargs):
     """Add custom test to database
 
     :param database: database folder
@@ -50,13 +50,14 @@ def add_test(database, code, delete, input_file, output_file,
     :type cor_suffix: str
     """
 
-    dest_folder = expanduser('{}/{}'.format(database, code))
+    dest_folder = '{}/{}'.format(database, code)
 
-    if delete:
+    if delete:  # Delete all custom test cases and return
         for custom_test in glob('{}/custom-*'.format(dest_folder)):
             remove(custom_test)
         return
 
+    # input from stdin if no file provided
     if input_file == stdin:
         print('Enter input:')
     src_inp = input_file.read()
@@ -67,13 +68,18 @@ def add_test(database, code, delete, input_file, output_file,
     if not isdir(dest_folder):
         mkdir(dest_folder)
 
+    # sorted sorts the output alfabetically since glob does not
     files = sorted(glob('{}/custom-*'.format(dest_folder)))
     if files:
-        num = 1 + int(search('-([0-9]*).', basename(files[-1])).group(1))
+        # find the number of the last custom test and add 1 to it
+        num = 1 + int(search(r'-([0-9]*)\.', basename(files[-1])).group(1))
     else:
+        # if there are no custom tests yet, start by 0
         num = 0
 
     dest = '{folder}/custom-{n:02}'.format(folder=dest_folder, n=num)
+
+    LOG.debug(dest)
 
     with open('{}.{}'.format(dest, inp_suffix), 'w') as inp_file:
         inp_file.write(src_inp)

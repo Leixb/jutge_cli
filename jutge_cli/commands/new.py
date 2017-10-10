@@ -23,73 +23,85 @@ from . import defaults
 from . import get_code
 from . import show
 
-log = getLogger('jutge.new')
+LOG = getLogger('jutge.new')
 
-template = {
-    'cpp': '''\
+TEMPLATES = {
+    'cpp' : '''\
 #include <bits/stdc++.h>
 using namespace std;
 
 int main () {
 }
 ''',
-    'py': '''\
-#!/usr/bin/python3
+    'py' : '''\
+#!/usr/bin/env python3
 '''
         }
 
+def new(problem_set, code, **kwargs):
+    if problem_set:
+        __new_problem_set__(set_name=code, **kwargs)
+    else:
+        __new_standalone_file__(code=code, **kwargs)
 
-class new:
+def __new_standalone_file__(code, extension, problem_sets,
+                            overwrite=False, **kwargs):
+    """
 
-    def __init__(self, args):
-        if args.problem_set:
-            self.problem_set(args)
-        else:
-            self.standalone_file(args)
+    subfolders
 
-    def standalone_file(self, args):
-        code = get_code.get_code(args).code
-        sub_code = code.split('_')[0]
-        title = show.show(args).title
+    :param code:
+    :param extension:
+    :param overwrite:
+    """
+    sub_code = code.split('_')[0]
+    title = show.show(code=code, mode=None, **kwargs)
 
-        dest_folder = '.'
+    dest_folder = '.'
 
-        for sub_folder, problems in defaults.config().subfolders.items():
-            if sub_code in problems:
-                dest_folder = sub_folder
-                if not isdir(dest_folder):
-                    mkdir(dest_folder)
-                break
+    for sub_folder, problems in problem_sets.items():
+        if sub_code in problems:
+            dest_folder = sub_folder
+            if not isdir(dest_folder):
+                mkdir(dest_folder)
+            break
 
-        file_name = '{}/{}.{}'.format(dest_folder, title, args.type)
-        if not isfile(file_name) or args.overwrite:
+    file_name = '{}/{}.{}'.format(dest_folder, title, extension)
+    if not isfile(file_name) or overwrite:
+        with open(file_name, 'a') as new_file:
+            if extension in TEMPLATES:
+                new_file.write(TEMPLATES[extension])
+
+def __new_problem_set__(set_name, problem_sets, extension,
+                        overwrite=False, **kwargs):
+    """
+    :param problem_sets: dict containing all problem sets
+    :param set_name: problem set name
+    :param extension: extension to use
+    :param overwrite: if True overwrite existing files
+    """
+    try:
+        problems = problem_sets[set_name]
+    except KeyError:
+        LOG.error('Problem set not found')
+        return
+
+    if not isdir(set_name):
+        mkdir(set_name)
+
+    for subcode in problems:
+        code = get_code.__expand_subcode__(subcode=subcode, **kwargs)
+
+        if code is None:
+            LOG.warning('Could not expand subcode %s, skipping...', subcode)
+            continue
+
+        LOG.debug(code)
+
+        title = show.show(code=code, mode=None, **kwargs)
+        file_name = '{}/{}.{}'.format(set_name, title, extension)
+
+        if not isfile(file_name) or overwrite:
             with open(file_name, 'a') as new_file:
-                if template[args.type] is not None:
-                    new_file.write(template[args.type])
-
-    def problem_set(self, args):
-        try:
-            problems = defaults.config().subfolders[args.code]
-        except KeyError:
-            log.error('Problem set not found')
-            exit(20)
-
-        dest_folder = args.code
-        if not isdir(dest_folder):
-            mkdir(dest_folder)
-
-        args_dict = vars(args)
-
-        for subcode in problems:
-            args_dict['code'] = subcode
-            code = get_code.get_code(args).code
-
-            log.debug(code)
-
-            title = show.show(args).title
-            file_name = '{}/{}.{}'.format(dest_folder, title, args.type)
-
-            if not isfile(file_name) or args.overwrite:
-                with open(file_name, 'a') as new_file:
-                    if template[args.type] is not None:
-                        new_file.write(template[args.type])
+                if extension in TEMPLATES:
+                    new_file.write(TEMPLATES[extension])
