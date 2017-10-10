@@ -17,19 +17,16 @@
 
 from glob import glob
 from logging import getLogger
-from os.path import expanduser, basename
+from os.path import basename
 from subprocess import Popen, PIPE, check_output, CalledProcessError
 from tempfile import NamedTemporaryFile
 
 from . import download
 
-log = getLogger('jutge.test')
+LOG = getLogger('jutge.test')
 
 
-__NO_COLOR__, __QUIET__ = False, False
-
-
-ansi_colors = dict(
+__ANSI_COLORS__ = dict(
     HEADER='\033[95m',
     BLUE='\033[94m',
     GREEN='\033[92m',
@@ -40,23 +37,9 @@ ansi_colors = dict(
     ENDC='\033[0m')
 
 
-def print_color(text, colors=None):
-    if not __QUIET__:
-        if colors is None or __NO_COLOR__:
-            print(text)
-            return
-        elif not isinstance(colors, list):
-            colors = [colors]
-        for color in colors:
-            print(ansi_colors[color], end='')
-        print(text)
-        for color in colors:
-            print(ansi_colors['ENDC'], end='')
-
-
-def test(prog, code, database, SUBCOMMAND, no_color=False, no_custom=False,
+def test(prog, code, database, no_color=False, no_custom=False,
          inp_suffix='inp', cor_suffix='cor', diff_prog='diff',
-         diff_flags='-y', no_download=False, cookies={},
+         diff_flags='-y', no_download=False, cookies=None,
          quiet=False, **kwargs):
     """
     :param prog:
@@ -75,9 +58,18 @@ def test(prog, code, database, SUBCOMMAND, no_color=False, no_custom=False,
     :param quiet:
     """
 
-    global __NO_COLOR__, __QUIET__
-
-    __NO_COLOR__, __QUIET__ = no_color, quiet
+    def print_color(text, colors=None):
+        if not quiet:
+            if colors is None or no_color:
+                print(text)
+                return
+            elif not isinstance(colors, list):
+                colors = [colors]
+            for color in colors:
+                print(__ANSI_COLORS__[color], end='')
+            print(text)
+            for color in colors:
+                print(__ANSI_COLORS__['ENDC'], end='')
 
     if isinstance(prog, str):
         source_file = prog
@@ -87,20 +79,20 @@ def test(prog, code, database, SUBCOMMAND, no_color=False, no_custom=False,
     if source_file.endswith('.cpp') or source_file.endswith('.cc'):
 
         prog_name = '.'.join(source_file.split('.')[:-1]) + '.x'
-        log.debug('Compiling to {}'.format(prog_name))
+        LOG.debug('Compiling to %s', prog_name)
 
-        p = Popen(
-                ['g++', '-std=c++11', '-g', source_file, '-o', prog_name])
-        return_code = p.wait()
+        process = Popen(
+            ['g++', '-std=c++11', '-g', source_file, '-o', prog_name])
+        return_code = process.wait()
 
         if return_code:
-            log.error('Compilation returned {}'.format(return_code))
+            LOG.error('Compilation returned %d', return_code)
             exit(return_code)
 
     else:
         prog_name = source_file
 
-    if not prog_name[0] in ('.', '/'):
+    if prog_name[0] not in ('.', '/'):
         prog_name = './' + prog_name
 
     cont, cor = 0, 0
@@ -109,9 +101,9 @@ def test(prog, code, database, SUBCOMMAND, no_color=False, no_custom=False,
         download.download(code=code, database=database, cookies=cookies,
                           no_download=no_download, **kwargs)
 
-    for sample_inp in sorted(glob(
-                '{}/{}/*.{}'.format(database,
-                                    code, inp_suffix))):
+    for sample_inp in sorted(
+            glob('{}/{}/*.{}'.format(database,
+                                     code, inp_suffix))):
         sample_cor = ''.join(sample_inp.split('.')[:-1]) \
                 + '.' + cor_suffix
 
@@ -128,13 +120,12 @@ def test(prog, code, database, SUBCOMMAND, no_color=False, no_custom=False,
 
             cont += 1
 
-            p = Popen(
-                    prog_name, stdin=test_input, stdout=test_output,
-                    stderr=PIPE)
-            return_code = p.wait()
+            process = Popen(prog_name, stdin=test_input, stdout=test_output,
+                            stderr=PIPE)
+            return_code = process.wait()
 
             if return_code:
-                log.warning('Program exited with code: ' + return_code)
+                LOG.warning('Program exited with code: %d', return_code)
 
             test_input.seek(0)
 
@@ -144,11 +135,9 @@ def test(prog, code, database, SUBCOMMAND, no_color=False, no_custom=False,
             test_input.close()
 
         try:
-            out = check_output(
-                    [diff_prog]
-                    + diff_flags.split(',')
-                    + [test_output.name, sample_cor]
-                    )
+            out = check_output([diff_prog]
+                               + diff_flags.split(',')
+                               + [test_output.name, sample_cor])
             print_color('{:*<79}'.format('*** OK '), ['GREEN', 'BOLD'])
             print_color(out.decode('UTF-8'))
 
@@ -164,9 +153,8 @@ def test(prog, code, database, SUBCOMMAND, no_color=False, no_custom=False,
     if cont == 0:
         print_color('Program has no test-cases yet')
     elif cont == cor:
-        print_color(
-                '{:*^79}'.format(result + ' ALL OK :) '), ['GREEN', 'BOLD']
-                )
+        print_color('{:*^79}'.format(result + ' ALL OK :) '),
+                    ['GREEN', 'BOLD'])
     else:
         print_color('{:*^79}'.format(result + ' :( '), ['FAIL', 'BOLD'])
 

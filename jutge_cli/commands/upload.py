@@ -104,7 +104,7 @@ def upload_problem(prog, code, cookies, compiler, check=True,
 
     if not skip_test:
         veredict = test.test(prog=prog, code=code, no_custom=True,
-                             quiet=True, **kwargs)
+                             cookies=cookies, quiet=True, **kwargs)
         if veredict != 0:
             log.error('Problem did not pass public tests, aborting... \
 (use --skip-test to upload anyways)')

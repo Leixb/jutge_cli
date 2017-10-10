@@ -31,7 +31,8 @@ from . import show
 LOG = getLogger('jutge.archive')
 
 
-def archive(prog, folder, code, overwrite=False, no_delete=False, **kwargs):
+def archive(prog, folder, code, problem_sets, overwrite=False,
+            no_delete=False, **kwargs):
 
     """Move file to the archive
 
@@ -54,7 +55,7 @@ def archive(prog, folder, code, overwrite=False, no_delete=False, **kwargs):
 
     sub_code = code.split('_')[0]
 
-    for sub_folder, problems in defaults.config()['subfolders'].items():
+    for sub_folder, problems in problem_sets.items():
         if sub_code in problems:
             sym_link = '{}/{}'.format(folder, sub_folder)
             if not isdir(sym_link):

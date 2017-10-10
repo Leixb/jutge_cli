@@ -94,9 +94,11 @@ def download(code, cookies, database,
         LOG.error("Couldn't download page, aborting...")
         exit(25)
 
-    # Delete token uid from database
-    if cookies != {}:
+    # Delete token uid from database (if found)
+    try:
         soup.find('input', {'name' : 'token_uid'})['value'] = ''
+    except TypeError:
+        pass
 
     with open('{}/problem.html'.format(db_folder), 'w') as \
             problem_file:
