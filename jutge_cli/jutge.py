@@ -399,7 +399,7 @@ def main():
             log.error('Please login before upload or check with: jutge login')
             exit(2)
 
-    if cmd not in ('login', 'check', 'import'):
+    if cmd not in ('login', 'check', 'import', 'cookie'):
         args_dict['code'] = get_code.get_code(**args_dict)
 
     if cmd in ('new', 'show', 'test'):
