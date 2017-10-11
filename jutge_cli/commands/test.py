@@ -21,8 +21,6 @@ from os.path import basename
 from subprocess import Popen, PIPE, check_output, CalledProcessError
 from tempfile import NamedTemporaryFile
 
-from . import download
-
 LOG = getLogger('jutge.test')
 
 
@@ -39,13 +37,12 @@ __ANSI_COLORS__ = dict(
 
 def test(prog, code, database, no_color=False, no_custom=False,
          inp_suffix='inp', cor_suffix='cor', diff_prog='diff',
-         diff_flags='-y', no_download=False, cookies=None,
+         diff_flags='-y',
          quiet=False, **kwargs):
     """
     :param prog:
     :param code:
 
-    :param SUBCOMMAND:
     :param database:
     :param no_color:
     :param no_custom:
@@ -53,8 +50,6 @@ def test(prog, code, database, no_color=False, no_custom=False,
     :param inp_suffix:
     :param diff_prog:
     :param diff_flags:
-    :param no_download:
-    :param cookies:
     :param quiet:
     """
 
@@ -96,10 +91,6 @@ def test(prog, code, database, no_color=False, no_custom=False,
         prog_name = './' + prog_name
 
     cont, cor = 0, 0
-
-    if not no_download:
-        download.download(code=code, database=database, cookies=cookies,
-                          no_download=no_download, **kwargs)
 
     for sample_inp in sorted(
             glob('{}/{}/*.{}'.format(database,

@@ -22,23 +22,20 @@ from time import sleep
 from bs4 import BeautifulSoup
 from requests import get, post
 
-from .check_submissions import check_last
+from .check_submissions import check_last, check_problem
 from . import test
 
-log = getLogger('jutge.upload')
+LOG = getLogger('jutge.upload')
 
 
-def upload(prog, problem_set, problem_sets, check=False,
-           no_skip_accepted=False, skip_test=False, delay=100, **kwargs):
+def upload(prog, problem_set, problem_sets, delay=100,
+           no_skip_accepted=False, **kwargs):
     """
     :param prog:
     :param problem_set:
     :param problem_sets:
-
-    :param check:
-    :param no_skip_accepted:
-    :param skip_test:
     :param delay:
+    :param no_skip_accepted:
     """
 
     if problem_set:
@@ -46,12 +43,13 @@ def upload(prog, problem_set, problem_sets, check=False,
         try:
             problems = problem_sets[set_name]
         except KeyError:
-            log.error('Problem set not found')
+            LOG.error('Problem set not found')
             exit(20)
     else:
         upload_problem(prog, **kwargs)
+        exit(0)
 
-    log.debug(problems)
+    LOG.debug(problems)
 
     submit_queue = []
 
@@ -62,9 +60,8 @@ def upload(prog, problem_set, problem_sets, check=False,
         if files:
             if not no_skip_accepted:
 
-                veredict = check_submissions.check_submissions(
-                    **kwargs).check_problem(subcode)
-                log.debug('{} {}'.format(subcode, veredict))
+                veredict = check_problem(subcode, **kwargs)
+                LOG.debug('%s %s', subcode, veredict)
 
                 if veredict == 'accepted':
                     continue
@@ -72,9 +69,9 @@ def upload(prog, problem_set, problem_sets, check=False,
             submit_queue += [files[0]]
 
         else:
-            log.warning(subcode + ' solution not found, skiping ...')
+            LOG.warning(subcode + ' solution not found, skiping ...')
 
-    log.debug(submit_queue)
+    LOG.debug(submit_queue)
 
     if len(submit_queue) > 10:
         print('Submit queue contains {} elements, continue? [Ny]'.format(
@@ -99,28 +96,28 @@ def upload_problem(prog, code, cookies, compiler, check=True,
     :param quiet:
     """
     if no_download:
-        log.error('Remove --no-download flag to upload')
+        LOG.error('Remove --no-download flag to upload')
         exit(4)
 
     if not skip_test:
         veredict = test.test(prog=prog, code=code, no_custom=True,
                              cookies=cookies, quiet=True, **kwargs)
         if veredict != 0:
-            log.error('Problem did not pass public tests, aborting... \
+            LOG.error('Problem did not pass public tests, aborting... \
 (use --skip-test to upload anyways)')
             exit(veredict)
         else:
-            log.debug('Public tests passed')
+            LOG.debug('Public tests passed')
 
     web = 'https://jutge.org/problems/{}/submissions'.format(code)
-    log.debug(web)
+    LOG.debug(web)
 
     # We need token_uid for POST to work
     response = get(web, cookies=cookies)
     soup = BeautifulSoup(response.text, 'lxml')
 
     token_uid = soup.find('input', {'name' : 'token_uid'})['value']
-    log.debug(token_uid)
+    LOG.debug(token_uid)
 
     extension = prog.split('.')[-1]  # To determine compiler
 
@@ -164,7 +161,7 @@ def upload_problem(prog, code, cookies, compiler, check=True,
         'token_uid' : token_uid
         }
 
-    log.debug(data)
+    LOG.debug(data)
 
     with open(prog, 'r') as prog_file:
         files = {
@@ -180,7 +177,7 @@ def upload_problem(prog, code, cookies, compiler, check=True,
         for _ in range(0, 6):
             sleep(5)
             veredict = check_last(cookies=cookies, quiet=True)
-            log.debug(veredict)
+            LOG.debug(veredict)
             if prev_veredict['time'] != veredict['time'] \
                     and veredict['code'] == code:
                 if veredict['veredict'] == 'Pending':
@@ -192,6 +189,6 @@ def upload_problem(prog, code, cookies, compiler, check=True,
                         exit(0)
                     else:
                         exit(1)
-        log.error('Check timed out')
+        LOG.error('Check timed out')
         exit(2)
 

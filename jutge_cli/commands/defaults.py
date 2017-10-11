@@ -55,7 +55,7 @@ def config():
         'password' : None
     }
 
-    subfolders = {}
+    problem_sets = {}
 
     for key in [*param, 'problem_sets']:
         try:

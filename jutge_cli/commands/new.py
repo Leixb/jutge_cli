@@ -19,9 +19,8 @@ from logging import getLogger
 from os import mkdir
 from os.path import isfile, isdir
 
-from . import defaults
-from . import get_code
-from . import show
+from .show import get_title
+from .get_code import __expand_subcode__
 
 LOG = getLogger('jutge.new')
 
@@ -36,7 +35,7 @@ int main () {
     'py' : '''\
 #!/usr/bin/env python3
 '''
-        }
+    }
 
 def new(problem_set, code, **kwargs):
     if problem_set:
@@ -44,18 +43,18 @@ def new(problem_set, code, **kwargs):
     else:
         __new_standalone_file__(code=code, **kwargs)
 
-def __new_standalone_file__(code, extension, problem_sets,
-                            overwrite=False, **kwargs):
+def __new_standalone_file__(code, title, extension, problem_sets,
+                            overwrite=False, quiet=False, **kwargs):
     """
 
     subfolders
 
     :param code:
+    :param title:
     :param extension:
     :param overwrite:
     """
     sub_code = code.split('_')[0]
-    title = show.show(code=code, mode=None, **kwargs)
 
     dest_folder = '.'
 
@@ -68,6 +67,8 @@ def __new_standalone_file__(code, extension, problem_sets,
 
     file_name = '{}/{}.{}'.format(dest_folder, title, extension)
     if not isfile(file_name) or overwrite:
+        if not quiet:
+            print(file_name)
         with open(file_name, 'a') as new_file:
             if extension in TEMPLATES:
                 new_file.write(TEMPLATES[extension])
@@ -90,7 +91,7 @@ def __new_problem_set__(set_name, problem_sets, extension,
         mkdir(set_name)
 
     for subcode in problems:
-        code = get_code.__expand_subcode__(subcode=subcode, **kwargs)
+        code = __expand_subcode__(subcode=subcode, **kwargs)
 
         if code is None:
             LOG.warning('Could not expand subcode %s, skipping...', subcode)
@@ -98,7 +99,7 @@ def __new_problem_set__(set_name, problem_sets, extension,
 
         LOG.debug(code)
 
-        title = show.show(code=code, mode=None, **kwargs)
+        title = get_title(code=code, **kwargs)
         file_name = '{}/{}.{}'.format(set_name, title, extension)
 
         if not isfile(file_name) or overwrite:

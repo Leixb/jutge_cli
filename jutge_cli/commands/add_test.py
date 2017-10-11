@@ -29,8 +29,8 @@ from sys import stdin
 LOG = getLogger('jutge.add_test')
 
 
-def add_test(database, code, delete, input_file, output_file,
-             inp_suffix, cor_suffix, **kwargs):
+def add_test(database, code, delete=False, input_file=stdin, output_file=stdin,
+             inp_suffix='inp', cor_suffix='cor', **kwargs):
     """Add custom test to database
 
     :param database: database folder

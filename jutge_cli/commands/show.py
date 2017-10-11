@@ -30,9 +30,21 @@ except ModuleNotFoundError:
 else:
     PANDOC_LOADED = True
 
-from . import download
-
 LOG = getLogger('jutge.show')
+
+
+def get_title(code, database, **kwargs):
+    try:
+        with open('{}/{}/problem.html'.format(database, code), 'r') as html_file:
+            soup = BeautifulSoup(html_file, 'lxml')
+    except FileNotFoundError:
+        LOG.warning('Cannot find problem.html')
+        return None
+
+    title = '-'.join(soup.find('title').text.split('-')[1:])
+    title = title[1:].replace(' ', '_').split()[0]
+
+    return title
 
 
 def show(code, mode, database, inp_suffix='inp', cor_suffix='cor', **kwargs):
@@ -45,22 +57,16 @@ def show(code, mode, database, inp_suffix='inp', cor_suffix='cor', **kwargs):
     :param cor_suffix: output file suffix for test cases
     """
 
-    # Download problem.html if necessary
-    download.download(code=code, database=database, **kwargs)
-
-    with open('{}/{}/problem.html'.format(database, code), 'r') as html_file:
-        soup = BeautifulSoup(html_file, 'lxml')
-
-    title = '-'.join(soup.find('title').text.split('-')[1:])
-    title = title[1:].replace(' ', '_').split()[0]
-
-    # if mode is None, return title (useful for calls from other modules)
-    if mode is None:
-        return title
-
     if mode == 'title':
+        title = get_title(code=code, database=database)
         print(title)
     elif mode == 'stat':
+        try:
+            with open('{}/{}/problem.html'.format(database, code), 'r') as html_file:
+                soup = BeautifulSoup(html_file, 'lxml')
+        except FileNotFoundError:
+            LOG.warning('Cannot find problem.html')
+            exit(10)
         # First paragraph removed cause it contains junk
         txt = soup.find('div', id='txt').find_all('p')[1:]
 

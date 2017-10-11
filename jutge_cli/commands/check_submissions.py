@@ -31,15 +31,13 @@ from requests import get
 LOG = getLogger('jutge.check_submissions')
 
 
-def check_submissions(code=None, no_download=False, quiet=False, 
-                      SUBCOMMAND='check', **kwargs):
+def check_submissions(code=None, no_download=False, quiet=False, **kwargs):
     """Save copy of args to the class
 
     If it is called from jutge.py subcommand it will call method
     check_last() or check_problem() depending if code exists
 
     :param code: problem code
-    :param SUBCOMMAND: jutge subcommand
     :param no_dowload: do not connect to jutge.org
     :param quiet: do not output results
     """
@@ -48,25 +46,18 @@ def check_submissions(code=None, no_download=False, quiet=False,
         LOG.error('Cannot check if --no-download provided')
         exit(20)
 
-    LOG.debug(SUBCOMMAND)
+    if code is None:
+        if check_last(quiet=quiet, **kwargs)['veredict'] in ('AC', '100/100'):
+            exit(0)
+    else:
+        veredict = check_problem(code, **kwargs)
 
-    if SUBCOMMAND in ('check_submissions', 'check'):
-        if code is None:
-            if check_last(quiet=quiet, **kwargs)['veredict'] in ('AC',
-                                                                 '100/100'):
-                exit(0)
-            else:
-                exit(1)
-        else:
-            veredict = check_problem(code, **kwargs)
+        if not quiet:
+            print(veredict)
 
-            if not quiet:
-                print(veredict)
-
-            if veredict == 'accepted':
-                exit(0)
-            else:
-                exit(1)
+        if veredict == 'accepted':
+            exit(0)
+    exit(1)
 
 def check_problem(code, cookies, **kwargs):
     """Check last submission of a given problem code
@@ -91,7 +82,7 @@ def check_problem(code, cookies, **kwargs):
         if contents.startswith('Problem'):
             return contents.split(':')[1].strip()
 
-def check_last(cookies, last=False, reverse=False, quiet=False, 
+def check_last(cookies, last=False, reverse=False, quiet=False,
                no_download=False, **kwargs):
     """Check last submissions to jutge.org
 
@@ -141,7 +132,7 @@ def check_last(cookies, last=False, reverse=False, quiet=False,
         problem_name = submission.div.p.contents[0].strip()
 
         if reverse and last_veredict is None:
-            last_veredict = dict(veredict=veredict, code=problem_code, 
+            last_veredict = dict(veredict=veredict, code=problem_code,
                                  time=time)
 
         if not quiet:

@@ -25,19 +25,18 @@ from os import mkdir, symlink, remove
 from os.path import isdir, isfile, basename
 from shutil import move, copyfile
 
-from . import defaults
-from . import show
-
 LOG = getLogger('jutge.archive')
 
 
-def archive(prog, folder, code, problem_sets, overwrite=False,
+def archive(prog, code, title, folder, problem_sets=None, overwrite=False,
             no_delete=False, **kwargs):
 
     """Move file to the archive
 
     :param prog: program file to archive
+    :param title: program title to use when archiving file
     :param folder: archive folder
+    :param problem_sets: problem_sets to consider
     :param overwrite: if True, overwrite program file if already in database
     :param no_delete: if True, copy program instead of moving it
 
@@ -47,19 +46,18 @@ def archive(prog, folder, code, problem_sets, overwrite=False,
     :type no_delete: Boolean
     """
 
-    # Show returns title if mode = None
-    title = show.show(code=code, mode=None, **kwargs)
     ext = basename(prog.name).split('.')[-1]
 
     sym_link = None
 
     sub_code = code.split('_')[0]
 
-    for sub_folder, problems in problem_sets.items():
-        if sub_code in problems:
-            sym_link = '{}/{}'.format(folder, sub_folder)
-            if not isdir(sym_link):
-                mkdir(sym_link)
+    if problem_sets is not None:
+        for sub_folder, problems in problem_sets.items():
+            if sub_code in problems:
+                sym_link = '{}/{}'.format(folder, sub_folder)
+                if not isdir(sym_link):
+                    mkdir(sym_link)
 
     destination = '{}/{}.{}'.format(folder, title, ext)
     if not isfile(destination) or overwrite:

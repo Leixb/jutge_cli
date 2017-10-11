@@ -4,15 +4,15 @@ _jutge_subcommands() {
     local subcommands; subcommands=(
         'test:test program using cases from database'
         {add-test,add}':add custom case to database'
-        {show,print}':show title, statement or test cases corresponding to problem code'
-        {archive,done}':move program to archive folder'
+        'show:show title, statement or test cases corresponding to problem code'
+        'archive:move program to archive folder'
         {upload,up}':upload program for jutge evaluation'
-        {update,import}':add programs to archived folder from a zip file'
-        {new,create}':create new file'
+        'import:add programs to archived folder from a zip file'
+        'new:create new file'
         {download,down}':download problem files to local database'
-        {check-submissions,check}':check last sent submissions'
+        'check:check last sent submissions'
         'cookie:save cookie to temporary file for later use'
-        'login: login to jutge.org and save cookie'
+        'login:login to jutge.org and save cookie'
     )
     _describe -t subcommands 'Use subcommand' subcommands "$@"
 }
