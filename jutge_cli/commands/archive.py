@@ -65,6 +65,8 @@ def archive(prog, code, title, folder, problem_sets=None, overwrite=False,
             move(prog.name, destination)
         else:
             copyfile(prog.name, destination)
+    else:
+        LOG.error('File already in DB')
 
     if sym_link is not None:
         sym_link = '{}/{}.{}'.format(sym_link, title, ext)
