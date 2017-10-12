@@ -134,7 +134,7 @@ Commands
 ``jutge_cli`` consists of different commands that achieve different
 things.
 
-Add cases (add)
+Add cases (add-cases|add)
 ~~~~~~~~~
 
 This command adds a custom test case into the database. The case can be
@@ -151,7 +151,7 @@ database as test cases for the problem ``P00001_ca``
 
     jutge add_cases -i inp -o cor P00001_ca_prog.cpp
 
-Archive (done)
+Archive (archive)
 ~~~~~~~
 
 This command moves a file to the ``Done`` folder. This folder can be
@@ -168,7 +168,7 @@ This command will move the file ``P00001_ca_prog.cpp`` to the folder
 
     jutge archive --folder Accepted/ P00001_ca_prog.cpp --overwrite
 
-Download (down)
+Download (download|down)
 ~~~~~~~~
 
 This command will attempt to download the html page and zip file
@@ -187,15 +187,15 @@ This command will populate the local database for problem ``P00001_en``:
 
 ::
 
-    jutge download -c P00001_en
+    jutge download P00001_en
 
-New (create)
-~~~~~~~~~~~~
+New (new)
+~~~
 
 This command must be followed by a code. It will fetch the problem title
 from the code and create a new file whose name is the code followed by
-the title. The ``-p`` flag can be used to specify the extension of the
-file.
+the title. The ``--extension`` or ``-e`` flag can be used to specify the
+extension of the file.
 
 If flag ``--problem-set`` is provided, all programs in the specified problem
 set will be created
@@ -208,9 +208,9 @@ This command will populate create a new python file named
 
 ::
 
-    jutge new P87523_ca -p py
+    jutge new P87523_ca --extension py
 
-Show (print)
+Show (show)
 ~~~~~
 
 This command provides 3 sub commands to print to stdout information
@@ -228,9 +228,9 @@ This command will print all cases in the database for the problem
 
 ::
 
-    jutge print cases -c P87523_ca
+    jutge show cases P87523_ca
 
-Test
+Test (test)
 ~~~~
 
 This is the most useful command in the tool set. It allows to test your
@@ -253,7 +253,7 @@ the program will be shown side by side using ``colordiff``.
 
     jutge test P87523_ca_prog.x --diff-prog colordiff
 
-Update (import)
+Import (import)
 ~~~~~~
 
 This command extracts all accepted submissions from a jutge.org zip
@@ -263,7 +263,7 @@ your jutge.org profile.
 
 ::
 
-    jutge update problems.zip
+    jutge import problems.zip
 
 Upload (up)
 ~~~~~~
@@ -302,5 +302,5 @@ show only the last submission and ``--reverse`` that shows the last submission
 on top of the list:
 
 ::
-    
-    jutge check-submissions --last
+
+    jutge check --last
