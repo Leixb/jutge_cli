@@ -53,36 +53,39 @@ def download(code, cookies, database,
             exit(25)
 
     # Check if already in DB
-    db_folder = expanduser('{}/{}'.format(database, code))
-    if isdir(db_folder) and not overwrite:
-        if isfile('{}/{}/problem.html'.format(db_folder, code)):
-            LOG.info('File already in DB, continue')
-            return
-    else:
+    db_folder = '{}/{}'.format(database, code)
+    LOG.debug(db_folder)
+
+    if not isdir(db_folder) or overwrite:
 
         zip_url = '{}/zip'.format(web)
         LOG.debug(zip_url)
 
         response = get(zip_url, cookies=cookies, stream=True)
-        temp_zip = NamedTemporaryFile('r+b', suffix='.zip', delete=False)
+        with NamedTemporaryFile('r+b', suffix='.zip', delete=False) as tmp_zip:
+            for chunk in response.iter_content(chunk_size=1024):
+                if chunk:
+                    tmp_zip.write(chunk)
 
-        for chunk in response.iter_content(chunk_size=1024):
-            if chunk:
-                temp_zip.write(chunk)
+            tmp_zip.close()
 
-        temp_zip.close()
-
-        try:
-            zip_file = ZipFile(temp_zip.name, 'r')
-        except BadZipFile:
-            LOG.error('Could not download zip file')
-            exit(23)
+            try:
+                zip_file = ZipFile(tmp_zip.name, 'r')
+            except BadZipFile:
+                LOG.error('Could not download zip file')
+                exit(23)
 
         if not isdir(db_folder):
             mkdir(db_folder)
 
         zip_file.extractall(db_folder + '/..')
         zip_file.close()
+    else:
+        LOG.warning('Folder already in DB, use overwrite to force download')
+
+    if isfile('{}/problem.html'.format(db_folder, code)) and not overwrite:
+        LOG.info('File already in DB, continue')
+        return
 
     response = get(web, cookies=cookies)
 

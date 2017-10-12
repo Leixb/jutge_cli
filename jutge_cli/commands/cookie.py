@@ -44,7 +44,8 @@ def get_cookie(cookie, no_download, skip_check=False, **kwargs):
     """
 
     cookie_container = Cookie(cookie, no_download, skip_check, **kwargs)
-    if not skip_check and cookie_container.check_cookie() is None:
+    if cookie_container.cookie is None or\
+            (not skip_check and cookie_container.check_cookie() is None):
         return {}
     return dict(PHPSESSID=cookie_container.cookie)
 

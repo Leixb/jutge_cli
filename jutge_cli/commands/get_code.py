@@ -87,9 +87,10 @@ def __match_regex__(regex, text):
 
     LOG.debug('match regex %s, text %s', regex, text)
 
-    # try:
-    temp = search('(' + regex + ')', text).group(1)
-    # except AttributeError:  # regex failed, return none
+    try:
+        temp = search('(' + regex + ')', text).group(1)
+    except AttributeError:  # regex failed, return none
+        return None
     LOG.debug(temp)
     return temp
 

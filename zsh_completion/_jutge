@@ -97,6 +97,7 @@ case $state in
             ;;
             (add|add-test)
                 _arguments \
+                    '1:code:_files'\
                     + '(help)' {-h,--help}'[show help and exit]' \
                     + '(verbosity)' \
                         {-q,--quiet}'[supress output]'\
@@ -112,13 +113,11 @@ case $state in
                     '--inp-suffix[input file suffix]:suffix' \
                     '--cor-suffix[correct output file suffix]:suffix' \
                     '-o[delete all custom tests]' \
-                    + '(code)' \
-                        {-p,--prog}'[filename from which we can extract the problem code]:prog:_files' \
-                        {-c,--code}'[code]:code'
             ;;
-            (show|print)
+            (show)
                 _arguments \
                     '1:action:(title stat cases)' \
+                    '2:code:_files'\
                     + '(help)' {-h,--help}'[show help and exit]' \
                     + '(verbosity)' \
                         {-q,--quiet}'[supress output]'\
@@ -128,13 +127,10 @@ case $state in
                     + '(database)' {-d,--database}'[directory containing test cases]:database:_files -/'\
                     '--no-download[do not attempt to fetch data from jutge.org]' \
                     \
-                    + '(code)' \
-                        {-p,--prog}'[filename from which we can extract the problem code]:prog:_files' \
-                        {-c,--code}'[problem code to use]:code' \
                     '--inp-suffix[input file suffix]:suffix' \
                     '--cor-suffix[correct output file suffix]:suffix'
             ;;
-            (archive|done)
+            (archive)
                 _arguments \
                     '1:filename:_files' \
                     + '(help)' {-h,--help}'[show help and exit]' \
@@ -169,7 +165,7 @@ case $state in
                     '--delay[delay between jutge-org upload requests]:milliseconds'\
                     '--check[wait for veredict from jutge]'
             ;;
-            (update|import)
+            (import)
                 _arguments \
                     '1:zip_file:_files -g "*.zip"' \
                     + '(help)' {-h,--help}'[show help and exit]' \
@@ -185,7 +181,7 @@ case $state in
                     '--overwrite[overwrite program if already in archive]' \
                     '--delay[delay between jutge.org GET requests]:milliseconds'
             ;;
-            (new|create)
+            (new)
                 _arguments \
                     '1:code' \
                     + '(help)' {-h,--help}'[show help and exit]' \
@@ -217,8 +213,9 @@ case $state in
                         {-p,--prog}'[filename from which we can extract the problem code]:prog:_files' \
                         {-c,--code}'[code]:code'
             ;;
-            (check|check-submissions)
+            (check)
                 _arguments \
+                    '1:code:_files'\
                     + '(action)' \
                     + '(help)' {-h,--help}'[show help and exit]' \
                     + '(verbosity)' \
@@ -231,9 +228,6 @@ case $state in
                     \
                         '--last[only show last submission]' \
                         '--reverse[only show last submission]' \
-                    + '(code)' \
-                        {-p,--prog}'[filename from which we can extract the problem code]:prog:_files' \
-                        {-c,--code}'[code]:code'
             ;;
             (cookie)
                 _arguments \

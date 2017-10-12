@@ -88,15 +88,9 @@ PARSER_ADD_TEST = SUBPARSERS.add_parser(
     help='add custom test case to database',
     parents=[PARENT_PARSER])
 PARSER_ADD_TEST.set_defaults(subcommand=add_test.add_test)
-PARSER_ADD_TEST_CODE = PARSER_ADD_TEST.add_mutually_exclusive_group(
-    required=True)
-PARSER_ADD_TEST_CODE.add_argument(
-    '-p', '--prog', type=argparse.FileType('r'),
-    metavar='prog.cpp',
-    help='program to test')
-PARSER_ADD_TEST_CODE.add_argument(
-    '-c', '--code', type=str,
-    help='code to use instead of searching in the filename')
+PARSER_ADD_TEST.add_argument(
+    'prog', type=str, metavar='code',
+    help='string containing the problem code')
 PARSER_ADD_TEST.add_argument(
     '-i', '--input-file', type=argparse.FileType('r'),
     metavar='test1.inp',
@@ -154,16 +148,10 @@ PARSER_CHECK_MODE.add_argument(
     '--reverse', action='store_true',
     help='show last submission on top',
     default=False)
-PARSER_CHECK_MEX = \
-    PARSER_CHECK.add_mutually_exclusive_group()
-PARSER_CHECK_MEX.add_argument(
-    '-p', '--prog',
-    type=argparse.FileType('r'),
-    metavar='prog.cpp',
-    help='filename from which we can extract the problem code')
-PARSER_CHECK_MEX.add_argument(
-    '-c', '--code', type=str,
-    help='problem code')
+PARSER_CHECK.add_argument(
+    'prog', metavar='code',
+    type=str,
+    help='string that contains problem code')
 
 PARSER_COOKIE = SUBPARSERS.add_parser(
     'cookie',
@@ -185,15 +173,10 @@ PARSER_DOWNLOAD = SUBPARSERS.add_parser(
     help='download problem files to local database',
     parents=[PARENT_PARSER])
 PARSER_DOWNLOAD.set_defaults(subcommand=download.download)
-PARSER_DOWNLOAD_MEX = PARSER_DOWNLOAD.add_mutually_exclusive_group(
-    required=True)
-PARSER_DOWNLOAD_MEX.add_argument(
-    '-p', '--prog', type=argparse.FileType('r'),
-    metavar='prog.cpp',
-    help='filename from which we can extract the problem code')
-PARSER_DOWNLOAD_MEX.add_argument(
-    '-c', '--code', type=str,
-    help='problem code')
+PARSER_DOWNLOAD.add_argument(
+    'prog', metavar='code',
+    type=str,
+    help='string containing problem code')
 PARSER_DOWNLOAD.add_argument(
     '--overwrite', action='store_true', default=False,
     help='overwrite existing files in database')
@@ -236,16 +219,10 @@ PARSER_SHOW.add_argument(
     'mode',
     type=str,
     choices=['title', 'stat', 'cases'])
-PARSER_SHOW_CODE = PARSER_SHOW.add_mutually_exclusive_group(required=True)
-PARSER_SHOW_CODE.add_argument(
-    '-p', '--prog',
-    metavar='prog.cpp',
-    type=argparse.FileType('r'),
-    help='filename from which we can extract the problem code')
-PARSER_SHOW_CODE.add_argument(
-    '-c', '--code',
+PARSER_SHOW.add_argument(
+    'prog', metavar='code',
     type=str,
-    help='problem code to use')
+    help='string containing problem code')
 PARSER_SHOW.add_argument(
     '--inp-suffix',
     type=str,
@@ -372,7 +349,7 @@ def config_logger(verbosity, quiet):
         log_lvl = logging.ERROR
 
     logging.basicConfig(
-        format='%(name)s; %(levelname)s: %(message)s', level=log_lvl)
+        format='%(levelname)s#%(name)s.%(funcName)s@%(lineno)d: %(message)s', level=log_lvl)
 
 
 def main():
@@ -393,7 +370,8 @@ def main():
 
     cmd = args.subcmd
 
-    if cmd in ('check', 'upload', 'up', 'new', 'show', 'test'):
+    if cmd in ('check', 'download', 'down', 'upload',
+               'up', 'new', 'show', 'test'):
         args_dict['cookies'] = cookie.get_cookie(**args_dict)
         if cmd in ('check', 'upload') and args_dict['cookies'] == {}:
             log.error('Please login before upload or check with: jutge login')
@@ -402,11 +380,18 @@ def main():
     if cmd not in ('login', 'check', 'import', 'cookie'):
         args_dict['code'] = get_code.get_code(**args_dict)
 
+    args_dict['database'] = expanduser(args_dict['database'])
+    if 'folder' in args_dict:
+        args_dict['folder'] = expanduser(args_dict['folder'])
+
     if cmd in ('new', 'show', 'test'):
         download.download(**args_dict)
 
     if cmd in ('archive', 'new'):
         args_dict['title'] = show.get_title(**args_dict)
+        if args_dict['title'] is None:
+            log.warning('Cannot find title, defaulting to code...')
+            args_dict['title'] = args_dict['code']
 
     if cmd in ('archive', 'new', 'upload', 'up'):
         args_dict['problem_sets'] = CONFIG['problem_sets']
@@ -416,10 +401,6 @@ def main():
 
     if 'prog' not in args_dict:
         args_dict['prog'] = None
-
-    args_dict['database'] = expanduser(args_dict['database'])
-    if 'folder' in args_dict:
-        args_dict['folder'] = expanduser(args_dict['folder'])
 
     log.debug(args_dict)
 

@@ -34,6 +34,7 @@ LOG = getLogger('jutge.show')
 
 
 def get_title(code, database, **kwargs):
+    LOG.debug('get_title called %s %s %s', code, database, kwargs)
     try:
         with open('{}/{}/problem.html'.format(database, code), 'r') as html_file:
             soup = BeautifulSoup(html_file, 'lxml')
@@ -57,8 +58,9 @@ def show(code, mode, database, inp_suffix='inp', cor_suffix='cor', **kwargs):
     :param cor_suffix: output file suffix for test cases
     """
 
+    title = get_title(code=code, database=database)
+
     if mode == 'title':
-        title = get_title(code=code, database=database)
         print(title)
     elif mode == 'stat':
         try:
@@ -81,6 +83,7 @@ def show(code, mode, database, inp_suffix='inp', cor_suffix='cor', **kwargs):
         print(txt)
 
     elif mode == 'cases':
+        print(title + '\n')
         cont = 0
         for sample_inp in sorted(
                 glob('{}/{}/*.{}'.format(database, code, inp_suffix))):

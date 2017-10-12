@@ -23,7 +23,7 @@ from bs4 import BeautifulSoup
 from requests import get, post
 
 from .check_submissions import check_last, check_problem
-from . import test
+from .test import test
 
 LOG = getLogger('jutge.upload')
 
@@ -100,7 +100,7 @@ def upload_problem(prog, code, cookies, compiler, check=True,
         exit(4)
 
     if not skip_test:
-        veredict = test.test(prog=prog, code=code, no_custom=True,
+        veredict = test(prog=prog, code=code, no_custom=True,
                              cookies=cookies, quiet=True, **kwargs)
         if veredict != 0:
             LOG.error('Problem did not pass public tests, aborting... \

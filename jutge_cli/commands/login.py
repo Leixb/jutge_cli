@@ -24,7 +24,7 @@ from logging import getLogger
 from requests import Session
 from requests.utils import dict_from_cookiejar
 
-from . import cookie
+from .cookie import Cookie
 
 LOG = getLogger('jutge.login')
 
@@ -60,5 +60,5 @@ def login(email, password, quiet, no_download, **kwargs):
 
     LOG.debug(session_cookie)
 
-    cookie.Cookie(cookie=session_cookie, no_download=no_download,
+    Cookie(cookie=session_cookie, no_download=no_download,
                   skip_check=False, **kwargs)
