@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+"""Provides function upload to upload a program to jutge.org
+"""
+
 from glob import glob
 from logging import getLogger
 from time import sleep
@@ -30,12 +33,21 @@ LOG = getLogger('jutge.upload')
 
 def upload(prog, problem_set, problem_sets, delay=100,
            no_skip_accepted=False, **kwargs):
-    """
-    :param prog:
-    :param problem_set:
-    :param problem_sets:
-    :param delay:
-    :param no_skip_accepted:
+    """Loops through problems in problem set to upload by calling
+    upload_problem
+
+    :param prog: program file
+    :param problem_set: interpret prog as problem_set name
+    :param problem_sets: defined problem sets
+    :param delay: delay between connections to jutge.org in milliseconds
+    :param no_skip_accepted: do not skip already accepted problems of problem
+        set
+
+    :type prog: str
+    :type problem_set: Boolean
+    :type problem_sets: dict
+    :type delay: int
+    :type no_skip_accepted: Boolean
     """
 
     if problem_set:
@@ -86,14 +98,25 @@ def upload(prog, problem_set, problem_sets, delay=100,
 
 def upload_problem(prog, code, cookies, compiler, check=True,
                    no_download=False, skip_test=False, quiet=False, **kwargs):
-    """
-    :param prog:
-    :param cookies:
-    :param compiler:
-    :param check:
-    :param no_download:
-    :param skip_test:
-    :param quiet:
+    """Upload program to problem identified by code
+
+    :param prog: program file to upload
+    :param code: code of problem to upload
+    :param cookies: cookies used to connect to jutge.org
+    :param compiler: compiler to use
+    :param check: check submission result
+    :param no_download: do not connecto to jutge.org (fails immediately)
+    :param skip_test: skip tests before upload
+    :param quiet: supress output
+
+    :type prog: str
+    :type code: str
+    :type cookies: dict
+    :type compiler: str
+    :type check: Boolean
+    :type no_download: Boolean
+    :type skip_test: Boolean
+    :type quiet: Boolean
     """
     if no_download:
         LOG.error('Remove --no-download flag to upload')
@@ -101,7 +124,7 @@ def upload_problem(prog, code, cookies, compiler, check=True,
 
     if not skip_test:
         veredict = test(prog=prog, code=code, no_custom=True,
-                             cookies=cookies, quiet=True, **kwargs)
+                        cookies=cookies, quiet=True, **kwargs)
         if veredict != 0:
             LOG.error('Problem did not pass public tests, aborting... \
 (use --skip-test to upload anyways)')
@@ -191,4 +214,3 @@ def upload_problem(prog, code, cookies, compiler, check=True,
                         exit(1)
         LOG.error('Check timed out')
         exit(2)
-

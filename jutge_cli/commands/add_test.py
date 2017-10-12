@@ -33,9 +33,9 @@ def add_test(database, code, delete=False, input_file=stdin, output_file=stdin,
              inp_suffix='inp', cor_suffix='cor', **kwargs):
     """Add custom test to database
 
-    :param database: database folder
+    :param database: database folder path
     :param code: problem code
-    :param delete: delete tests
+    :param delete: if true, delete tests of problem
     :param input_file: file containing test case input
     :param output_file: file containing test case output
     :param inp_suffix: input file suffix

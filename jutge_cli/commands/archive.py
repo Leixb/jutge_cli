@@ -30,7 +30,6 @@ LOG = getLogger('jutge.archive')
 
 def archive(prog, code, title, folder, problem_sets=None, overwrite=False,
             no_delete=False, **kwargs):
-
     """Move file to the archive
 
     :param prog: program file to archive

@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+"""Provides function import_zip to import problems from zip file to database
+"""
+
 from glob import glob
 from logging import getLogger
 from os import mkdir, symlink
@@ -31,12 +34,24 @@ LOG = getLogger('jutge.import_zip')
 
 def import_zip(zip_file, folder, database, problem_sets=None, delay=100,
                overwrite=False, **kwargs):
-    """
-    zip
-    folder
-    overwrite
-    delay
-    no_download
+    """Import problems from zip file to archive
+
+    The zip file must match the exact structure of the one that is downloaded
+    from jutge.org profile page
+
+    :param zip: zip file to import
+    :param folder: archive folder to where files are imported
+    :param overwrite: overwrite existing files in database
+    :param problem_sets: problem sets to consider when importing
+    :param delay: delay between jutge.org connections
+    :param no_download: do not connect to jutge.org (save as code.ext)
+
+    :type zip: str
+    :type folder: str
+    :type overwrite: Boolean
+    :param problem_sets: list
+    :type delay: int
+    :type no_download: Boolean
     """
 
     extract_to = TemporaryDirectory().name

@@ -32,10 +32,15 @@ LOG = getLogger('jutge.login')
 def login(email, password, quiet, no_download, **kwargs):
     """Login to jutge.org
 
-    :param no_download
-    :param quiet:
     :param email: login email
     :param password: login password
+    :param quiet: supress output
+    :param no_download: do not connect to jutge.org
+
+    :type email: str
+    :type password: str
+    :type quiet: Boolean
+    :type no_download: Boolean
     """
 
     if email is None:
@@ -61,4 +66,4 @@ def login(email, password, quiet, no_download, **kwargs):
     LOG.debug(session_cookie)
 
     Cookie(cookie=session_cookie, no_download=no_download,
-                  skip_check=False, **kwargs)
+           skip_check=False, **kwargs)

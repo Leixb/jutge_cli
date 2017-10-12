@@ -44,6 +44,11 @@ def __expand_subcode__(subcode, database, cookies, no_download, **kwargs):
     :param cookie: dict cookies
     :param no_download: do not connect to jutge.org
 
+    :type subcode: str
+    :type database: str
+    :type cookie: dict
+    :type no_download: Boolean
+
     :return: code
     :rtype: str
     """
@@ -81,6 +86,9 @@ def __match_regex__(regex, text):
     :param regex: regex to use
     :param text: text where regex should match
 
+    :type regex: str
+    :type text: str
+
     :return: regex match or None if failed
     :rtype: str
     """
@@ -101,9 +109,14 @@ def get_code(database, regex, no_download, code=None, prog=None, **kwargs):
     :param database: database folder path
     :param regex: regex used to match code
     :param no_download: do not connect to jutge.org
-
     :param code: problem code
     :param prog: problem file
+
+    :type database: str
+    :type regex: str
+    :type no_download: Boolean
+    :type code: str
+    :type prog: str
     """
 
     LOG.debug('prog %s, code %s', prog, code)

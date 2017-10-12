@@ -40,6 +40,10 @@ def check_submissions(code=None, no_download=False, quiet=False, **kwargs):
     :param code: problem code
     :param no_dowload: do not connect to jutge.org
     :param quiet: do not output results
+
+    :type code: str
+    :type no_download: Boolean
+    :type quiet: Boolean
     """
 
     if no_download:
@@ -63,6 +67,9 @@ def check_problem(code, cookies, **kwargs):
     """Check last submission of a given problem code
 
     :param code: string equal to the jutge.org code of the problem to check
+
+    :type code: str
+
     :return: problem veredict
     :rtype: str
     """
@@ -93,6 +100,10 @@ def check_last(cookies, last=False, reverse=False, quiet=False,
     :param quiet: no print, only return veredict
     :param last: print only the last submission
     :param reverse: print the first submission last
+
+    :type quiet: Boolean
+    :type last: Boolean
+    :type reverse: Boolean
 
     :return: last veredict in the form of a dict with keys:
         code, time and veredict

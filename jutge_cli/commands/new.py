@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+"""Provide method to create new file with title from problem code
+"""
+
 from logging import getLogger
 from os import mkdir
 from os.path import isfile, isdir
@@ -38,6 +41,15 @@ int main () {
     }
 
 def new(problem_set, code, **kwargs):
+    """Call __new_standalone_file__ or __new_problem_set__ depending on
+    problem_set variable
+
+    :param problem_set: interpret code as problem_set
+    :param code: code or problem_set name
+
+    :type problem_set: Boolean
+    :type code: str
+    """
     if problem_set:
         __new_problem_set__(set_name=code, **kwargs)
     else:
@@ -45,14 +57,19 @@ def new(problem_set, code, **kwargs):
 
 def __new_standalone_file__(code, title, extension, problem_sets,
                             overwrite=False, quiet=False, **kwargs):
-    """
+    """Create new file from code and title
 
-    subfolders
+    :param code: problem code
+    :param title: problem title
+    :param extension: file extension
+    :param problem_sets: problem sets
+    :param overwrite: overwrite existing files
 
-    :param code:
-    :param title:
-    :param extension:
-    :param overwrite:
+    :type code: str
+    :type title: str
+    :type extension: Boolean
+    :type problem_sets: dict
+    :type overwrite: Boolean
     """
     sub_code = code.split('_')[0]
 
@@ -75,11 +92,17 @@ def __new_standalone_file__(code, title, extension, problem_sets,
 
 def __new_problem_set__(set_name, problem_sets, extension,
                         overwrite=False, **kwargs):
-    """
-    :param problem_sets: dict containing all problem sets
+    """Create all files in the problem set set_name
+
     :param set_name: problem set name
+    :param problem_sets: dict containing all problem sets
     :param extension: extension to use
     :param overwrite: if True overwrite existing files
+
+    :type set_name: str
+    :type problem_sets: dict
+    :type extension: str
+    :type overwrite: Boolean
     """
     try:
         problems = problem_sets[set_name]

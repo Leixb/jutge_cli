@@ -15,6 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+"""Provides function test that tests a given code or executable againt
+test cases in database
+"""
+
 from glob import glob
 from logging import getLogger
 from os.path import basename
@@ -39,21 +43,43 @@ def test(prog, code, database, no_color=False, no_custom=False,
          inp_suffix='inp', cor_suffix='cor', diff_prog='diff',
          diff_flags='-y',
          quiet=False, **kwargs):
-    """
-    :param prog:
-    :param code:
+    """Test prog against test cases in database
 
-    :param database:
-    :param no_color:
-    :param no_custom:
-    :param cor_suffix:
-    :param inp_suffix:
-    :param diff_prog:
-    :param diff_flags:
-    :param quiet:
+    :param prog: program file
+    :param code: problem code
+    :param database: database folder
+    :param no_color: do not colorize output
+    :param no_custom: do not test against custom added tests
+    :param cor_suffix: correct file suffix
+    :param inp_suffix: input file suffix
+    :param diff_prog: diff program to use
+    :param diff_flags: diff flags to use
+    :param quiet: supress output
+
+    :type prog: str
+    :type code: str
+    :type database: str
+    :type no_color: Boolean
+    :type no_custom: Boolean
+    :type cor_suffix: str
+    :type inp_suffix: str
+    :type diff_prog: str
+    :type diff_flags: str
+    :type quiet: Boolean
+
+    :return: number of failed tests
+    :rtype: int
     """
 
     def print_color(text, colors=None):
+        """Print text in color or not
+
+        :param text: text to print
+        :param colors: colors to apply
+
+        :type text: str
+        :type colors: list or str
+        """
         if not quiet:
             if colors is None or no_color:
                 print(text)

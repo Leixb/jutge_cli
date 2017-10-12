@@ -15,10 +15,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+"""Provides function to download problem files to database
+"""
+
 from logging import getLogger
 
 from os import mkdir
-from os.path import isdir, isfile, expanduser
+from os.path import isdir, isfile
 from tempfile import NamedTemporaryFile
 from zipfile import ZipFile, BadZipFile
 
@@ -28,14 +31,21 @@ from requests import get
 LOG = getLogger('jutge.download')
 
 
-def download(code, cookies, database,
-             no_download, overwrite=False, **kwargs):
-    """
-    :param code:
-    :param cookies:
-    :param database:
-    :param no_download:
-    :param overwrite:
+def download(code, cookies, database, no_download=False,
+             overwrite=False, **kwargs):
+    """Download problem files to database
+
+    :param code: problem code
+    :param cookies: cookies used to connect
+    :param database: database folder
+    :param no_download: do not connect to jutge.org
+    :param overwrite: overwrite already existing files in database
+
+    :type code: str
+    :type cookies: dict
+    :type database: str
+    :type no_download: Boolean
+    :type overwrite: Boolean
     """
 
     if no_download:
@@ -83,7 +93,7 @@ def download(code, cookies, database,
     else:
         LOG.warning('Folder already in DB, use overwrite to force download')
 
-    if isfile('{}/problem.html'.format(db_folder, code)) and not overwrite:
+    if isfile('{}/problem.html'.format(db_folder)) and not overwrite:
         LOG.info('File already in DB, continue')
         return
 
@@ -103,6 +113,5 @@ def download(code, cookies, database,
     except TypeError:
         pass
 
-    with open('{}/problem.html'.format(db_folder), 'w') as \
-            problem_file:
+    with open('{}/problem.html'.format(db_folder), 'w') as problem_file:
         problem_file.write(str(soup))
