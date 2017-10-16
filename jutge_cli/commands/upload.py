@@ -60,7 +60,7 @@ def upload(prog, problem_set, problem_sets, delay=100,
             LOG.error('Problem set not found')
             exit(20)
     else:
-        upload_problem(prog=prog, code=code **kwargs)
+        upload_problem(prog=prog, code=code, **kwargs)
         exit(0)
 
     LOG.debug(problems)
