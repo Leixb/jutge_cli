@@ -27,12 +27,13 @@ from requests import get, post
 
 from .check_submissions import check_last, check_problem
 from .test import test
+from .get_code import get_code
 
 LOG = getLogger('jutge.upload')
 
 
 def upload(prog, problem_set, problem_sets, delay=100,
-           no_skip_accepted=False, **kwargs):
+           no_skip_accepted=False, code=None, **kwargs):
     """Loops through problems in problem set to upload by calling
     upload_problem
 
@@ -42,6 +43,7 @@ def upload(prog, problem_set, problem_sets, delay=100,
     :param delay: delay between connections to jutge.org in milliseconds
     :param no_skip_accepted: do not skip already accepted problems of problem
         set
+    :param code: to remove code from kwargs so that check_problem() doesn't fail when called
 
     :type prog: str
     :type problem_set: Boolean
@@ -58,7 +60,7 @@ def upload(prog, problem_set, problem_sets, delay=100,
             LOG.error('Problem set not found')
             exit(20)
     else:
-        upload_problem(prog, **kwargs)
+        upload_problem(prog=prog, code=code **kwargs)
         exit(0)
 
     LOG.debug(problems)
@@ -92,7 +94,8 @@ def upload(prog, problem_set, problem_sets, delay=100,
             exit(130)
 
     for problem in submit_queue:
-        upload_problem(prog=problem, **kwargs)
+        problem_code = get_code(code=None, prog=problem, **kwargs)
+        upload_problem(prog=problem, code=problem_code, **kwargs)
 
         sleep(delay/1000.0)
 
@@ -139,8 +142,13 @@ def upload_problem(prog, code, cookies, compiler, check=True,
     response = get(web, cookies=cookies)
     soup = BeautifulSoup(response.text, 'lxml')
 
-    token_uid = soup.find('input', {'name' : 'token_uid'})['value']
-    LOG.debug(token_uid)
+    try:
+        LOG.debug(web)
+        token_uid = soup.find('input', {'name' : 'token_uid'})['value']
+        LOG.debug(token_uid)
+    except TypeError:
+        LOG.error('Invalid cookie, cannot get token_uid, please login again')
+        exit(30)
 
     extension = prog.split('.')[-1]  # To determine compiler
 
