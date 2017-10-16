@@ -304,3 +304,5 @@ on top of the list:
 ::
 
     jutge check --last
+
+You can also check the status of a problem by using the flag ``--code``

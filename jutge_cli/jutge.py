@@ -36,7 +36,7 @@ except ModuleNotFoundError:
                          defaults, download, get_code, import_zip, login,\
                          new, show, test, upload
 
-JUTGE_CLI_VERSION = '2.0.0'
+JUTGE_CLI_VERSION = '2.0.1'
 
 CONFIG = defaults.config()
 DEFAULT_PARAM = CONFIG['param']
@@ -149,7 +149,7 @@ PARSER_CHECK_MODE.add_argument(
     help='show last submission on top',
     default=False)
 PARSER_CHECK.add_argument(
-    'prog', metavar='code',
+    '-c','--code', metavar='code',
     type=str,
     help='string that contains problem code')
 
