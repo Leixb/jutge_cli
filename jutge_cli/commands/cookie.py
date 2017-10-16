@@ -56,7 +56,7 @@ class Cookie:
     """
 
     def __init__(self, cookie=None, no_download=False,
-                 skip_check=False, SUBCOMMAND='cookie', **kwargs):
+                 skip_check=False, subcmd='cookie', **kwargs):
         """Save args and initialize class variables
 
         :param cookie: cookie value
@@ -97,7 +97,7 @@ skip the check use --skip-check)')
                     self.has_cookie = True
                 LOG.debug(self.cookie)
 
-            if self.has_cookie and SUBCOMMAND == 'cookie':
+            if self.has_cookie and subcmd == 'cookie':
                 print(self.cookie)
             else:
                 LOG.warning('No cookie saved')
