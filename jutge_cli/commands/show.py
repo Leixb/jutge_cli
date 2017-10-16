@@ -113,5 +113,5 @@ def show(code, mode, database, inp_suffix='inp', cor_suffix='cor', **kwargs):
                 print('### Input {} {}'.format(cont, is_custom))
                 print(inp_file.read())
             with open(sample_cor, 'r') as cor_file:
-                print('### Output ' + cont)
+                print('### Output {}'.format(cont))
                 print(cor_file.read())
