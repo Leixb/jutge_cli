@@ -149,7 +149,7 @@ PARSER_CHECK_MODE.add_argument(
     help='show last submission on top',
     default=False)
 PARSER_CHECK.add_argument(
-    '-c','--code', metavar='code',
+    '-c', '--code', metavar='code',
     type=str,
     help='string that contains problem code')
 
