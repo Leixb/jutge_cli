@@ -163,6 +163,7 @@ case $state in
                     '--problem-set[upload all files from a problem set]'\
                     '--skip-check[do not test against public test cases before upload]'\
                     '--delay[delay between jutge-org upload requests]:milliseconds'\
+                    '--no-skip-ac[do not skip accepted problems when uploading a problem set]'\
                     '--check[wait for veredict from jutge]'
             ;;
             (import)
