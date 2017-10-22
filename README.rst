@@ -190,7 +190,7 @@ This command will populate the local database for problem ``P00001_en``:
     jutge download P00001_en
 
 New (new)
-~~~
+~~~~~~~~~
 
 This command must be followed by a code. It will fetch the problem title
 from the code and create a new file whose name is the code followed by
