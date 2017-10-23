@@ -129,7 +129,7 @@ case $state in
                     \
                     '--inp-suffix[input file suffix]:suffix' \
                     '--cor-suffix[correct output file suffix]:suffix'\
-                    '--pandoc[use pypandoc to print problem statement]'
+                    '--html[use use html instead of pypandoc to print problem statement (faster)]'
             ;;
             (archive)
                 _arguments \
