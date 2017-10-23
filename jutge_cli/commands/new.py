@@ -52,34 +52,26 @@ def new(problem_set: Boolean, code: str, **kwargs):
     else:
         __new_standalone_file__(code=code, **kwargs)
 
-def __new_standalone_file__(code, title, extension, problem_sets,
-                            overwrite=False, quiet=False, **kwargs):
+def __new_standalone_file__(code: str, title: str, extension: str,
+        overwrite: Boolean = False, quiet: Boolean = False, **kwargs):
     """Create new file from code and title
 
     :param code: problem code
     :param title: problem title
     :param extension: file extension
-    :param problem_sets: problem sets
     :param overwrite: overwrite existing files
     """
     sub_code = code.split('_')[0]
 
-    dest_folder = '.'
-
-    for sub_folder, problems in problem_sets.items():
-        if sub_code in problems:
-            dest_folder = sub_folder
-            if not isdir(dest_folder):
-                mkdir(dest_folder)
-            break
-
-    file_name = '{}/{}.{}'.format(dest_folder, title, extension)
+    file_name = './{}.{}'.format(title, extension)
     if not isfile(file_name) or overwrite:
         if not quiet:
             print(file_name)
         with open(file_name, 'a') as new_file:
             if extension in TEMPLATES:
                 new_file.write(TEMPLATES[extension])
+    elif not quiet:
+        print('File already exists:', file_name)
 
 def __new_problem_set__(set_name: str, problem_sets: dict, extension: str,
         overwrite: Boolean = False, **kwargs):
