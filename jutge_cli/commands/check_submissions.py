@@ -31,7 +31,8 @@ from requests import get
 LOG = getLogger('jutge.check_submissions')
 
 
-def check_submissions(code=None, no_download=False, quiet=False, **kwargs):
+def check_submissions(code: str = None, no_download: Boolean = False,
+        quiet: Boolean = False, **kwargs):
     """Save copy of args to the class
 
     If it is called from jutge.py subcommand it will call method
@@ -40,10 +41,6 @@ def check_submissions(code=None, no_download=False, quiet=False, **kwargs):
     :param code: problem code
     :param no_dowload: do not connect to jutge.org
     :param quiet: do not output results
-
-    :type code: str
-    :type no_download: Boolean
-    :type quiet: Boolean
     """
 
     if no_download:
@@ -63,15 +60,12 @@ def check_submissions(code=None, no_download=False, quiet=False, **kwargs):
             exit(0)
     exit(1)
 
-def check_problem(code, cookies, **kwargs):
+def check_problem(code: str, cookies: dict, **kwargs) -> str:
     """Check last submission of a given problem code
 
     :param code: string equal to the jutge.org code of the problem to check
 
-    :type code: str
-
     :return: problem veredict
-    :rtype: str
     """
 
     if cookies == {}:

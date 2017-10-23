@@ -31,7 +31,8 @@ from requests import get
 LOG = getLogger('jutge.get_code')
 
 
-def __expand_subcode__(subcode, database, cookies, no_download, **kwargs):
+def __expand_subcode__(subcode: str, database: str, cookies: dict,
+        no_download: Boolean, **kwargs) -> str:
     """Return code from subcode
 
     This function uses info from the database if available or connects
@@ -44,13 +45,7 @@ def __expand_subcode__(subcode, database, cookies, no_download, **kwargs):
     :param cookie: dict cookies
     :param no_download: do not connect to jutge.org
 
-    :type subcode: str
-    :type database: str
-    :type cookie: dict
-    :type no_download: Boolean
-
     :return: code
-    :rtype: str
     """
 
     problem_folder = glob('{}/{}_*'.format(database, subcode))
@@ -80,17 +75,13 @@ def __expand_subcode__(subcode, database, cookies, no_download, **kwargs):
         return code
 
 
-def __match_regex__(regex, text):
+def __match_regex__(regex: str, text: str) -> str:
     """Return regex match on text
 
     :param regex: regex to use
     :param text: text where regex should match
 
-    :type regex: str
-    :type text: str
-
     :return: regex match or None if failed
-    :rtype: str
     """
 
     LOG.debug('match regex %s, text %s', regex, text)
@@ -103,7 +94,8 @@ def __match_regex__(regex, text):
     return temp
 
 
-def get_code(database, regex, no_download, code=None, prog=None, **kwargs):
+def get_code(database: str, regex: str, no_download: Boolean, code: str = None,
+        prog: str = None, **kwargs) -> str:
     """Return problem code
 
     :param database: database folder path
@@ -112,11 +104,7 @@ def get_code(database, regex, no_download, code=None, prog=None, **kwargs):
     :param code: problem code
     :param prog: problem file
 
-    :type database: str
-    :type regex: str
-    :type no_download: Boolean
-    :type code: str
-    :type prog: str
+    :return: code
     """
 
     LOG.debug('prog %s, code %s', prog, code)

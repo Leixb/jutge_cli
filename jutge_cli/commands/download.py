@@ -31,8 +31,8 @@ from requests import get
 LOG = getLogger('jutge.download')
 
 
-def download(code, cookies, database, no_download=False,
-             overwrite=False, **kwargs):
+def download(code: str, cookies: dict, database: str,
+        no_download: Boolean = False, overwrite: Boolean = False, **kwargs):
     """Download problem files to database
 
     :param code: problem code
@@ -40,12 +40,6 @@ def download(code, cookies, database, no_download=False,
     :param database: database folder
     :param no_download: do not connect to jutge.org
     :param overwrite: overwrite already existing files in database
-
-    :type code: str
-    :type cookies: dict
-    :type database: str
-    :type no_download: Boolean
-    :type overwrite: Boolean
     """
 
     if no_download:

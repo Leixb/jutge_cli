@@ -28,8 +28,9 @@ from shutil import move, copyfile
 LOG = getLogger('jutge.archive')
 
 
-def archive(prog, code, title, folder, problem_sets=None, overwrite=False,
-            no_delete=False, **kwargs):
+def archive(prog: FileType('w'), code: str, title: str, folder: str,
+        problem_sets: Boolean = None, overwrite: Boolean = False,
+        no_delete: Boolean = False, **kwargs):
     """Move file to the archive
 
     :param prog: program file to archive
@@ -38,11 +39,6 @@ def archive(prog, code, title, folder, problem_sets=None, overwrite=False,
     :param problem_sets: problem_sets to consider
     :param overwrite: if True, overwrite program file if already in database
     :param no_delete: if True, copy program instead of moving it
-
-    :type prog: FileType
-    :type folder: str
-    :type overwrite: Boolean
-    :type no_delete: Boolean
     """
 
     ext = basename(prog.name).split('.')[-1]

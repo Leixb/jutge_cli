@@ -29,16 +29,13 @@ from requests import get
 LOG = getLogger('jutge.cookie')
 
 
-def get_cookie(cookie, no_download, skip_check=False, **kwargs):
+def get_cookie(cookie: str, no_download: Boolean,
+        skip_check: Boolean = False, **kwargs) -> dict:
     """Wrapper around Cookie class that returns cookie dict
 
     :param cookie: cookie value
     :param no_download: do not download from jutge.org
     :param skip_check: skip cookie check
-
-    :type cookie: str
-    :type no_download: Boolean
-    :type skip_check: Boolean
 
     :return: cookie dict with cookie as PHPSESSID (empty if cookie not valid)
     """
@@ -55,17 +52,13 @@ class Cookie:
     """Provides methods to save and read cookie from file or arguments
     """
 
-    def __init__(self, cookie=None, no_download=False,
-                 skip_check=False, subcmd='cookie', **kwargs):
+    def __init__(self, cookie: str = None, no_download: Boolean = False,
+            skip_check: Boolean = False, subcmd: str = 'cookie', **kwargs):
         """Save args and initialize class variables
 
         :param cookie: cookie value
         :param no_download: do not download from jutge.org
         :param skip_check: skip cookie check
-
-        :type cookie: str
-        :type no_download: Boolean
-        :type skip_check: Boolean
         """
 
         self.file_name = '{}/jutge_cli_cookie'.format(gettempdir())
@@ -109,11 +102,10 @@ skip the check use --skip-check)')
         with open(self.file_name, 'w') as cookie_file:
             cookie_file.write(self.cookie + '\n')
 
-    def check_cookie(self):
+    def check_cookie(self) -> str:
         """Check that cookie is valid by downloading dashboard
 
         :return: username if cookie succesfull or None on failure
-        :rtype: str
         """
         if self.check_done:
             return self.username

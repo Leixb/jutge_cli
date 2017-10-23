@@ -32,8 +32,9 @@ from .show import get_title
 LOG = getLogger('jutge.import_zip')
 
 
-def import_zip(zip_file, folder, database, problem_sets=None, delay=100,
-               overwrite=False, **kwargs):
+def import_zip(zip_file: str, folder: str, database: str,
+        problem_sets: Boolean = None, delay: int = 100,
+        overwrite: Boolean =False, **kwargs):
     """Import problems from zip file to archive
 
     The zip file must match the exact structure of the one that is downloaded
@@ -45,13 +46,6 @@ def import_zip(zip_file, folder, database, problem_sets=None, delay=100,
     :param problem_sets: problem sets to consider when importing
     :param delay: delay between jutge.org connections
     :param no_download: do not connect to jutge.org (save as code.ext)
-
-    :type zip: str
-    :type folder: str
-    :type overwrite: Boolean
-    :param problem_sets: list
-    :type delay: int
-    :type no_download: Boolean
     """
 
     extract_to = TemporaryDirectory().name

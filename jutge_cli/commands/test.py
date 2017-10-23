@@ -39,10 +39,10 @@ __ANSI_COLORS__ = dict(
     ENDC='\033[0m')
 
 
-def test(prog, code, database, no_color=False, no_custom=False,
-         inp_suffix='inp', cor_suffix='cor', diff_prog='diff',
-         diff_flags='-y',
-         quiet=False, **kwargs):
+def test(prog: str, code: str, database: str, no_color: Boolean = False,
+        no_custom: Boolean = False, inp_suffix: str = 'inp',
+        cor_suffix: str = 'cor', diff_prog: str = 'diff',
+        diff_flags: str = '-y', quiet: Boolean = False, **kwargs) -> int:
     """Test prog against test cases in database
 
     :param prog: program file
@@ -56,29 +56,14 @@ def test(prog, code, database, no_color=False, no_custom=False,
     :param diff_flags: diff flags to use
     :param quiet: supress output
 
-    :type prog: str
-    :type code: str
-    :type database: str
-    :type no_color: Boolean
-    :type no_custom: Boolean
-    :type cor_suffix: str
-    :type inp_suffix: str
-    :type diff_prog: str
-    :type diff_flags: str
-    :type quiet: Boolean
-
     :return: number of failed tests
-    :rtype: int
     """
 
-    def print_color(text, colors=None):
+    def print_color(text: str, colors: list = None):
         """Print text in color or not
 
         :param text: text to print
         :param colors: colors to apply
-
-        :type text: str
-        :type colors: list or str
         """
         if not quiet:
             if colors is None or no_color:

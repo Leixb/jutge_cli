@@ -26,14 +26,13 @@ from yaml import load
 LOG = getLogger('jutge.defaults')
 
 
-def config():
+def config() -> dict:
     """Read YAML config and return configuration in dict
 
     If setting is not in YAML config file or config file is not found
     it will default to the default values
 
     :return: dictionary with keys param and subfolders
-    :rtype: dict
     """
 
     try:

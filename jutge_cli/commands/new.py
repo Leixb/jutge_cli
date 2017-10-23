@@ -40,15 +40,12 @@ int main () {
 '''
     }
 
-def new(problem_set, code, **kwargs):
+def new(problem_set: Boolean, code: str, **kwargs):
     """Call __new_standalone_file__ or __new_problem_set__ depending on
     problem_set variable
 
     :param problem_set: interpret code as problem_set
     :param code: code or problem_set name
-
-    :type problem_set: Boolean
-    :type code: str
     """
     if problem_set:
         __new_problem_set__(set_name=code, **kwargs)
@@ -64,12 +61,6 @@ def __new_standalone_file__(code, title, extension, problem_sets,
     :param extension: file extension
     :param problem_sets: problem sets
     :param overwrite: overwrite existing files
-
-    :type code: str
-    :type title: str
-    :type extension: Boolean
-    :type problem_sets: dict
-    :type overwrite: Boolean
     """
     sub_code = code.split('_')[0]
 
@@ -90,19 +81,14 @@ def __new_standalone_file__(code, title, extension, problem_sets,
             if extension in TEMPLATES:
                 new_file.write(TEMPLATES[extension])
 
-def __new_problem_set__(set_name, problem_sets, extension,
-                        overwrite=False, **kwargs):
+def __new_problem_set__(set_name: str, problem_sets: dict, extension: str,
+        overwrite: Boolean = False, **kwargs):
     """Create all files in the problem set set_name
 
     :param set_name: problem set name
     :param problem_sets: dict containing all problem sets
     :param extension: extension to use
     :param overwrite: if True overwrite existing files
-
-    :type set_name: str
-    :type problem_sets: dict
-    :type extension: str
-    :type overwrite: Boolean
     """
     try:
         problems = problem_sets[set_name]

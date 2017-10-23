@@ -32,8 +32,9 @@ from .get_code import get_code
 LOG = getLogger('jutge.upload')
 
 
-def upload(prog, problem_set, problem_sets, delay=100,
-           no_skip_accepted=False, code=None, **kwargs):
+def upload(prog: str, problem_set: Boolean, problem_sets: str,
+        delay: int = 100, no_skip_accepted: Boolean = False,
+        code: str = None, **kwargs):
     """Loops through problems in problem set to upload by calling
     upload_problem
 
@@ -44,12 +45,6 @@ def upload(prog, problem_set, problem_sets, delay=100,
     :param no_skip_accepted: do not skip already accepted problems of problem
         set
     :param code: to remove code from kwargs so that check_problem() doesn't fail when called
-
-    :type prog: str
-    :type problem_set: Boolean
-    :type problem_sets: dict
-    :type delay: int
-    :type no_skip_accepted: Boolean
     """
 
     if problem_set:
@@ -99,8 +94,9 @@ def upload(prog, problem_set, problem_sets, delay=100,
 
         sleep(delay/1000.0)
 
-def upload_problem(prog, code, cookies, compiler, check=True,
-                   no_download=False, skip_test=False, quiet=False, **kwargs):
+def upload_problem(prog: str, code: str, cookies: dict, compiler: str,
+        check: Boolean = True, no_download: Boolean = False,
+        skip_test: Boolean = False, quiet: Boolean = False, **kwargs):
     """Upload program to problem identified by code
 
     :param prog: program file to upload
@@ -111,15 +107,6 @@ def upload_problem(prog, code, cookies, compiler, check=True,
     :param no_download: do not connecto to jutge.org (fails immediately)
     :param skip_test: skip tests before upload
     :param quiet: supress output
-
-    :type prog: str
-    :type code: str
-    :type cookies: dict
-    :type compiler: str
-    :type check: Boolean
-    :type no_download: Boolean
-    :type skip_test: Boolean
-    :type quiet: Boolean
     """
     if no_download:
         LOG.error('Remove --no-download flag to upload')

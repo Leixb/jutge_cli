@@ -33,11 +33,13 @@ else:
 LOG = getLogger('jutge.show')
 
 
-def get_title(code, database, **kwargs):
+def get_title(code: str, database: str, **kwargs) -> str:
     """Return title of given code from database
 
-    :return: problem title
-    :rtype: str
+    :param code: problem code
+    :param database: database folder
+
+    :return: title
     """
     LOG.debug('get_title called %s %s %s', code, database, kwargs)
     try:
@@ -53,7 +55,8 @@ def get_title(code, database, **kwargs):
     return title
 
 
-def show(code, mode, database, inp_suffix='inp', cor_suffix='cor', **kwargs):
+def show(code: str, mode: str, database: str, inp_suffix: str = 'inp',
+        cor_suffix: str = 'cor', **kwargs):
     """Print title, test_cases or statement of given problem
 
     :param code: problem code
@@ -62,12 +65,6 @@ def show(code, mode, database, inp_suffix='inp', cor_suffix='cor', **kwargs):
         return title
     :param inp_suffix: input file suffix for test cases
     :param cor_suffix: output file suffix for test cases
-
-    :type code: str
-    :type database: str
-    :type mode: str
-    :type inp_suffix: str
-    :type cor_suffix: str
     """
 
     title = get_title(code=code, database=database)
