@@ -84,7 +84,7 @@ def check_problem(code: str, cookies: dict, **kwargs) -> str:
             return contents.split(':')[1].strip()
 
 def check_last(cookies: dict, last=False, reverse=False, quiet=False,
-               no_download=False, **kwargs) --> dict:
+               no_download=False, **kwargs) -> dict:
     """Check last submissions to jutge.org
 
     This function will connect to jutge.org and retrieve the last
