@@ -56,7 +56,7 @@ def get_title(code: str, database: str, **kwargs) -> str:
 
 
 def show(code: str, mode: str, database: str, inp_suffix: str = 'inp',
-        cor_suffix: str = 'cor', **kwargs):
+        cor_suffix: str = 'cor', pandoc = False, **kwargs):
     """Print title, test_cases or statement of given problem
 
     :param code: problem code
@@ -65,6 +65,7 @@ def show(code: str, mode: str, database: str, inp_suffix: str = 'inp',
         return title
     :param inp_suffix: input file suffix for test cases
     :param cor_suffix: output file suffix for test cases
+    :param pandoc: whether to use pandoc when printing stat
     """
 
     title = get_title(code=code, database=database)
@@ -85,7 +86,7 @@ def show(code: str, mode: str, database: str, inp_suffix: str = 'inp',
         txt = ' '.join([str(i) for i in txt])
 
         # Convert html to plain text using pandoc (if loaded)
-        if PANDOC_LOADED:
+        if pandoc and PANDOC_LOADED:
             txt = convert_text(txt, 'plain', 'html')
 
         print(title + '\n')

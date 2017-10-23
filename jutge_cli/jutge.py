@@ -36,7 +36,7 @@ except ModuleNotFoundError:
                          defaults, download, get_code, import_zip, login,\
                          new, show, test, upload
 
-JUTGE_CLI_VERSION = '2.0.6'
+JUTGE_CLI_VERSION = '2.0.7'
 
 CONFIG = defaults.config()
 DEFAULT_PARAM = CONFIG['param']
@@ -232,6 +232,9 @@ PARSER_SHOW.add_argument(
     '--cor-suffix', type=str,
     default=DEFAULT_PARAM['cor-suffix'],
     help='suffix of test correct output files')
+PARSER_SHOW.add_argument(
+    '--pandoc', action='store_true', default=False,
+    help='Use pypandoc to print problem statement')
 
 PARSER_TEST = SUBPARSERS.add_parser(
     'test',

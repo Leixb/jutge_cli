@@ -128,7 +128,8 @@ case $state in
                     '--no-download[do not attempt to fetch data from jutge.org]' \
                     \
                     '--inp-suffix[input file suffix]:suffix' \
-                    '--cor-suffix[correct output file suffix]:suffix'
+                    '--cor-suffix[correct output file suffix]:suffix'\
+                    '--pandoc[use pypandoc to print problem statement]'
             ;;
             (archive)
                 _arguments \
