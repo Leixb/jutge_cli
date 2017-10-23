@@ -28,7 +28,7 @@ from shutil import move, copyfile
 LOG = getLogger('jutge.archive')
 
 
-def archive(prog: FileType('w'), code: str, title: str, folder: str,
+def archive(prog: "FileType('w')", code: str, title: str, folder: str,
         problem_sets: 'Boolean' = None, overwrite: 'Boolean' = False,
         no_delete: 'Boolean' = False, **kwargs):
     """Move file to the archive
