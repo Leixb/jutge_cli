@@ -40,7 +40,7 @@ int main () {
 '''
     }
 
-def new(problem_set: Boolean, code: str, **kwargs):
+def new(problem_set: 'Boolean', code: str, **kwargs):
     """Call __new_standalone_file__ or __new_problem_set__ depending on
     problem_set variable
 
@@ -53,7 +53,7 @@ def new(problem_set: Boolean, code: str, **kwargs):
         __new_standalone_file__(code=code, **kwargs)
 
 def __new_standalone_file__(code: str, title: str, extension: str,
-        overwrite: Boolean = False, quiet: Boolean = False, **kwargs):
+        overwrite: 'Boolean' = False, quiet: 'Boolean' = False, **kwargs):
     """Create new file from code and title
 
     :param code: problem code
@@ -74,7 +74,7 @@ def __new_standalone_file__(code: str, title: str, extension: str,
         print('File already exists:', file_name)
 
 def __new_problem_set__(set_name: str, problem_sets: dict, extension: str,
-        overwrite: Boolean = False, **kwargs):
+        overwrite: 'Boolean' = False, **kwargs):
     """Create all files in the problem set set_name
 
     :param set_name: problem set name

@@ -29,7 +29,7 @@ from sys import stdin
 LOG = getLogger('jutge.add_test')
 
 
-def add_test(database: str, code: str, delete: Boolean = False,
+def add_test(database: str, code: str, delete: 'Boolean' = False,
              input_file=stdin, output_file=stdin,
              inp_suffix: str = 'inp', cor_suffix: str = 'cor', **kwargs):
     """Add custom test to database

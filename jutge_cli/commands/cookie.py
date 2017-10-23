@@ -29,8 +29,8 @@ from requests import get
 LOG = getLogger('jutge.cookie')
 
 
-def get_cookie(cookie: str, no_download: Boolean,
-        skip_check: Boolean = False, **kwargs) -> dict:
+def get_cookie(cookie: str, no_download: 'Boolean',
+        skip_check: 'Boolean' = False, **kwargs) -> dict:
     """Wrapper around Cookie class that returns cookie dict
 
     :param cookie: cookie value
@@ -52,8 +52,8 @@ class Cookie:
     """Provides methods to save and read cookie from file or arguments
     """
 
-    def __init__(self, cookie: str = None, no_download: Boolean = False,
-            skip_check: Boolean = False, subcmd: str = 'cookie', **kwargs):
+    def __init__(self, cookie: str = None, no_download: 'Boolean' = False,
+            skip_check: 'Boolean' = False, subcmd: str = 'cookie', **kwargs):
         """Save args and initialize class variables
 
         :param cookie: cookie value

@@ -32,7 +32,7 @@ LOG = getLogger('jutge.download')
 
 
 def download(code: str, cookies: dict, database: str,
-        no_download: Boolean = False, overwrite: Boolean = False, **kwargs):
+        no_download: 'Boolean' = False, overwrite: 'Boolean' = False, **kwargs):
     """Download problem files to database
 
     :param code: problem code

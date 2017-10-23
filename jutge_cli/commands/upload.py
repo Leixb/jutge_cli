@@ -32,8 +32,8 @@ from .get_code import get_code
 LOG = getLogger('jutge.upload')
 
 
-def upload(prog: str, problem_set: Boolean, problem_sets: str,
-        delay: int = 100, no_skip_accepted: Boolean = False,
+def upload(prog: str, problem_set: 'Boolean', problem_sets: str,
+        delay: int = 100, no_skip_accepted: 'Boolean' = False,
         code: str = None, **kwargs):
     """Loops through problems in problem set to upload by calling
     upload_problem
@@ -95,8 +95,8 @@ def upload(prog: str, problem_set: Boolean, problem_sets: str,
         sleep(delay/1000.0)
 
 def upload_problem(prog: str, code: str, cookies: dict, compiler: str,
-        check: Boolean = True, no_download: Boolean = False,
-        skip_test: Boolean = False, quiet: Boolean = False, **kwargs):
+        check: 'Boolean' = True, no_download: 'Boolean' = False,
+        skip_test: 'Boolean' = False, quiet: 'Boolean' = False, **kwargs):
     """Upload program to problem identified by code
 
     :param prog: program file to upload

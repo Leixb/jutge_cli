@@ -39,10 +39,10 @@ __ANSI_COLORS__ = dict(
     ENDC='\033[0m')
 
 
-def test(prog: str, code: str, database: str, no_color: Boolean = False,
-        no_custom: Boolean = False, inp_suffix: str = 'inp',
+def test(prog: str, code: str, database: str, no_color: 'Boolean' = False,
+        no_custom: 'Boolean' = False, inp_suffix: str = 'inp',
         cor_suffix: str = 'cor', diff_prog: str = 'diff',
-        diff_flags: str = '-y', quiet: Boolean = False, **kwargs) -> int:
+        diff_flags: str = '-y', quiet: 'Boolean' = False, **kwargs) -> int:
     """Test prog against test cases in database
 
     :param prog: program file

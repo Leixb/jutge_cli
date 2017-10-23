@@ -29,8 +29,8 @@ from .cookie import Cookie
 LOG = getLogger('jutge.login')
 
 
-def login(email: str, password: str, quiet: Boolean,
-        no_download: Boolean, **kwargs):
+def login(email: str, password: str, quiet: 'Boolean',
+        no_download: 'Boolean', **kwargs):
     """Login to jutge.org
 
     :param email: login email

@@ -31,8 +31,8 @@ from requests import get
 LOG = getLogger('jutge.check_submissions')
 
 
-def check_submissions(code: str = None, no_download: Boolean = False,
-        quiet: Boolean = False, **kwargs):
+def check_submissions(code: str = None, no_download: 'Boolean' = False,
+        quiet: 'Boolean' = False, **kwargs):
     """Save copy of args to the class
 
     If it is called from jutge.py subcommand it will call method
@@ -83,8 +83,8 @@ def check_problem(code: str, cookies: dict, **kwargs) -> str:
         if contents.startswith('Problem'):
             return contents.split(':')[1].strip()
 
-def check_last(cookies, last=False, reverse=False, quiet=False,
-               no_download=False, **kwargs):
+def check_last(cookies: dict, last=False, reverse=False, quiet=False,
+               no_download=False, **kwargs) --> dict:
     """Check last submissions to jutge.org
 
     This function will connect to jutge.org and retrieve the last
@@ -95,13 +95,8 @@ def check_last(cookies, last=False, reverse=False, quiet=False,
     :param last: print only the last submission
     :param reverse: print the first submission last
 
-    :type quiet: Boolean
-    :type last: Boolean
-    :type reverse: Boolean
-
     :return: last veredict in the form of a dict with keys:
         code, time and veredict
-    :rtype: dict
     """
 
     if cookies == {}:

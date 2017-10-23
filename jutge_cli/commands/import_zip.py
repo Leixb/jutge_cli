@@ -33,8 +33,8 @@ LOG = getLogger('jutge.import_zip')
 
 
 def import_zip(zip_file: str, folder: str, database: str,
-        problem_sets: Boolean = None, delay: int = 100,
-        overwrite: Boolean =False, **kwargs):
+        problem_sets: 'Boolean' = None, delay: int = 100,
+        overwrite: 'Boolean' =False, **kwargs):
     """Import problems from zip file to archive
 
     The zip file must match the exact structure of the one that is downloaded
