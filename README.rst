@@ -1,8 +1,22 @@
-jutge\_cli: a command line client for jutge.org
-===============================================
+jutge\_cli: a command line interface for jutge.org
+==================================================
+
+1. `Intro`_
+1. `Installation`_
+    1. `Archlinux PKGBUILD`_
+2. `Usage`_
+2. `Configuration`_
+2. `Login`_
+2. `Commands`_
+
+Intro
+-----
 
 Installation
 ------------
+
+Global installation (root)
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To install python module run:
 
@@ -11,9 +25,41 @@ To install python module run:
     sudo python3 setup.py install
 
 This should install all dependencies and create an executable named
-``jutge`` in your ``$PATH``.
+``jutge`` in ``/usr/bin/jutge``.
+
+Archlinux PKGBUILD
+~~~~~~~~~~~~~~~~~~
 
 There is also a ``PKGBUILD`` included in the repository for arch linux users.
+
+Installation using virtualenv (no root)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You can install this program inside of a python3 virtualenv:
+
+.. code:: sh
+
+    virtualenv jutge_cli_venv && cd !$
+    source bin/activate
+    git clone https://github.com/leixb/jutge_cli
+    python3 jutge_cli/setup.py install && cd -
+
+Once the above commands complete successfully, the ``jutge`` will be installed
+inside the ``bin`` folder of the virtualenv. It is recommended to link it to
+the user ``bin`` folder and add it to your ``$PATH``.
+
+.. code:: sh
+
+    mkdir ~/bin
+    ln -s bin/jutge ~/bin/jutge
+
+Remember to add bin to your path by adding the following line to ``.bashrc``
+or equivalent:
+
+.. code:: sh
+
+    export PATH=$PATH:~/bin
+
 
 Usage
 -----
