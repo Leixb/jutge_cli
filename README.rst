@@ -1,16 +1,17 @@
 jutge\_cli: a command line interface for jutge.org
 ==================================================
 
-1. `Intro`_
-2. `Installation`_
+#. `Intro`_
+#. `Installation`_
 
-    1. `Archlinux PKGBUILD`_
-    2. `Installation using virtualenv (no root)`
+    #. `Archlinux PKGBUILD`_
+    #. `Installation using virtualenv (no root)`_
 
-3. `Usage`_
-3. `Configuration`_
-4. `Login`_
-5. `Commands`_
+#. `Usage`_
+#. `Configuration`_
+#. `Login`_
+#. `Commands`_
+
 
 Intro
 -----
