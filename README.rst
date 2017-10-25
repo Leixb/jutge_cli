@@ -1,4 +1,4 @@
-jutge\_cli: a command line interface for `jutge.org <https://jutge.org>`
+jutge\_cli: a command line interface for `jutge.org <https://jutge.org>`_
 ========================================================================
 
 #. `Intro`_
@@ -18,19 +18,19 @@ Intro
 -----
 
 ``jutge_cli`` is a python3 console application that aims to automate common
-tasks when working with `jutge.org <https://jutge.org>` problems. Those tasks
+tasks when working with `jutge.org <https://jutge.org>`_ problems. Those tasks
 include:
 
 * Creating new files named after problem title given the problem code
 * Displaying statement and public test cases of a given problem
 * Compiling and testing a program against public test cases
-* Uploading program solutions to `jutge.org <https://jutge.org>`
-* Checking `jutge.org <https://jutge.org>` results for last submissions or
+* Uploading program solutions to `jutge.org <https://jutge.org>`_
+* Checking `jutge.org <https://jutge.org>`_ results for last submissions or
 for a specific problem.
 * Adding ant testing against custom test cases to a problem
 * Batch uploading problems from a given problem set
 * Batch creating new files of a given problem set
-* Extract and rename problem solutions from a `jutge.org <https://jute.org>`
+* Extract and rename problem solutions from a `jutge.org <https://jute.org>`_
 zip file export to a specific folder.
 
 
@@ -64,7 +64,7 @@ Installation using virtualenv (no root)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can install this program inside of a python3 
-`virtualenv <https://virtualenv.pypa.io/>`:
+`virtualenv <https://virtualenv.pypa.io/>`_:
 
 .. code:: sh
 
@@ -173,7 +173,7 @@ Login
 -----
 
 To upload problem solutions or to access private problems (the ones which code
-starts with ``X``) you must be logged in into `jutge.org <https://jutge.org>`.
+starts with ``X``) you must be logged in into `jutge.org <https://jutge.org>`_.
 The preferred method to login is through the ``jutge login`` command although
 there are 2 more methods involving cookies.
 
@@ -211,7 +211,7 @@ Most of the flags depend on the subcommands, but there are some global
 flags that effect all subcommands. Those are:
 
 -  ``--regex MY_REGEX`` Regex used to extract codes from filenames
--  ``--cookie MY_COOKIE`` Cookie used to connect to jutge.org
+-  ``--cookie MY_COOKIE`` Cookie used to connect to `jutge.org <https://jutge.org>`_
 -  ``--database FOLDER`` Change database location
 -  ``--no-download`` Do not attempt to download anything when not found
    in database
@@ -256,8 +256,8 @@ This command will move the file ``P00001_ca_prog.cpp`` to the folder
 Download (download|down)
 ~~~~~~~~
 
-This command will attempt to download the html page and zip file
-corresponding to the given problem from jutge.org and add them to the
+This command will attempt to download the html page and zip file corresponding
+to the given problem from `jutge.org <https://jutge.org>`_ and add them to the
 database. Either a code flag (``-c``) or a program file (``-p``) must be
 provided.
 
@@ -341,10 +341,10 @@ the program will be shown side by side using ``colordiff``.
 Import (import)
 ~~~~~~
 
-This command extracts all accepted submissions from a jutge.org zip
-file, renames them according to their title and adds them to the
-``Done`` folder. Note that the zip file must be the one downloaded from
-your jutge.org profile.
+This command extracts all accepted submissions from a `jutge.org
+<https://jutge.org>`_ zip file, renames them according to their title and adds
+them to the ``Done`` folder. Note that the zip file must be the one downloaded
+from your `jutge.org <https://jutge.org>`_ profile.
 
 ::
 
@@ -353,12 +353,13 @@ your jutge.org profile.
 Upload (up)
 ~~~~~~
 
-This command uploads a file to jutge.org to be evaluated. Note that you must
-have a valid cookie previously saved by ``jutge cookie PHPSSID`` or you
-can provide it through the ``--cookie`` flag. As of now, the program cannot
-report if the upload was successful so you will have to check your submissions
-page manually. The compiler to use will be determined by the filename extension
-but you can specify another one through the ``--compiler`` flag.
+This command uploads a file to `jutge.org <https://jutge.org>`_ to be
+evaluated. Note that you must have a valid cookie previously saved by ``jutge
+cookie PHPSSID`` or you can provide it through the ``--cookie`` flag. As of
+now, the program cannot report if the upload was successful so you will have to
+check your submissions page manually. The compiler to use will be determined by
+the filename extension but you can specify another one through the
+``--compiler`` flag.
 
 ::
 
@@ -366,9 +367,9 @@ but you can specify another one through the ``--compiler`` flag.
 
 If the flag ``--problem-set`` the command will upload all problems from the
 specified set found in the current working directory or in the set folder in
-the current working directory. (Keep in mind that jutge.org limits the number
-of submissions to 20 per hour so it is discouraged to use this flag with large
-problem sets)
+the current working directory. (Keep in mind that `jutge.org
+<https://jutge.org>`_ limits the number of submissions to 20 per hour so it is
+discouraged to use this flag with large problem sets)
 
 By default upload will test all problems against public test cases in the
 database (not including custom ones). You can skip those checks with the flag
@@ -380,11 +381,11 @@ the flag ``--check`` which will wait for the jutge verdict and output it.
 Check-submissions (check)
 ~~~~~~~~~~~~~~~~~
 
-This command checks the last submissions to jutge.org and displays them in the
-terminal. The program will return 0 if the last submission's veredict is ``AC``
-and 1 otherwise. This subcommand accept 2 flags: ``--last`` that tells it to
-show only the last submission and ``--reverse`` that shows the last submission 
-on top of the list:
+This command checks the last submissions to `jutge.org <https://jutge.org>`_
+and displays them in the terminal. The program will return 0 if the last
+submission's veredict is ``AC`` and 1 otherwise. This subcommand accept
+2 flags: ``--last`` that tells it to show only the last submission and
+``--reverse`` that shows the last submission on top of the list:
 
 ::
 
@@ -395,4 +396,4 @@ You can also check the status of a problem by using the flag ``--code``
 License
 -------
 
-This software is licensed under the `GPL v3 license <http://www.gnu.org/copyleft/gpl.html>`.
+This software is licensed under the `GPL v3 license <http://www.gnu.org/copyleft/gpl.html>`_.
