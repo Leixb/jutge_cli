@@ -110,6 +110,7 @@ def test(prog: str, code: str, database: str, no_color: 'Boolean' = False,
             )
 
     extension = source_file.split('.')[-1]
+    prog_name = source_file.split('.')[:-1] + '.x'
 
     if extension in compiler:
         compile_command = compiler[extension].format(src=source_file,
