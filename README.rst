@@ -4,13 +4,37 @@ jutge\_cli: a command line interface for `jutge.org <https://jutge.org>`_
 #. `Intro`_
 #. `Installation`_
 
+    #. `Global installation (root)`_
     #. `Archlinux PKGBUILD`_
     #. `Installation using virtualenv (no root)`_
 
 #. `Usage`_
 #. `Configuration`_
+
+    #. `Basic options`_
+    #. `Problem sets`_
+    #. `Login credentials`_
+
 #. `Login`_
+
+    #. `login command`_
+    #. `cookie command`_
+    #. `cookie flag`_
+
 #. `Commands`_
+
+    #. `add-test (add)`_
+    #. `archive`_
+    #. `check`_
+    #. `cookie`_
+    #. `download (down)`_
+    #. `login`_
+    #. `new`_
+    #. `show`_
+    #. `test`_
+    #. `import`_
+    #. `upload (up)`_
+
 #. `License`_
 
 
@@ -153,7 +177,7 @@ The above configuration file will save problems ``P19724, P34279...`` into
 folder ``P1``, problems ``P27341, P28754...`` into ``P2`` and so on.
 
 
-Login information
+Login credentials
 ~~~~~~~~~~~~~~~~~
 
 You can also provide login credentials in the configuration file inside
@@ -183,7 +207,7 @@ login command
 
 Issuing the command ``jutge login`` will prompt the user for their email and
 password and save the session cookie for next use. If username or
-password are already provided in `Login information`_ it will not prompt the
+password are already provided in `Login credentials`_ it will not prompt the
 user to input them.
 
 
@@ -192,6 +216,7 @@ cookie command
 
 The command ``jutge cookie`` accepts a cookie as a parameter and will
 store it for next use.
+
 
 cookie flag
 ~~~~~~~~~~~
@@ -216,11 +241,25 @@ flags that effect all subcommands. Those are:
 -  ``--no-download`` Do not attempt to download anything when not found
    in database
 
+
 Commands
 --------
 
-Add cases (add-cases|add)
-~~~~~~~~~
+#. `add-test (add)`_
+#. `archive`_
+#. `check`_
+#. `cookie`_
+#. `download (down)`_
+#. `login`_
+#. `new`_
+#. `show`_
+#. `test`_
+#. `import`_
+#. `upload (up)`_
+
+
+add-test (add)
+~~~~~~~~~~~~~~
 
 This command adds a custom test case into the database. The case can be
 provided through the flags ``-i`` (input) and ``-o`` (expected output)
@@ -236,7 +275,8 @@ database as test cases for the problem ``P00001_ca``
 
     jutge add_cases -i inp -o cor P00001_ca_prog.cpp
 
-Archive (archive)
+
+archive
 ~~~~~~~
 
 This command moves a file to the ``Done`` folder. This folder can be
@@ -253,8 +293,29 @@ This command will move the file ``P00001_ca_prog.cpp`` to the folder
 
     jutge archive --folder Accepted/ P00001_ca_prog.cpp --overwrite
 
-Download (download|down)
-~~~~~~~~
+
+check
+~~~~~
+
+This command checks the last submissions to `jutge.org <https://jutge.org>`_
+and displays them in the terminal. The program will return 0 if the last
+submission's veredict is ``AC`` and 1 otherwise. This subcommand accept
+2 flags: ``--last`` that tells it to show only the last submission and
+``--reverse`` that shows the last submission on top of the list:
+
+::
+
+    jutge check --last
+
+You can also check the status of a problem by using the flag ``--code``
+
+
+cookie
+~~~~~~
+
+
+download (down)
+~~~~~~~~~~~~~~~
 
 This command will attempt to download the html page and zip file corresponding
 to the given problem from `jutge.org <https://jutge.org>`_ and add them to the
@@ -274,8 +335,13 @@ This command will populate the local database for problem ``P00001_en``:
 
     jutge download P00001_en
 
-New (new)
-~~~~~~~~~
+
+login
+~~~~~
+
+
+new
+~~~
 
 This command must be followed by a code. It will fetch the problem title
 from the code and create a new file whose name is the code followed by
@@ -295,8 +361,9 @@ This command will populate create a new python file named
 
     jutge new P87523_ca --extension py
 
-Show (show)
-~~~~~
+
+show
+~~~~
 
 This command provides 3 sub commands to print to stdout information
 about the problem. Those are:
@@ -315,7 +382,8 @@ This command will print all cases in the database for the problem
 
     jutge show cases P87523_ca
 
-Test (test)
+
+test
 ~~~~
 
 This is the most useful command in the tool set. It allows to test your
@@ -338,7 +406,8 @@ the program will be shown side by side using ``colordiff``.
 
     jutge test P87523_ca_prog.x --diff-prog colordiff
 
-Import (import)
+
+import
 ~~~~~~
 
 This command extracts all accepted submissions from a `jutge.org
@@ -350,8 +419,9 @@ from your `jutge.org <https://jutge.org>`_ profile.
 
     jutge import problems.zip
 
-Upload (up)
-~~~~~~
+
+upload (up)
+~~~~~~~~~~~
 
 This command uploads a file to `jutge.org <https://jutge.org>`_ to be
 evaluated. Note that you must have a valid cookie previously saved by ``jutge
@@ -377,21 +447,6 @@ database (not including custom ones). You can skip those checks with the flag
 
 If you want to check the submitted problem verdict directly after upload, use
 the flag ``--check`` which will wait for the jutge verdict and output it.
-
-Check-submissions (check)
-~~~~~~~~~~~~~~~~~
-
-This command checks the last submissions to `jutge.org <https://jutge.org>`_
-and displays them in the terminal. The program will return 0 if the last
-submission's veredict is ``AC`` and 1 otherwise. This subcommand accept
-2 flags: ``--last`` that tells it to show only the last submission and
-``--reverse`` that shows the last submission on top of the list:
-
-::
-
-    jutge check --last
-
-You can also check the status of a problem by using the flag ``--code``
 
 License
 -------
