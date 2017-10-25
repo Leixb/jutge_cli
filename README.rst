@@ -1,5 +1,5 @@
-jutge\_cli: a command line interface for jutge.org
-==================================================
+jutge\_cli: a command line interface for `jutge.org <https://jutge.org>`
+========================================================================
 
 #. `Intro`_
 #. `Installation`_
@@ -11,13 +11,35 @@ jutge\_cli: a command line interface for jutge.org
 #. `Configuration`_
 #. `Login`_
 #. `Commands`_
+#. `License`_
 
 
 Intro
 -----
 
+``jutge_cli`` is a python3 console application that aims to automate common
+tasks when working with `jutge.org <https://jutge.org>` problems. Those tasks
+include:
+
+* Creating new files named after problem title given the problem code
+* Displaying statement and public test cases of a given problem
+* Compiling and testing a program against public test cases
+* Uploading program solutions to `jutge.org <https://jutge.org>`
+* Checking `jutge.org <https://jutge.org>` results for last submissions or
+for a specific problem.
+* Adding ant testing against custom test cases to a problem
+* Batch uploading problems from a given problem set
+* Batch creating new files of a given problem set
+* Extract and rename problem solutions from a `jutge.org <https://jute.org>`
+zip file export to a specific folder.
+
+
 Installation
 ------------
+
+``jutge_cli`` is packed as python3 package and as such, it can be installed
+through ``setup.py``.
+
 
 Global installation (root)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -31,15 +53,18 @@ To install python module run:
 This should install all dependencies and create an executable named
 ``jutge`` in ``/usr/bin/jutge``.
 
+
 Archlinux PKGBUILD
 ~~~~~~~~~~~~~~~~~~
 
 There is also a ``PKGBUILD`` included in the repository for arch linux users.
 
+
 Installation using virtualenv (no root)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You can install this program inside of a python3 virtualenv:
+You can install this program inside of a python3 
+`virtualenv <https://virtualenv.pypa.io/>`:
 
 .. code:: sh
 
@@ -79,14 +104,14 @@ For the program to work you will have to either specify the code of the
 problem you want to test (``-c`` flag) or rename the program file so
 that it begins with the code. The code must match the following regular
 expression: ``[PGQX]\d{5}_(ca|en|es)`` (note that the code includes the
-language). You can provide a custom regular expression through the
-``--regex`` flag.
+language although it is not mandatory).
+
 
 Configuration
 -------------
 
 You can configure default parameters through the YAML configuration file:
-``~/.jutge_cli.yaml``. 
+``~/.jutge_cli.yaml``.
 
 Basic options
 ~~~~~~~~~~~~~
@@ -104,10 +129,16 @@ their default values:
     cor-suffix : cor
     folder : ~/Documents/jutge/Done
 
+Those options can also be specified using the flags with the same name.
+
+Although you can change the regex it is not recommended to do so since bad
+regex may break correct functionality.
+
+
 Problem sets
 ~~~~~~~~~~~~
 
-You can also add problem sets with the ``problem_sets`` setting. These will
+You can also add problem sets with the ``problem_sets`` group. These will
 make the commands ``new``, ``archive`` and ``update`` classify problems into
 folders:
 
@@ -118,8 +149,9 @@ folders:
         P2: [P27341, P28754, P29448, P32046, P34451, P35547, P37500, P55622, P59539, P59875, P60816, P64976, P65171, P74398, P79784, P85370, P97156, X30229, X32391, X80452]
         P3: [P13623, P19991, P29973, P32533, P61061, P79817, P80660, P87323, P96767, X01646, X08783, X26853, X29759, X59091, X84338, X98097]
 
-The above configuration file will save problems ``P19724``, ``P34279``... into
-folder ``P1`` and so on.
+The above configuration file will save problems ``P19724, P34279...`` into
+folder ``P1``, problems ``P27341, P28754...`` into ``P2`` and so on.
+
 
 Login information
 ~~~~~~~~~~~~~~~~~
@@ -136,19 +168,24 @@ the group ``login``:
 You can omit either email, password or both and the login command will
 prompt the user for input when issued.
 
-Login to jutge.org
-------------------
 
-Some problem from jutge.org (the ones which code starts with X) are only
-accessible to logged users and therefore if you want to download the
-required information from jutge.org of those problems you'll have to
-provide a valid PHPSSID cookie there are 3 different ways to provide it.
+Login
+-----
+
+To upload problem solutions or to access private problems (the ones which code
+starts with ``X``) you must be logged in into `jutge.org <https://jutge.org>`.
+The preferred method to login is through the ``jutge login`` command although
+there are 2 more methods involving cookies.
+
 
 login command
 ~~~~~~~~~~~~~
 
 Issuing the command ``jutge login`` will prompt the user for their email and
-password and save the session cookie for next use.
+password and save the session cookie for next use. If username or
+password are already provided in `Login information`_ it will not prompt the
+user to input them.
+
 
 cookie command
 ~~~~~~~~~~~~~~
@@ -159,7 +196,8 @@ store it for next use.
 cookie flag
 ~~~~~~~~~~~
 
-You can also manually provide a cookie to each subcommand call through the ``--cookie`` flag:
+You can also explicitly provide a cookie to each subcommand call through the
+``--cookie`` flag:
 
 .. code:: sh
 
@@ -180,9 +218,6 @@ flags that effect all subcommands. Those are:
 
 Commands
 --------
-
-``jutge_cli`` consists of different commands that achieve different
-things.
 
 Add cases (add-cases|add)
 ~~~~~~~~~
@@ -356,3 +391,8 @@ on top of the list:
     jutge check --last
 
 You can also check the status of a problem by using the flag ``--code``
+
+License
+-------
+
+This software is licensed under the `GPL v3 license <http://www.gnu.org/copyleft/gpl.html>`.
