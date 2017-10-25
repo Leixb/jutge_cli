@@ -15,9 +15,9 @@ jutge\_cli: a command line interface for `jutge.org <https://jutge.org>`_
     #. `Problem sets`_
     #. `Login credentials`_
 
-#. `Login`_
+#. _login_sec
 
-    #. `login command`_
+    #. _login_command
     #. `cookie command`_
     #. `cookie flag`_
 
@@ -49,13 +49,13 @@ include:
 * Displaying statement and public test cases of a given problem
 * Compiling and testing a program against public test cases
 * Uploading program solutions to `jutge.org <https://jutge.org>`_
-* Checking `jutge.org <https://jutge.org>`_ results for last submissions or
-for a specific problem.
+* Checking `jutge.org <https://jutge.org>`_ results for last submissions or for
+  a specific problem.
 * Adding ant testing against custom test cases to a problem
 * Batch uploading problems from a given problem set
 * Batch creating new files of a given problem set
 * Extract and rename problem solutions from a `jutge.org <https://jute.org>`_
-zip file export to a specific folder.
+  zip file export to a specific folder.
 
 
 Installation
@@ -193,6 +193,7 @@ You can omit either email, password or both and the login command will
 prompt the user for input when issued.
 
 
+.. _login_sec:
 Login
 -----
 
@@ -336,6 +337,7 @@ This command will populate the local database for problem ``P00001_en``:
     jutge download P00001_en
 
 
+.. _login_command:
 login
 ~~~~~
 
