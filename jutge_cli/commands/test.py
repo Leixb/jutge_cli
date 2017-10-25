@@ -82,24 +82,58 @@ def test(prog: str, code: str, database: str, no_color: 'Boolean' = False,
     else:
         source_file = prog.name
 
-    if source_file.endswith('.cpp') or source_file.endswith('.cc'):
+    compiler = dict(
+            ada='gnat {src} -o {bin}',
+            bas='fbc {src} -o {bin}',
+            c='gcc -g {src} -o {bin}',
+            cc='g++ -std=c++11 -g {src} -o {bin}',
+            cpp='g++ -std=c++11 -g {src} -o {bin}',
+            d='gdc {src} -o {bin}',
+            f='gfortran {src} -o {bin}',
+            hs='ghc -O3 {src} -o {bin}',
+            pas='fpc -Sd -Co -Cr -Ct -Ci -v0 {src} -o {bin}',
+            rs='rustc {src} -o {bin}',
+            )
+    interpreter = dict(
+            bf='beef {src}',
+            go='go run {src}',
+            js='node {src}',
+            lisp='clisp {src}',
+            lua='lua {src}',
+            php='php {src}',
+            pl='perl {src}',
+            py2='python2 {src}',
+            py3='python3 {src}',
+            py='python3 {src}',
+            r='Rscript {src}',
+            rb='ruby {src}',
+            )
 
-        prog_name = '.'.join(source_file.split('.')[:-1]) + '.x'
+    extension = source_file.split('.')[-1]
+
+    if extension in compiler:
+        compile_command = compiler[extension].format(src=source_file,
+                                                     bin=prog_name)
+        compile_command = compile_command.split()
+
         LOG.debug('Compiling to %s', prog_name)
 
-        process = Popen(
-            ['g++', '-std=c++11', '-g', source_file, '-o', prog_name])
+        process = Popen(compile_command)
         return_code = process.wait()
 
         if return_code:
             LOG.error('Compilation returned %d', return_code)
             exit(return_code)
-
     else:
         prog_name = source_file
 
-    if prog_name[0] not in ('.', '/'):
-        prog_name = './' + prog_name
+    if extension in interpreter:
+        run_command = interpreter[extension].format(src=source_file,
+                                                    bin=prog_name)
+        run_command = run_command.split()
+    else:
+        if prog_name[0] not in ('.', '/'):
+            run_command = './' + prog_name
 
     cont, cor = 0, 0
 
@@ -122,7 +156,7 @@ def test(prog: str, code: str, database: str, no_color: 'Boolean' = False,
 
             cont += 1
 
-            process = Popen(prog_name, stdin=test_input, stdout=test_output,
+            process = Popen(run_command, stdin=test_input, stdout=test_output,
                             stderr=PIPE)
             return_code = process.wait()
 
