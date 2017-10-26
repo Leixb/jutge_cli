@@ -39,7 +39,7 @@ setup(
             'bs4',
             'lxml',
             'pypandoc',
-            'pyyaml'
+            'pyyaml',
             'requests',
             ],
 
