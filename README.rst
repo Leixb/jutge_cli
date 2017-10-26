@@ -15,7 +15,7 @@ jutge\_cli: a command line interface for `jutge.org <https://jutge.org>`_
     #. `Problem sets`_
     #. `Login credentials`_
 
-#. login_sec_
+#. `Authenticate to jutge`_
 
     #. `login command`_
     #. `cookie command`_
@@ -28,7 +28,7 @@ jutge\_cli: a command line interface for `jutge.org <https://jutge.org>`_
     #. `check`_
     #. `cookie`_
     #. `download (down)`_
-    #. `login`__
+    #. `login`_
     #. `new`_
     #. `show`_
     #. `test`_
@@ -36,8 +36,6 @@ jutge\_cli: a command line interface for `jutge.org <https://jutge.org>`_
     #. `upload (up)`_
 
 #. `License`_
-
-__ login_command_
 
 Intro
 -----
@@ -88,7 +86,7 @@ There is also a ``PKGBUILD`` included in the repository for arch linux users.
 Installation using virtualenv (no root)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You can install this program inside of a python3 
+You can install this program inside of a python3
 `virtualenv <https://virtualenv.pypa.io/>`_:
 
 .. code:: sh
@@ -194,9 +192,8 @@ You can omit either email, password or both and the login command will
 prompt the user for input when issued.
 
 
-.. _login_sec:
-Login
------
+Authenticate to jutge
+---------------------
 
 To upload problem solutions or to access private problems (the ones which code
 starts with ``X``) you must be logged in into `jutge.org <https://jutge.org>`_.
@@ -208,16 +205,16 @@ login command
 ~~~~~~~~~~~~~
 
 Issuing the command ``jutge login`` will prompt the user for their email and
-password and save the session cookie for next use. If username or
+password and save the session cookie for next use. If email or
 password are already provided in `Login credentials`_ it will not prompt the
-user to input them.
+user to input them. For more details on the command see `login`_
 
 
 cookie command
 ~~~~~~~~~~~~~~
 
 The command ``jutge cookie`` accepts a cookie as a parameter and will
-store it for next use.
+store it for next use. For more details on the command see `cookie`_
 
 
 cookie flag
@@ -237,10 +234,10 @@ Global flags
 Most of the flags depend on the subcommands, but there are some global
 flags that effect all subcommands. Those are:
 
--  ``--regex MY_REGEX`` Regex used to extract codes from filenames
+-  ``--regex MY_REGEX`` regular expression used to extract codes from filenames
 -  ``--cookie MY_COOKIE`` Cookie used to connect to `jutge.org <https://jutge.org>`_
 -  ``--database FOLDER`` Change database location
--  ``--no-download`` If this flag is provided, jutge_cli will not attempt
+-  ``--no-download`` If this flag is provided, ``jutge_cli`` will not attempt
    to connect to the internet
 
 
@@ -252,14 +249,12 @@ Commands
 #. `check`_
 #. `cookie`_
 #. `download (down)`_
-#. `login`__ 
+#. `login`_
 #. `new`_
 #. `show`_
 #. `test`_
 #. `import`_
 #. `upload (up)`_
-
-__ login_command_
 
 add-test (add)
 ~~~~~~~~~~~~~~
@@ -267,8 +262,8 @@ add-test (add)
 This command adds a custom test case into the database. A test case consists
 of two files, the input that will be feed to the program and the expected
 output or solution. Those files can be provided through the flags ``-i``
-(input) and ``-o`` (expected output) or if omitted they will be taken from
-stdin.
+(input) and ``-o`` (expected output) or if omitted the user will be prompted to
+input them manually through stdin.
 
 Example
 ^^^^^^^
@@ -282,7 +277,7 @@ database as test cases for the problem ``P00001_ca``
     jutge add-test -i inp -o cor P00001_ca_prog.cpp
 
     # Prompt the user to enter the input and expected output and add them to
-    # the database for problem P00001_ca: 
+    # the database for problem P00001_ca:
     jutge add-test P00001_ca_prog.cpp
 
 
@@ -310,9 +305,9 @@ The following command will move the file ``P00001_ca_prog.cpp`` to the folder
 check
 ~~~~~
 
-Checks submissions to `jutge.org <https://jutge.org>`_ 
+Checks submissions to `jutge.org <https://jutge.org>`_
 and displays them in the terminal. The program will return 0 if the last
-submission's veredict is ``AC`` or ``100/100``  and 1 otherwise.
+submission's verdict is ``AC`` or ``100/100``  and 1 otherwise.
 
 This subcommand accepts 3 flags:
 
@@ -348,7 +343,6 @@ This command will populate the local database for problem ``P00001_en``:
     jutge download P00001_en
 
 
-.. _login_command:
 login
 ~~~~~
 
@@ -392,8 +386,8 @@ Those are:
 -  ``stat`` print statement
 -  ``cases`` print test cases in database
 
-By default ``stat`` will parse the problem statement through pypandoc to
-optimize the output for terminal if you prefer raw HTML or pypandoc takes
+By default ``stat`` will parse the problem statement through ``pypandoc`` to
+optimize the output for terminal if you prefer raw HTML or ``pypandoc`` takes
 to much time to parse the output you can use the flag ``--html``.
 
 Example
@@ -475,9 +469,10 @@ database (not including custom ones). You can skip those checks with the flag
 ``--skip-check``
 
 If you want to check the submitted problem verdict directly after upload, use
-the flag ``--check`` which will wait for the jutge verdict and output it.
+the flag ``--check`` which will wait for the judge verdict and output it.
 
 License
 -------
 
-This software is licensed under the `GPL v3 license <http://www.gnu.org/copyleft/gpl.html>`_.
+This software is licensed under the `GPL v3 license
+<http://www.gnu.org/copyleft/gpl.html>`_.
