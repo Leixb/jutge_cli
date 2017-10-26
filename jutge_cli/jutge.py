@@ -36,7 +36,7 @@ except ModuleNotFoundError:
                          defaults, download, get_code, import_zip, login,\
                          new, show, test, upload
 
-JUTGE_CLI_VERSION = '2.1.4'
+JUTGE_CLI_VERSION = '2.1.5'
 
 CONFIG = defaults.config()
 DEFAULT_PARAM = CONFIG['param']
@@ -190,6 +190,9 @@ PARSER_LOGIN.add_argument(
     help='jutge.org email')
 PARSER_LOGIN.add_argument(
     '--password', default=DEFAULT_PARAM['password'],
+    help='jutge.org password')
+PARSER_LOGIN.add_argument(
+    '--prompt', action='store_true', default=False,
     help='jutge.org password')
 
 PARSER_NEW = SUBPARSERS.add_parser(

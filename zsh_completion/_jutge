@@ -255,7 +255,8 @@ case $state in
                     '--no-download[do not attempt to fetch data from jutge.org]' \
                     \
                     '--email[email to login to jutge.org]:email'\
-                    '--password[password]:password'
+                    '--password[password]:password'\
+                    '--prompt[prompt user to input credentials]'
             ;;
     esac
     ;;

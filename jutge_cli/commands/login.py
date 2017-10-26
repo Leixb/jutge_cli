@@ -29,23 +29,24 @@ from .cookie import Cookie
 LOG = getLogger('jutge.login')
 
 
-def login(email: str, password: str, quiet: 'Boolean',
+def login(email: str, password: str, prompt: 'Boolean', quiet: 'Boolean',
         no_download: 'Boolean', **kwargs):
     """Login to jutge.org
 
     :param email: login email
     :param password: login password
+    :param prompt: if True force prompt to user
     :param quiet: supress output
     :param no_download: do not connect to jutge.org
     """
 
-    if email is None:
+    if email is None or prompt:
         email = input('Email: ')
     else:
         if not quiet:
             print('Email :', email)
 
-    if password is None:
+    if password is None or prompt:
         password = getpass('Password: ')
 
     url = 'https://jutge.org/'
