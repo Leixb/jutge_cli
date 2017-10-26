@@ -21,7 +21,7 @@ This should be used to save a local copy of accepted problems from jutge.org
 """
 
 from logging import getLogger
-from os import mkdir, symlink, remove
+from os import makedirs, symlink, remove
 from os.path import isdir, isfile, basename
 from shutil import move, copyfile
 
@@ -52,7 +52,7 @@ def archive(prog: "FileType('w')", code: str, title: str, folder: str,
             if sub_code in problems:
                 sym_link = '{}/{}'.format(folder, sub_folder)
                 if not isdir(sym_link):
-                    mkdir(sym_link)
+                    makedirs(sym_link)
 
     destination = '{}/{}.{}'.format(folder, title, ext)
     if not isfile(destination) or overwrite:

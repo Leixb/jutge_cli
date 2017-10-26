@@ -19,7 +19,7 @@
 """
 
 from logging import getLogger
-from os import mkdir
+from os import makedirs
 from os.path import isfile, isdir
 
 from .show import get_title
@@ -89,7 +89,7 @@ def __new_problem_set__(set_name: str, problem_sets: dict, extension: str,
         return
 
     if not isdir(set_name):
-        mkdir(set_name)
+        makedirs(set_name)
 
     for subcode in problems:
         code = __expand_subcode__(subcode=subcode, **kwargs)

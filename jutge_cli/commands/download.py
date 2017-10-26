@@ -20,7 +20,7 @@
 
 from logging import getLogger
 
-from os import mkdir
+from os import makedirs
 from os.path import isdir, isfile
 from tempfile import NamedTemporaryFile
 from zipfile import ZipFile, BadZipFile
@@ -80,7 +80,7 @@ def download(code: str, cookies: dict, database: str,
                 exit(23)
 
         if not isdir(db_folder):
-            mkdir(db_folder)
+            makedirs(db_folder)
 
         zip_file.extractall(db_folder + '/..')
         zip_file.close()

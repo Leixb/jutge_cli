@@ -21,7 +21,7 @@ to add a new custom test case to the database folder
 
 from glob import glob
 from logging import getLogger
-from os import mkdir, remove
+from os import makedirs, remove
 from os.path import isdir, basename
 from re import search
 from sys import stdin
@@ -59,7 +59,7 @@ def add_test(database: str, code: str, delete: 'Boolean' = False,
     src_cor = output_file.read()
 
     if not isdir(dest_folder):
-        mkdir(dest_folder)
+        makedirs(dest_folder)
 
     # sorted sorts the output alfabetically since glob does not
     files = sorted(glob('{}/custom-*'.format(dest_folder)))

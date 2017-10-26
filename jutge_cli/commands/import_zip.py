@@ -20,7 +20,7 @@
 
 from glob import glob
 from logging import getLogger
-from os import mkdir, symlink
+from os import makedirs, symlink
 from os.path import basename, isdir
 from shutil import copyfile
 from tempfile import TemporaryDirectory
@@ -54,7 +54,7 @@ def import_zip(zip_file: str, folder: str, database: str,
         opened_zip_file.extractall(extract_to)
 
     if not isdir(folder):
-        mkdir(folder)
+        makedirs(folder)
 
     extensions = ['cc', 'c', 'hs', 'php', 'bf', 'py']
 
@@ -97,7 +97,7 @@ def import_zip(zip_file: str, folder: str, database: str,
                             if sub_code in problems:
                                 sym_link = '{}/{}'.format(folder, sub_folder)
                                 if not isdir(sym_link):
-                                    mkdir(sym_link)
+                                    makedirs(sym_link)
 
                     if sym_link != '.':
                         sym_link = '{}/{}.{}'.format(sym_link, name, ext)
