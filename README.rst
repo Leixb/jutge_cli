@@ -15,9 +15,9 @@ jutge\_cli: a command line interface for `jutge.org <https://jutge.org>`_
     #. `Problem sets`_
     #. `Login credentials`_
 
-#. _login_sec
+#. login_sec_
 
-    #. _login_command
+    #. `login command`_
     #. `cookie command`_
     #. `cookie flag`_
 
@@ -28,7 +28,7 @@ jutge\_cli: a command line interface for `jutge.org <https://jutge.org>`_
     #. `check`_
     #. `cookie`_
     #. `download (down)`_
-    #. `login`_
+    #. `login`__
     #. `new`_
     #. `show`_
     #. `test`_
@@ -37,6 +37,7 @@ jutge\_cli: a command line interface for `jutge.org <https://jutge.org>`_
 
 #. `License`_
 
+__ login_command_
 
 Intro
 -----
@@ -92,10 +93,10 @@ You can install this program inside of a python3
 
 .. code:: sh
 
-    virtualenv jutge_cli_venv && cd !$
+    virtualenv -p /usr/bin/python3 jutge_cli_venv && cd !$
     source bin/activate
-    git clone https://github.com/leixb/jutge_cli
-    python3 jutge_cli/setup.py install && cd -
+    git clone https://github.com/leixb/jutge_cli && cd jutge_cli
+    python3 setup.py install && cd ../..
 
 Once the above commands complete successfully, the ``jutge`` will be installed
 inside the ``bin`` folder of the virtualenv. It is recommended to link it to
@@ -155,7 +156,7 @@ their default values:
 
 Those options can also be specified using the flags with the same name.
 
-Although you can change the regex it is not recommended to do so since bad
+Although you can change the regex it is **not** recommended to do so since bad
 regex may break correct functionality.
 
 
@@ -239,8 +240,8 @@ flags that effect all subcommands. Those are:
 -  ``--regex MY_REGEX`` Regex used to extract codes from filenames
 -  ``--cookie MY_COOKIE`` Cookie used to connect to `jutge.org <https://jutge.org>`_
 -  ``--database FOLDER`` Change database location
--  ``--no-download`` Do not attempt to download anything when not found
-   in database
+-  ``--no-download`` If this flag is provided, jutge_cli will not attempt
+   to connect to the internet
 
 
 Commands
@@ -251,20 +252,23 @@ Commands
 #. `check`_
 #. `cookie`_
 #. `download (down)`_
-#. `login`_
+#. `login`__ 
 #. `new`_
 #. `show`_
 #. `test`_
 #. `import`_
 #. `upload (up)`_
 
+__ login_command_
 
 add-test (add)
 ~~~~~~~~~~~~~~
 
-This command adds a custom test case into the database. The case can be
-provided through the flags ``-i`` (input) and ``-o`` (expected output)
-or through stdin.
+This command adds a custom test case into the database. A test case consists
+of two files, the input that will be feed to the program and the expected
+output or solution. Those files can be provided through the flags ``-i``
+(input) and ``-o`` (expected output) or if omitted they will be taken from
+stdin.
 
 Example
 ^^^^^^^
@@ -274,21 +278,29 @@ database as test cases for the problem ``P00001_ca``
 
 ::
 
-    jutge add_cases -i inp -o cor P00001_ca_prog.cpp
+    # Add the contents of inp and cor to the database for problem P00001_ca:
+    jutge add-test -i inp -o cor P00001_ca_prog.cpp
+
+    # Prompt the user to enter the input and expected output and add them to
+    # the database for problem P00001_ca: 
+    jutge add-test P00001_ca_prog.cpp
 
 
 archive
 ~~~~~~~
 
-This command moves a file to the ``Done`` folder. This folder can be
-changed through the ``-f`` flag. To override files already in the folder
+Move problem file to the archive folder. This folder can be
+changed through the ``-f`` flag. To overwrite files already in the folder
 use the ``--overwrite`` flag.
+
+The default behaviour is to move the file to the folder, if you want to copy
+it instead use the ``--copy`` flag.
 
 Example
 ^^^^^^^
 
-This command will move the file ``P00001_ca_prog.cpp`` to the folder
-``Accepted`` and overwrite if necessary.
+The following command will move the file ``P00001_ca_prog.cpp`` to the folder
+``Accepted`` and overwrite if already in the folder.
 
 ::
 
@@ -298,17 +310,16 @@ This command will move the file ``P00001_ca_prog.cpp`` to the folder
 check
 ~~~~~
 
-This command checks the last submissions to `jutge.org <https://jutge.org>`_
+Checks submissions to `jutge.org <https://jutge.org>`_ 
 and displays them in the terminal. The program will return 0 if the last
-submission's veredict is ``AC`` and 1 otherwise. This subcommand accept
-2 flags: ``--last`` that tells it to show only the last submission and
-``--reverse`` that shows the last submission on top of the list:
+submission's veredict is ``AC`` or ``100/100``  and 1 otherwise.
 
-::
+This subcommand accepts 3 flags:
 
-    jutge check --last
-
-You can also check the status of a problem by using the flag ``--code``
+* ``--last`` show only the last submission
+* ``--reverse`` order the output so that the last submission is on top
+* ``--code`` check if a given problem code is accepted, rejected or not done
+  yet
 
 
 cookie
@@ -341,6 +352,13 @@ This command will populate the local database for problem ``P00001_en``:
 login
 ~~~~~
 
+Prompt the user to input their credentials and login to `jutge.org
+<https://jutge.org>`_. If credentials are already specified in the
+configuration file (`Login credentials`_) it will not prompt for them.
+
+The flags ``--email`` and ``--password`` can be used to specify the credentials
+without prompting and to override the ones specified in the configuration file.
+
 
 new
 ~~~
@@ -348,10 +366,10 @@ new
 This command must be followed by a code. It will fetch the problem title
 from the code and create a new file whose name is the code followed by
 the title. The ``--extension`` or ``-e`` flag can be used to specify the
-extension of the file.
+extension of the file (defaults to ``cpp``).
 
 If flag ``--problem-set`` is provided, all programs in the specified problem
-set will be created
+set will be created inside a folder named after the problem set.
 
 Example
 ^^^^^^^
@@ -367,12 +385,16 @@ This command will populate create a new python file named
 show
 ~~~~
 
-This command provides 3 sub commands to print to stdout information
-about the problem. Those are:
+This command provides 3 sub commands to print information about the problem.
+Those are:
 
--  ``title``
--  ``stat``
--  ``cases``
+-  ``title`` print problem title
+-  ``stat`` print statement
+-  ``cases`` print test cases in database
+
+By default ``stat`` will parse the problem statement through pypandoc to
+optimize the output for terminal if you prefer raw HTML or pypandoc takes
+to much time to parse the output you can use the flag ``--html``.
 
 Example
 ^^^^^^^
@@ -392,10 +414,14 @@ This is the most useful command in the tool set. It allows to test your
 code against all the test cases found in the database and output side by
 side differences using ``diff``.
 
-The command takes an executable file as parameter and tests it against
-the test cases in the database folder. You can specify an alternate diff
-program to use and its flags (separated by commas) through
-``--diff-prog`` and ``--diff-flags``.
+The command takes a file that can be either an executable or source file or
+script of a supported language executable file as parameter and tests it
+against the test cases in the database folder. Note that if the program if a
+source file that needs to be compiled, ``jutge_cli`` will compile it to
+a file named after the original name with extension ``.x``.
+
+You can specify an other program to act as ``diff`` (such as ``colordiff``) and
+its flags (separated by commas) through ``--diff-prog`` and ``--diff-flags``.
 
 Example
 ^^^^^^^
@@ -414,7 +440,8 @@ import
 
 This command extracts all accepted submissions from a `jutge.org
 <https://jutge.org>`_ zip file, renames them according to their title and adds
-them to the ``Done`` folder. Note that the zip file must be the one downloaded
+them to the archive folder that can be specified through the ``-f`` flag or in
+the main configuration file. Note that the zip file must be the one downloaded
 from your `jutge.org <https://jutge.org>`_ profile.
 
 ::
