@@ -18,11 +18,15 @@
 """Print title, test-cases or statement of a given problem
 """
 
+from importlib.util import find_spec
 from logging import getLogger
 from os.path import basename
 from glob import glob
 
 from bs4 import BeautifulSoup
+
+PARSER = 'lxml' if find_spec('lxml') is not None else 'html.parser'
+
 try:
     from pypandoc import convert_text
 except ModuleNotFoundError:
@@ -44,7 +48,7 @@ def get_title(code: str, database: str, **kwargs) -> str:
     LOG.debug('get_title called %s %s %s', code, database, kwargs)
     try:
         with open('{}/{}/problem.html'.format(database, code), 'r') as html_file:
-            soup = BeautifulSoup(html_file, 'lxml')
+            soup = BeautifulSoup(html_file, PARSER)
     except FileNotFoundError:
         LOG.warning('Cannot find problem.html')
         return None
@@ -75,7 +79,7 @@ def show(code: str, mode: str, database: str, inp_suffix: str = 'inp',
     elif mode == 'stat':
         try:
             with open('{}/{}/problem.html'.format(database, code), 'r') as html_file:
-                soup = BeautifulSoup(html_file, 'lxml')
+                soup = BeautifulSoup(html_file, PARSER)
         except FileNotFoundError:
             LOG.warning('Cannot find problem.html')
             exit(10)

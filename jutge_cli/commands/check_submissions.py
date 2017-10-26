@@ -23,10 +23,13 @@ of the last submission or the veredict of the last submission of a specific
 problem
 """
 
+from importlib.util import find_spec
 from logging import getLogger
 
 from bs4 import BeautifulSoup
 from requests import get
+
+PARSER = 'lxml' if find_spec('lxml') is not None else 'html.parser'
 
 LOG = getLogger('jutge.check_submissions')
 
@@ -75,7 +78,7 @@ def check_problem(code: str, cookies: dict, **kwargs) -> str:
     url = 'https://jutge.org/problems/' + code
 
     response = get(url, cookies=cookies)
-    soup = BeautifulSoup(response.text, 'lxml')
+    soup = BeautifulSoup(response.text, PARSER)
 
     for div in soup.findAll('div', {'class' : 'panel-heading'}):
         contents = div.contents[0].strip()
@@ -110,7 +113,7 @@ def check_last(cookies: dict, last=False, reverse=False, quiet=False,
     url = 'https://jutge.org/submissions'
 
     response = get(url, cookies=cookies)
-    soup = BeautifulSoup(response.text, 'lxml')
+    soup = BeautifulSoup(response.text, PARSER)
 
     submissions_list = soup.find('ul', {'class' : 'timeline'})
 

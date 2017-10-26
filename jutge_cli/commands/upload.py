@@ -19,6 +19,7 @@
 """
 
 from glob import glob
+from importlib.util import find_spec
 from logging import getLogger
 from time import sleep
 
@@ -28,6 +29,8 @@ from requests import get, post
 from .check_submissions import check_last, check_problem
 from .test import test
 from .get_code import get_code
+
+PARSER = 'lxml' if find_spec('lxml') is not None else 'html.parser'
 
 LOG = getLogger('jutge.upload')
 
@@ -127,7 +130,7 @@ def upload_problem(prog: str, code: str, cookies: dict, compiler: str,
 
     # We need token_uid for POST to work
     response = get(web, cookies=cookies)
-    soup = BeautifulSoup(response.text, 'lxml')
+    soup = BeautifulSoup(response.text, PARSER)
 
     try:
         LOG.debug(web)

@@ -21,12 +21,15 @@ Main function is: get_code()
 """
 
 from glob import glob
+from importlib.util import find_spec
 from logging import getLogger
 from os.path import basename
 from re import search
 
 from bs4 import BeautifulSoup
 from requests import get
+
+PARSER = 'lxml' if find_spec('lxml') is not None else 'html.parser'
 
 LOG = getLogger('jutge.get_code')
 
@@ -61,7 +64,7 @@ def __expand_subcode__(subcode: str, database: str, cookies: dict,
         url = 'https://jutge.org/problems/' + subcode
 
         response = get(url, cookies=cookies)
-        soup = BeautifulSoup(response.text, 'lxml')
+        soup = BeautifulSoup(response.text, PARSER)
 
         try:
             code = soup.find('title').text.split('-')[1].strip()

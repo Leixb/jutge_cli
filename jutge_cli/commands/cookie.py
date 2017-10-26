@@ -18,6 +18,7 @@
 """Save and read cookie from args or /tmp file
 """
 
+from importlib.util import find_spec
 from logging import getLogger
 from os import remove
 from os.path import isfile
@@ -25,6 +26,8 @@ from tempfile import gettempdir
 
 from bs4 import BeautifulSoup
 from requests import get
+
+PARSER = 'lxml' if find_spec('lxml') is not None else 'html.parser'
 
 LOG = getLogger('jutge.cookie')
 
@@ -118,7 +121,7 @@ skip the check use --skip-check)')
         web = 'https://jutge.org/dashboard'
 
         response = get(web, cookies=cookies)
-        soup = BeautifulSoup(response.text, 'lxml')
+        soup = BeautifulSoup(response.text, PARSER)
 
         try:
             tags = soup.findAll('a', {'href' : '/profile'})

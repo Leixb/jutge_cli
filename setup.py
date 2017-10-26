@@ -12,7 +12,7 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
 
 setup(
         name='jutge_cli',
-        version='2.1.5',
+        version='2.1.6',
 
         description='CLI to manage jutge.org problems',
         long_description=long_description,
@@ -37,11 +37,14 @@ setup(
         install_requires=[
             'argparse',
             'bs4',
-            'lxml',
             'pypandoc',
             'pyyaml',
             'requests',
             ],
+
+        extras_require={
+            'lxml' : ['lxml']
+            },
 
         entry_points = {
             'console_scripts': ['jutge=jutge_cli.jutge:main'],

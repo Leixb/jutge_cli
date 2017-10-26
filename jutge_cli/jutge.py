@@ -36,7 +36,7 @@ except ModuleNotFoundError:
                          defaults, download, get_code, import_zip, login,\
                          new, show, test, upload
 
-JUTGE_CLI_VERSION = '2.1.5'
+JUTGE_CLI_VERSION = '2.1.6'
 
 CONFIG = defaults.config()
 DEFAULT_PARAM = CONFIG['param']

@@ -18,8 +18,8 @@
 """Provides function to download problem files to database
 """
 
+from importlib.util import find_spec
 from logging import getLogger
-
 from os import makedirs
 from os.path import isdir, isfile
 from tempfile import NamedTemporaryFile
@@ -27,6 +27,8 @@ from zipfile import ZipFile, BadZipFile
 
 from bs4 import BeautifulSoup
 from requests import get
+
+PARSER = 'lxml' if find_spec('lxml') is not None else 'html.parser'
 
 LOG = getLogger('jutge.download')
 
@@ -93,7 +95,7 @@ def download(code: str, cookies: dict, database: str,
 
     response = get(web, cookies=cookies)
 
-    soup = BeautifulSoup(response.text, 'lxml')
+    soup = BeautifulSoup(response.text, PARSER)
 
     name = '-'.join(soup.find('title').text.split('-')[1:])
     name = name[1:].replace(' ', '_').split()[0]

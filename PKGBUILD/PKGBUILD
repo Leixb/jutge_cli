@@ -1,12 +1,13 @@
 # Maintainer: Aleix Boné <abone9999@gmail.com>
 pkgname=python-jutge_cli-git 
-pkgver=r175.d978ff6
+pkgver=r177.128d48f
 pkgrel=1
 pkgdesc="Command line utilities for jutge.org online jutge"
 arch=('any')
 url="https://github.com/Leixb/jutge_cli"
 license=('GPL3')
-depends=('python' 'python-beautifulsoup4' 'python-lxml' 'python-requests' 'python-argparse' 'python-pypandoc' 'python-yaml')
+depends=('python' 'python-beautifulsoup4' 'python-requests' 'python-argparse' 'python-pypandoc' 'python-yaml')
+optdepends=('python-lxml: faster html parser' )
 makedepends=('git') 
 provides=("${pkgname%-git}")
 conflicts=("jutgeutils-git" "${pkgname%-git}")
