@@ -52,10 +52,10 @@ def add_test(database: str, code: str, delete: 'Boolean' = False,
 
     # input from stdin if no file provided
     if input_file == stdin:
-        print('Enter input:')
+        print('Enter input: (^D to end input)')
     src_inp = input_file.read()
     if output_file == stdin:
-        print('Enter output:')
+        print('Enter output: (^D to end input)')
     src_cor = output_file.read()
 
     if not isdir(dest_folder):
