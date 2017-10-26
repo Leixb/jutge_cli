@@ -119,7 +119,7 @@ Usage
 To use ``jutge_cli`` run the command ``jutge`` followed by the
 subcommand you want to execute:
 
-::
+.. code:: sh
 
     jutge [SUBCOMMAND] [SUBCOMMAND_OPTIONS]
 
@@ -271,7 +271,7 @@ Example
 This command will add the contents of files ``inp`` and ``cor`` to the
 database as test cases for the problem ``P00001_ca``
 
-::
+.. code:: sh
 
     # Add the contents of inp and cor to the database for problem P00001_ca:
     jutge add-test -i inp -o cor P00001_ca_prog.cpp
@@ -297,7 +297,7 @@ Example
 The following command will move the file ``P00001_ca_prog.cpp`` to the folder
 ``Accepted`` and overwrite if already in the folder.
 
-::
+.. code:: sh
 
     jutge archive --folder Accepted/ P00001_ca_prog.cpp --overwrite
 
@@ -338,7 +338,7 @@ Example
 
 This command will populate the local database for problem ``P00001_en``:
 
-::
+.. code:: sh
 
     jutge download P00001_en
 
@@ -371,7 +371,7 @@ Example
 This command will populate create a new python file named
 ``P87523_ca_-_Hola-adéu.py``
 
-::
+.. code:: sh
 
     jutge new P87523_ca --extension py
 
@@ -396,7 +396,7 @@ Example
 This command will print all cases in the database for the problem
 ``P87523_ca`` (if any).
 
-::
+.. code:: sh
 
     jutge show cases P87523_ca
 
@@ -424,7 +424,7 @@ This command will test the executable ``P87523_ca_prog.x`` against the
 test cases for problem P87523\_ca. The expected output and the output of
 the program will be shown side by side using ``colordiff``.
 
-::
+.. code:: sh
 
     jutge test P87523_ca_prog.x --diff-prog colordiff
 
@@ -438,7 +438,7 @@ them to the archive folder that can be specified through the ``-f`` flag or in
 the main configuration file. Note that the zip file must be the one downloaded
 from your `jutge.org <https://jutge.org>`_ profile.
 
-::
+.. code:: sh
 
     jutge import problems.zip
 
@@ -454,7 +454,7 @@ check your submissions page manually. The compiler to use will be determined by
 the filename extension but you can specify another one through the
 ``--compiler`` flag.
 
-::
+.. code:: sh
 
     jutge upload P00001_ca_prog.cpp --compiler 'G++'
 
