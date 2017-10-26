@@ -30,7 +30,7 @@ LOG = getLogger('jutge.archive')
 
 def archive(prog: "FileType('w')", code: str, title: str, folder: str,
         problem_sets: 'Boolean' = None, overwrite: 'Boolean' = False,
-        no_delete: 'Boolean' = False, **kwargs):
+        copy: 'Boolean' = False, **kwargs):
     """Move file to the archive
 
     :param prog: program file to archive
@@ -38,7 +38,7 @@ def archive(prog: "FileType('w')", code: str, title: str, folder: str,
     :param folder: archive folder
     :param problem_sets: problem_sets to consider
     :param overwrite: if True, overwrite program file if already in database
-    :param no_delete: if True, copy program instead of moving it
+    :param copy: if True, copy program instead of moving it
     """
 
     ext = basename(prog.name).split('.')[-1]
@@ -56,7 +56,7 @@ def archive(prog: "FileType('w')", code: str, title: str, folder: str,
 
     destination = '{}/{}.{}'.format(folder, title, ext)
     if not isfile(destination) or overwrite:
-        if not no_delete:
+        if not copy:
             move(prog.name, destination)
         else:
             copyfile(prog.name, destination)
@@ -68,7 +68,7 @@ def archive(prog: "FileType('w')", code: str, title: str, folder: str,
         try:
             symlink(destination, sym_link)
             LOG.debug('Symlink %s -> %s', sym_link, destination)
-            if isfile(prog.name) and not no_delete:
+            if isfile(prog.name) and not copy:
                 remove(prog.name)
         except FileExistsError:
             LOG.error('Symlink already exists')

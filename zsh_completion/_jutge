@@ -145,7 +145,7 @@ case $state in
                     \
                     + '(folder)' {-f,--folder}'[folder where program will be archived]:folder:_files -/' \
                     '--overwrite[overwrite program if already in archive]' \
-                    '--no-delete[do not delete file after archiving]'
+                    '--copy[copy file instead of moving to the archive]'
             ;;
             (upload|up)
                 _arguments \

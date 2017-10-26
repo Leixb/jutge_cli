@@ -36,7 +36,7 @@ except ModuleNotFoundError:
                          defaults, download, get_code, import_zip, login,\
                          new, show, test, upload
 
-JUTGE_CLI_VERSION = '2.1.3'
+JUTGE_CLI_VERSION = '2.1.4'
 
 CONFIG = defaults.config()
 DEFAULT_PARAM = CONFIG['param']
@@ -130,8 +130,8 @@ PARSER_ARCHIVE.add_argument(
     '--overwrite', action='store_true', default=False,
     help='overwrite program if already in archive')
 PARSER_ARCHIVE.add_argument(
-    '--no-delete', action='store_true', default=False,
-    help='do not delete file after archiving')
+    '--copy', action='store_true', default=False,
+    help='copy file instead of moving to the archive')
 
 PARSER_CHECK = SUBPARSERS.add_parser(
     'check',
