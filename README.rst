@@ -320,6 +320,14 @@ This subcommand accepts 3 flags:
 cookie
 ~~~~~~
 
+Add cookie provided as first argument to a temporary directory so it is used
+for next commands. If the first argument is ``delete`` the current cookie
+will be deleted and if the argument is ``print`` or ``show`` it will
+output the current saved cookie.
+
+The command will check that the provided cookie is valid before saving the
+value, to skip this check use the flag ``--skip-check``.
+
 
 download (down)
 ~~~~~~~~~~~~~~~
