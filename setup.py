@@ -35,11 +35,12 @@ setup(
         packages=['jutge_cli','jutge_cli.commands'],
 
         install_requires=[
-            'pypandoc',
-            'requests',
-            'bs4',
             'argparse',
+            'bs4',
+            'lxml',
+            'pypandoc',
             'pyyaml'
+            'requests',
             ],
 
         entry_points = {
