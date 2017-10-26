@@ -474,7 +474,7 @@ discouraged to use this flag with large problem sets)
 
 By default upload will test all problems against public test cases in the
 database (not including custom ones). You can skip those checks with the flag
-``--skip-check``
+``--skip-test``
 
 If you want to check the submitted problem verdict directly after upload, use
 the flag ``--check`` which will wait for the judge verdict and output it.
