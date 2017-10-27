@@ -53,5 +53,5 @@ setup(
         'console_scripts': ['jutge=jutge_cli.jutge:main'],
         },
 
-    zip_safe=False
+    zip_safe=True
 )
