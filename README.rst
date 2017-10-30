@@ -60,8 +60,8 @@ include:
 Installation
 ------------
 
-``jutge_cli`` is packed as python3 package and as such, it can be installed
-through ``setup.py``.
+``jutge_cli`` is included in `pypi <https://pypi.org/project/jutge_cli/>`_
+and as such, it can be installed through ``pip3``.
 
 
 Global installation (root)
@@ -71,7 +71,7 @@ To install python module run:
 
 .. code:: sh
 
-    sudo python3 setup.py install
+    sudo pip3 install jutge_cli
 
 This should install all dependencies and create an executable named
 ``jutge`` in ``/usr/bin/jutge``.
@@ -91,10 +91,9 @@ You can install this program inside of a python3
 
 .. code:: sh
 
-    virtualenv -p /usr/bin/python3 jutge_cli_venv && cd !$
+    virtualenv -p /usr/bin/python3 jutge_cli_venv && cd jutge_cli_venv
     source bin/activate
-    git clone https://github.com/leixb/jutge_cli && cd jutge_cli
-    python3 setup.py install && cd ../..
+    pip3 install jutge_cli
 
 Once the above commands complete successfully, the ``jutge`` will be installed
 inside the ``bin`` folder of the virtualenv. It is recommended to link it to
