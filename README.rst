@@ -468,4 +468,4 @@ License
 This software is licensed under the `GPL v3 license
 <http://www.gnu.org/copyleft/gpl.html>`_.
 
-.. jutge.org: https://jutge.org
+.. _jutge.org: https://jutge.org
