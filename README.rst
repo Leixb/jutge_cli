@@ -1,5 +1,5 @@
-jutge\_cli: a command line interface for `jutge.org <https://jutge.org>`_
-========================================================================
+jutge\_cli: a command line interface for `jutge.org`_
+=========================================================================
 
 #. `Intro`_
 #. `Installation`_
@@ -41,20 +41,20 @@ Intro
 -----
 
 ``jutge_cli`` is a python3 console application that aims to automate common
-tasks when working with `jutge.org <https://jutge.org>`_ problems. Those tasks
+tasks when working with `jutge.org`_ problems. Those tasks
 include:
 
 * Creating new files named after problem title given the problem code
 * Displaying statement and public test cases of a given problem
 * Compiling and testing a program against public test cases
-* Uploading program solutions to `jutge.org <https://jutge.org>`_
-* Checking `jutge.org <https://jutge.org>`_ results for last submissions or for
+* Uploading program solutions to `jutge.org`_
+* Checking `jutge.org`_ results for last submissions or for
   a specific problem.
 * Adding ant testing against custom test cases to a problem
 * Batch uploading problems from a given problem set
 * Batch creating new files of a given problem set
-* Extract and rename problem solutions from a `jutge.org <https://jute.org>`_
-  zip file export to a specific folder.
+* Extract and rename problem solutions from a `jutge.org`_ zip file export
+  to a specific folder.
 
 
 Installation
@@ -196,7 +196,7 @@ Authenticate to jutge
 ---------------------
 
 To upload problem solutions or to access private problems (the ones which code
-starts with ``X``) you must be logged in into `jutge.org <https://jutge.org>`_.
+starts with ``X``) you must be logged in into `jutge.org`_.
 The preferred method to login is through the ``jutge login`` command although
 there are 2 more methods involving cookies.
 
@@ -235,7 +235,7 @@ Most of the flags depend on the subcommands, but there are some global
 flags that effect all subcommands. Those are:
 
 -  ``--regex MY_REGEX`` regular expression used to extract codes from filenames
--  ``--cookie MY_COOKIE`` Cookie used to connect to `jutge.org <https://jutge.org>`_
+-  ``--cookie MY_COOKIE`` Cookie used to connect to `jutge.org`_
 -  ``--database FOLDER`` Change database location
 -  ``--no-download`` If this flag is provided, ``jutge_cli`` will not attempt
    to connect to the internet
@@ -265,11 +265,8 @@ output or solution. Those files can be provided through the flags ``-i``
 (input) and ``-o`` (expected output) or if omitted the user will be prompted to
 input them manually through stdin.
 
-Example
-^^^^^^^
-
-This command will add the contents of files ``inp`` and ``cor`` to the
-database as test cases for the problem ``P00001_ca``
+The following example will add the contents of files ``inp`` and ``cor`` to
+the database as test cases for the problem ``P00001_ca``
 
 .. code:: sh
 
@@ -291,11 +288,8 @@ use the ``--overwrite`` flag.
 The default behaviour is to move the file to the folder, if you want to copy
 it instead use the ``--copy`` flag.
 
-Example
-^^^^^^^
-
-The following command will move the file ``P00001_ca_prog.cpp`` to the folder
-``Accepted`` and overwrite if already in the folder.
+The following example will move the file ``P00001_ca_prog.cpp`` to the
+folder ``Accepted`` and overwrite if already in the folder.
 
 .. code:: sh
 
@@ -305,7 +299,7 @@ The following command will move the file ``P00001_ca_prog.cpp`` to the folder
 check
 ~~~~~
 
-Checks submissions to `jutge.org <https://jutge.org>`_
+Checks submissions to `jutge.org`_
 and displays them in the terminal. The program will return 0 if the last
 submission's verdict is ``AC`` or ``100/100``  and 1 otherwise.
 
@@ -333,7 +327,7 @@ download (down)
 ~~~~~~~~~~~~~~~
 
 This command will attempt to download the html page and zip file corresponding
-to the given problem from `jutge.org <https://jutge.org>`_ and add them to the
+to the given problem from `jutge.org`_ and add them to the
 database. Either a code flag (``-c``) or a program file (``-p``) must be
 provided.
 
@@ -341,10 +335,8 @@ Note that other commands that depend on the database files will
 automatically try to download them if they don't exist and therefore
 this command is only useful when populating the database in advance.
 
-Example
-^^^^^^^
-
-This command will populate the local database for problem ``P00001_en``:
+The following example will populate the local database for problem
+``P00001_en``:
 
 .. code:: sh
 
@@ -354,9 +346,9 @@ This command will populate the local database for problem ``P00001_en``:
 login
 ~~~~~
 
-Prompt the user to input their credentials and login to `jutge.org
-<https://jutge.org>`_. If credentials are already specified in the
-configuration file (`Login credentials`_) it will not prompt for them.
+Prompt the user to input their credentials and login to `jutge.org`_. If
+credentials are already specified in the configuration file (`Login
+credentials`_) it will not prompt for them.
 
 The flags ``--email`` and ``--password`` can be used to specify the credentials
 without prompting and to override the ones specified in the configuration file.
@@ -373,10 +365,7 @@ extension of the file (defaults to ``cpp``).
 If flag ``--problem-set`` is provided, all programs in the specified problem
 set will be created inside a folder named after the problem set.
 
-Example
-^^^^^^^
-
-This command will populate create a new python file named
+The following example will populate create a new python file named
 ``P87523_ca_-_Hola-adéu.py``
 
 .. code:: sh
@@ -398,10 +387,7 @@ By default ``stat`` will parse the problem statement through ``pypandoc`` to
 optimize the output for terminal if you prefer raw HTML or ``pypandoc`` takes
 to much time to parse the output you can use the flag ``--html``.
 
-Example
-^^^^^^^
-
-This command will print all cases in the database for the problem
+The following example will print all cases in the database for the problem
 ``P87523_ca`` (if any).
 
 .. code:: sh
@@ -425,11 +411,8 @@ a file named after the original name with extension ``.x``.
 You can specify an other program to act as ``diff`` (such as ``colordiff``) and
 its flags (separated by commas) through ``--diff-prog`` and ``--diff-flags``.
 
-Example
-^^^^^^^
-
-This command will test the executable ``P87523_ca_prog.x`` against the
-test cases for problem P87523\_ca. The expected output and the output of
+The following example will test the executable ``P87523_ca_prog.x`` against
+the test cases for problem P87523\_ca. The expected output and the output of
 the program will be shown side by side using ``colordiff``.
 
 .. code:: sh
@@ -440,11 +423,11 @@ the program will be shown side by side using ``colordiff``.
 import
 ~~~~~~
 
-This command extracts all accepted submissions from a `jutge.org
-<https://jutge.org>`_ zip file, renames them according to their title and adds
-them to the archive folder that can be specified through the ``-f`` flag or in
-the main configuration file. Note that the zip file must be the one downloaded
-from your `jutge.org <https://jutge.org>`_ profile.
+This command extracts all accepted submissions from a `jutge.org`_ zip file,
+renames them according to their title and adds them to the archive folder
+that can be specified through the ``-f`` flag or in the main configuration
+file. Note that the zip file must be the one downloaded from your
+`jutge.org`_ profile.
 
 .. code:: sh
 
@@ -454,7 +437,7 @@ from your `jutge.org <https://jutge.org>`_ profile.
 upload (up)
 ~~~~~~~~~~~
 
-This command uploads a file to `jutge.org <https://jutge.org>`_ to be
+This command uploads a file to `jutge.org`_ to be
 evaluated. Note that you must have a valid cookie previously saved by ``jutge
 cookie PHPSSID`` or you can provide it through the ``--cookie`` flag. As of
 now, the program cannot report if the upload was successful so you will have to
@@ -468,9 +451,9 @@ the filename extension but you can specify another one through the
 
 If the flag ``--problem-set`` the command will upload all problems from the
 specified set found in the current working directory or in the set folder in
-the current working directory. (Keep in mind that `jutge.org
-<https://jutge.org>`_ limits the number of submissions to 20 per hour so it is
-discouraged to use this flag with large problem sets)
+the current working directory. (Keep in mind that `jutge.org`_ limits the
+number of submissions to 20 per hour so it is discouraged to use this flag
+with large problem sets)
 
 By default upload will test all problems against public test cases in the
 database (not including custom ones). You can skip those checks with the flag
@@ -484,3 +467,5 @@ License
 
 This software is licensed under the `GPL v3 license
 <http://www.gnu.org/copyleft/gpl.html>`_.
+
+.. jutge.org: https://jutge.org
