@@ -136,7 +136,7 @@ def get_code(database: str, regex: str, no_download: 'Boolean', code: str = None
             prog_name = None
 
     if prog_name is None:
-        LOG.error('No code found')
+        LOG.warning('No code found')
         return None
 
     code = __match_regex__(regex=regex, text=prog_name)
