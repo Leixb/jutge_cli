@@ -25,6 +25,7 @@ from time import sleep
 
 from bs4 import BeautifulSoup
 from requests import get, post
+from requests.exceptions import ConnectionError
 
 from .check_submissions import check_last, check_problem
 from .test import test
@@ -129,7 +130,11 @@ def upload_problem(prog: str, code: str, cookies: dict, compiler: str,
     LOG.debug(web)
 
     # We need token_uid for POST to work
-    response = get(web, cookies=cookies)
+    try:
+        response = get(web, cookies=cookies)
+    except ConnectionError:
+        LOG.error('Connection Error, are you connected to the internet?')
+        exit(1)
     soup = BeautifulSoup(response.text, PARSER)
 
     try:
@@ -192,7 +197,11 @@ def upload_problem(prog: str, code: str, cookies: dict, compiler: str,
         if check:
             prev_veredict = check_last(cookies=cookies, quiet=True)
 
-        post(web, data=data, files=files, cookies=cookies)
+        try:
+            post(web, data=data, files=files, cookies=cookies)
+        except ConnectionError:
+            LOG.error('Connection Error, are you connected to the internet?')
+            exit(1)
 
     if check:
         for _ in range(0, 6):

@@ -26,6 +26,7 @@ from tempfile import gettempdir
 
 from bs4 import BeautifulSoup
 from requests import get
+from requests.exceptions import ConnectionError
 
 PARSER = 'lxml' if find_spec('lxml') is not None else 'html.parser'
 
@@ -120,7 +121,11 @@ skip the check use --skip-check)')
         cookies = {'PHPSESSID' : self.cookie}
         web = 'https://jutge.org/dashboard'
 
-        response = get(web, cookies=cookies)
+        try:
+            response = get(web, cookies=cookies)
+        except ConnectionError:
+            LOG.error('Connection Error, are you connected to the internet?')
+            exit(1)
         soup = BeautifulSoup(response.text, PARSER)
 
         try:

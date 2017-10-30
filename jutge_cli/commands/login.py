@@ -22,6 +22,7 @@ from getpass import getpass
 from logging import getLogger
 
 from requests import Session
+from requests.exceptions import ConnectionError
 from requests.utils import dict_from_cookiejar
 
 from .cookie import Cookie
@@ -55,10 +56,15 @@ def login(email: str, password: str, prompt: 'Boolean', quiet: 'Boolean',
         'password': password,
         'submit': ''
     }
-    sess = Session()
-    sess.post(url, data=login_data)
-
-    session_cookie = dict_from_cookiejar(sess.cookies)['PHPSESSID']
+    try:
+        sess = Session()
+        sess.post(url, data=login_data)
+        session_cookie = dict_from_cookiejar(sess.cookies)['PHPSESSID']
+    except ConnectionError:
+        LOG.error('Connection Error, are you connected to the internet?')
+        exit(1)
+    finally:
+        sess.close()
 
     LOG.debug(session_cookie)
 

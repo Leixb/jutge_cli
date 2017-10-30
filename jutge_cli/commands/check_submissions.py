@@ -28,6 +28,7 @@ from logging import getLogger
 
 from bs4 import BeautifulSoup
 from requests import get
+from requests.exceptions import ConnectionError
 
 PARSER = 'lxml' if find_spec('lxml') is not None else 'html.parser'
 
@@ -77,7 +78,12 @@ def check_problem(code: str, cookies: dict, **kwargs) -> str:
 
     url = 'https://jutge.org/problems/' + code
 
-    response = get(url, cookies=cookies)
+    try:
+        response = get(url, cookies=cookies)
+    except ConnectionError:
+        LOG.error('Connection Error, are you connected to the internet?')
+        exit(1)
+
     soup = BeautifulSoup(response.text, PARSER)
 
     for div in soup.findAll('div', {'class' : 'panel-heading'}):
@@ -112,7 +118,11 @@ def check_last(cookies: dict, last=False, reverse=False, quiet=False,
 
     url = 'https://jutge.org/submissions'
 
-    response = get(url, cookies=cookies)
+    try:
+        response = get(url, cookies=cookies)
+    except ConnectionError:
+        LOG.error('Connection Error, are you connected to the internet?')
+        exit(1)
     soup = BeautifulSoup(response.text, PARSER)
 
     submissions_list = soup.find('ul', {'class' : 'timeline'})

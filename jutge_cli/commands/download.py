@@ -27,6 +27,7 @@ from zipfile import ZipFile, BadZipFile
 
 from bs4 import BeautifulSoup
 from requests import get
+from requests.exceptions import ConnectionError
 
 PARSER = 'lxml' if find_spec('lxml') is not None else 'html.parser'
 
@@ -67,7 +68,11 @@ def download(code: str, cookies: dict, database: str,
         zip_url = '{}/zip'.format(web)
         LOG.debug(zip_url)
 
-        response = get(zip_url, cookies=cookies, stream=True)
+        try:
+            response = get(zip_url, cookies=cookies, stream=True)
+        except ConnectionError:
+            LOG.error('Connection Error, are you connected to the internet?')
+            exit(1)
         with NamedTemporaryFile('r+b', suffix='.zip', delete=False) as tmp_zip:
             for chunk in response.iter_content(chunk_size=1024):
                 if chunk:
@@ -93,7 +98,11 @@ def download(code: str, cookies: dict, database: str,
         LOG.info('File already in DB, continue')
         return
 
-    response = get(web, cookies=cookies)
+    try:
+        response = get(web, cookies=cookies)
+    except ConnectionError:
+        LOG.error('Connection Error, are you connected to the internet?')
+        exit(1)
 
     soup = BeautifulSoup(response.text, PARSER)
 

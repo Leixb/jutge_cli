@@ -28,6 +28,7 @@ from re import search
 
 from bs4 import BeautifulSoup
 from requests import get
+from requests.exceptions import ConnectionError
 
 PARSER = 'lxml' if find_spec('lxml') is not None else 'html.parser'
 
@@ -63,7 +64,11 @@ def __expand_subcode__(subcode: str, database: str, cookies: dict,
 
         url = 'https://jutge.org/problems/' + subcode
 
-        response = get(url, cookies=cookies)
+        try:
+            response = get(url, cookies=cookies)
+        except ConnectionError:
+            LOG.error('Connection Error, are you connected to the internet?')
+            exit(1)
         soup = BeautifulSoup(response.text, PARSER)
 
         try:
