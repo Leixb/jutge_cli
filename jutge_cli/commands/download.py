@@ -45,25 +45,26 @@ def download(code: str, cookies: dict, database: str,
     :param overwrite: overwrite already existing files in database
     """
 
-    if no_download:
-        LOG.error('Remove --no-download flag to download')
-        exit(3)
 
     LOG.debug(code)
     web = 'https://jutge.org/problems/{}'.format(code)
 
     LOG.debug(cookies)
 
-    if code[0] == 'X':
-        if cookies == {}:
-            LOG.error('Cookie needed to download problem')
-            exit(25)
-
     # Check if already in DB
     db_folder = '{}/{}'.format(database, code)
     LOG.debug(db_folder)
 
     if not isdir(db_folder) or overwrite:
+
+        if no_download:
+            LOG.error('Remove --no-download flag to download')
+            return
+
+        if code[0] == 'X':
+            if cookies == {}:
+                LOG.error('Cookie needed to download problem')
+                return
 
         zip_url = '{}/zip'.format(web)
         LOG.debug(zip_url)
@@ -98,11 +99,21 @@ def download(code: str, cookies: dict, database: str,
         LOG.info('File already in DB, continue')
         return
 
+    if no_download:
+        LOG.error('Remove --no-download flag to download')
+        return
+
+    if code[0] == 'X':
+        if cookies == {}:
+            LOG.error('Cookie needed to download problem')
+            return
+
+
     try:
         response = get(web, cookies=cookies)
     except ConnectionError:
         LOG.error('Connection Error, are you connected to the internet?')
-        exit(1)
+        return
 
     soup = BeautifulSoup(response.text, PARSER)
 
@@ -110,7 +121,7 @@ def download(code: str, cookies: dict, database: str,
     name = name[1:].replace(' ', '_').split()[0]
     if name == 'Error':
         LOG.error("Couldn't download page, aborting...")
-        exit(25)
+        return
 
     # Delete token uid from database (if found)
     try:
