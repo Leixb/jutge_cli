@@ -94,9 +94,9 @@ skip the check use --skip-check)')
                     self.has_cookie = True
                 LOG.debug(self.cookie)
 
-            if self.has_cookie and subcmd == 'cookie':
+            if subcmd == 'cookie':
                 print(self.cookie)
-            else:
+            elif not self.has_cookie:
                 LOG.warning('No cookie saved')
 
     def make_file(self):

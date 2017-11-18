@@ -378,7 +378,7 @@ def main():
 
     if cmd in ('check', 'download', 'down', 'upload',
                'up', 'new', 'show', 'test'):
-        args_dict['cookies'] = cookie.get_cookie(**args_dict)
+        args_dict['cookies'] = cookie.get_cookie(**args_dict, skip_check=True)
         if cmd in ('check', 'upload') and args_dict['cookies'] == {}:
             log.error('Please login before upload or check with: jutge login')
             exit(2)
