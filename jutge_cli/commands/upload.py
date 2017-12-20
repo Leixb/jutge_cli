@@ -66,6 +66,8 @@ def upload(prog: str, problem_set: 'Boolean', problem_sets: str,
 
     submit_queue = []
 
+    web = 'https://jutge.org/problems/{}/submissions'.format(code)
+    LOG.debug(web)
 
     for subcode in problems:
 
