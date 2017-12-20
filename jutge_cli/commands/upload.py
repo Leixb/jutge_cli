@@ -211,7 +211,7 @@ def upload_problem(prog: str, code: str, cookies: dict, token_uid: str = None,
         exit(2)
 
 
-def get_token_uid(code: str, cookies: dict):
+def get_token_uid(code: str, cookies: dict, **kwargs):
 
     web = 'https://jutge.org/problems/{}/submissions'.format(code)
     LOG.debug(web)
