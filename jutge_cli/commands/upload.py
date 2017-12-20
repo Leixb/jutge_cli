@@ -66,9 +66,6 @@ def upload(prog: str, problem_set: 'Boolean', problem_sets: str,
 
     submit_queue = []
 
-    web = 'https://jutge.org/problems/{}/submissions'.format(code)
-    LOG.debug(web)
-
     for subcode in problems:
 
         files = glob('{}*[!.x]'.format(subcode))\
@@ -126,6 +123,9 @@ def upload_problem(prog: str, code: str, cookies: dict, token_uid: str = None,
     if no_download:
         LOG.error('Remove --no-download flag to upload')
         exit(4)
+
+    web = 'https://jutge.org/problems/{}/submissions'.format(code)
+    LOG.debug(web)
 
     if not skip_test:
         veredict = test(prog=prog, code=code, no_custom=True,
