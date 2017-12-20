@@ -62,11 +62,11 @@ def upload(prog: str, problem_set: 'Boolean', problem_sets: str,
         upload_problem(prog=prog, code=code, **kwargs)
         exit(0)
 
-    LOG.debug(problems, **kwargs)
+    LOG.debug(problems)
 
     submit_queue = []
 
-    token_uid = get_token_uid(code)
+    token_uid = get_token_uid(code, **kwargs)
 
     for subcode in problems:
 
