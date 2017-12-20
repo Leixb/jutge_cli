@@ -66,7 +66,6 @@ def upload(prog: str, problem_set: 'Boolean', problem_sets: str,
 
     submit_queue = []
 
-    token_uid = get_token_uid(code, **kwargs)
 
     for subcode in problems:
 
@@ -94,8 +93,14 @@ def upload(prog: str, problem_set: 'Boolean', problem_sets: str,
         if not input().lower() in ('y', 'ye', 'yes'):
             exit(130)
 
+    token_uid = None
+
     for problem in submit_queue:
         problem_code = get_code(code=None, prog=problem, **kwargs)
+
+        if token_uid is None:
+            token_uid = get_token_uid(problem_code, **kwargs)
+
         upload_problem(prog=problem, code=problem_code, token_uid=token_uid, **kwargs)
 
         sleep(delay/1000.0)
