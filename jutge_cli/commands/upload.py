@@ -62,7 +62,7 @@ def upload(prog: str, problem_set: 'Boolean', problem_sets: str,
         upload_problem(prog=prog, code=code, **kwargs)
         exit(0)
 
-    LOG.debug(problems)
+    LOG.debug(problems, **kwargs)
 
     submit_queue = []
 
@@ -211,7 +211,7 @@ def upload_problem(prog: str, code: str, cookies: dict, token_uid: str = None,
         exit(2)
 
 
-def get_token_uid(code: str):
+def get_token_uid(code: str, cookies: dict):
 
     web = 'https://jutge.org/problems/{}/submissions'.format(code)
     LOG.debug(web)
