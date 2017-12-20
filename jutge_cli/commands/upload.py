@@ -37,8 +37,8 @@ LOG = getLogger('jutge.upload')
 
 
 def upload(prog: str, problem_set: 'Boolean', problem_sets: str,
-        delay: int = 100, no_skip_accepted: 'Boolean' = False,
-        code: str = None, **kwargs):
+           delay: int = 100, no_skip_accepted: 'Boolean' = False,
+           code: str = None, **kwargs):
     """Loops through problems in problem set to upload by calling
     upload_problem
 
@@ -65,6 +65,8 @@ def upload(prog: str, problem_set: 'Boolean', problem_sets: str,
     LOG.debug(problems)
 
     submit_queue = []
+
+    token_uid = get_token_uid(code)
 
     for subcode in problems:
 
@@ -94,17 +96,19 @@ def upload(prog: str, problem_set: 'Boolean', problem_sets: str,
 
     for problem in submit_queue:
         problem_code = get_code(code=None, prog=problem, **kwargs)
-        upload_problem(prog=problem, code=problem_code, **kwargs)
+        upload_problem(prog=problem, code=problem_code, token_uid=token_uid, **kwargs)
 
         sleep(delay/1000.0)
 
-def upload_problem(prog: str, code: str, cookies: dict, compiler: str,
-        check: 'Boolean' = True, no_download: 'Boolean' = False,
-        skip_test: 'Boolean' = False, quiet: 'Boolean' = False, **kwargs):
+def upload_problem(prog: str, code: str, cookies: dict, token_uid: str = None,
+        compiler: str = None, check: 'Boolean' = True,
+        no_download: 'Boolean' = False, skip_test: 'Boolean' = False,
+        quiet: 'Boolean' = False, **kwargs):
     """Upload program to problem identified by code
 
     :param prog: program file to upload
     :param code: code of problem to upload
+    :param token_uid: token_uid to upload
     :param cookies: cookies used to connect to jutge.org
     :param compiler: compiler to use
     :param check: check submission result
@@ -126,24 +130,8 @@ def upload_problem(prog: str, code: str, cookies: dict, compiler: str,
         else:
             LOG.debug('Public tests passed')
 
-    web = 'https://jutge.org/problems/{}/submissions'.format(code)
-    LOG.debug(web)
-
-    # We need token_uid for POST to work
-    try:
-        response = get(web, cookies=cookies)
-    except ConnectionError:
-        LOG.error('Connection Error, are you connected to the internet?')
-        exit(1)
-    soup = BeautifulSoup(response.text, PARSER)
-
-    try:
-        LOG.debug(web)
-        token_uid = soup.find('input', {'name' : 'token_uid'})['value']
-        LOG.debug(token_uid)
-    except TypeError:
-        LOG.error('Invalid cookie, cannot get token_uid, please login again')
-        exit(30)
+    if token_uid is None:
+        token_uid = get_token_uid(code)
 
     extension = prog.split('.')[-1]  # To determine compiler
 
@@ -221,3 +209,27 @@ def upload_problem(prog: str, code: str, cookies: dict, compiler: str,
                         exit(1)
         LOG.error('Check timed out')
         exit(2)
+
+
+def get_token_uid(code: str):
+
+    web = 'https://jutge.org/problems/{}/submissions'.format(code)
+    LOG.debug(web)
+
+    # We need token_uid for POST to work
+    try:
+        response = get(web, cookies=cookies)
+    except ConnectionError:
+        LOG.error('Connection Error, are you connected to the internet?')
+        exit(1)
+    soup = BeautifulSoup(response.text, PARSER)
+
+    try:
+        LOG.debug(web)
+        token_uid = soup.find('input', {'name' : 'token_uid'})['value']
+        LOG.debug(token_uid)
+    except TypeError:
+        LOG.error('Invalid cookie, cannot get token_uid, please login again')
+        exit(30)
+
+    return token_uid
