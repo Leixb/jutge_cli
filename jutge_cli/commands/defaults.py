@@ -56,7 +56,7 @@ def config() -> dict:
 
     problem_sets = {}
 
-    for key in [*param, 'problem_sets']:
+    for key in list(param.keys()) + ['problem_sets']:
         try:
             if key in ('email', 'password'):
                 param[key] = settings['login'][key]

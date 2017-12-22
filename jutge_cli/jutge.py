@@ -27,14 +27,9 @@ from os.path import expanduser
 
 import argparse
 
-try:
-    from .commands import add_test, archive, check_submissions, cookie,\
-                         defaults, download, get_code, import_zip, login,\
-                         new, show, test, upload
-except ModuleNotFoundError:
-    from commands import add_test, archive, check_submissions, cookie,\
-                         defaults, download, get_code, import_zip, login,\
-                         new, show, test, upload
+from .commands import add_test, archive, check_submissions, cookie,\
+                      defaults, download, get_code, import_zip, login,\
+                      new, show, test, upload
 
 JUTGE_CLI_VERSION = '2.1.9'
 
