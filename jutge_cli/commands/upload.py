@@ -81,7 +81,7 @@ def upload(prog: str, problem_set: 'Boolean', problem_sets: str,
             submit_queue += [files[0]]
 
         else:
-            LOG.warning(subcode + ' solution not found, skiping ...')
+            LOG.warning('%s solution not found, skiping ...', subcode)
 
     LOG.debug(submit_queue)
 
@@ -111,9 +111,9 @@ def upload(prog: str, problem_set: 'Boolean', problem_sets: str,
         sleep(delay/1000.0)
 
 def upload_problem(prog: str, code: str, cookies: dict, token_uid: str = None,
-        compiler: str = None, check: 'Boolean' = True,
-        no_download: 'Boolean' = False, skip_test: 'Boolean' = False,
-        quiet: 'Boolean' = False, **kwargs):
+                   compiler: str = None, check: 'Boolean' = True,
+                   no_download: 'Boolean' = False, skip_test: 'Boolean' = False,
+                   quiet: 'Boolean' = False, **kwargs):
     """Upload program to problem identified by code
 
     :param prog: program file to upload
@@ -209,7 +209,13 @@ def upload_problem(prog: str, code: str, cookies: dict, token_uid: str = None,
             LOG.error('Connection Error, are you connected to the internet?')
             exit(1)
 
+    if not quiet:
+        print(code, "uploaded")
+
     if check:
+        if not quiet:
+            print("Checking veredict...")
+
         for _ in range(0, 6):
             sleep(5)
             veredict = check_last(cookies=cookies, quiet=True)
@@ -220,11 +226,11 @@ def upload_problem(prog: str, code: str, cookies: dict, token_uid: str = None,
                     continue
                 else:
                     if not quiet:
-                        print(veredict['veredict'])
+                        print(code, veredict['veredict'])
                     if veredict['veredict'] in ('AC', '100/100'):
                         return 0
-                    else:
-                        return 1
+                    return 1
+
         LOG.error('Check timed out')
         return 2
     return 0
