@@ -138,7 +138,7 @@ def upload_problem(prog: str, code: str, cookies: dict, token_uid: str = None,
             LOG.debug('Public tests passed')
 
     if token_uid is None:
-        token_uid = get_token_uid(code)
+        token_uid = get_token_uid(code, **kwargs)
 
     extension = prog.split('.')[-1]  # To determine compiler
 
