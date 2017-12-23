@@ -148,7 +148,7 @@ def get_code(database: str, regex: str, no_download: 'Boolean', code: str = None
         regex_v2 = regex.split('_')[0]
         subcode = __match_regex__(regex=regex_v2, text=prog_name)
         if subcode is None:
-            LOG.error('Cannot find code in filename')
+            LOG.warning('Cannot find code in filename')
             return None
 
         code = __expand_subcode__(subcode, database=database,
