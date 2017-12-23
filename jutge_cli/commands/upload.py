@@ -96,7 +96,7 @@ def upload(prog: str, problem_set: 'Boolean', problem_sets: str,
 
     token_uid = None
 
-    for index, problem in enumerate(submit_queue):
+    for index, problem in enumerate(submit_queue, start=1):
         problem_code = get_code(code=None, prog=problem, quiet=quiet, **kwargs)
 
         if token_uid is None:
