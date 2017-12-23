@@ -86,20 +86,26 @@ def upload(prog: str, problem_set: 'Boolean', problem_sets: str,
 
     LOG.debug(submit_queue)
 
-    if len(submit_queue) > 10:
+    queue_len = len(submit_queue)
+
+    if queue_len > 10:
         print('Submit queue contains {} elements, continue? [Ny]'.format(
-            len(submit_queue)))
+            queue_len))
         if not input().lower() in ('y', 'ye', 'yes'):
             exit(130)
 
     token_uid = None
 
-    for problem in submit_queue:
+    for index, problem in enumerate(submit_queue):
         problem_code = get_code(code=None, prog=problem, **kwargs)
 
         if token_uid is None:
             token_uid = get_token_uid(problem_code, **kwargs)
 
+        if not quiet:
+            print("Uploading {}/{}: {}   {} ...".format(
+                index, queue_len, problem_code, problem
+                ))
         upload_problem(prog=problem, code=problem_code, token_uid=token_uid, **kwargs)
 
         sleep(delay/1000.0)
