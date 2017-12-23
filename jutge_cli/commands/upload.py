@@ -59,8 +59,7 @@ def upload(prog: str, problem_set: 'Boolean', problem_sets: str,
             LOG.error('Problem set not found')
             exit(20)
     else:
-        upload_problem(prog=prog, code=code, **kwargs)
-        exit(0)
+        exit(upload_problem(prog=prog, code=code, **kwargs))
 
     LOG.debug(problems)
 
@@ -126,6 +125,11 @@ def upload_problem(prog: str, code: str, cookies: dict, token_uid: str = None,
     :param no_download: do not connecto to jutge.org (fails immediately)
     :param skip_test: skip tests before upload
     :param quiet: supress output
+
+    :return:
+        0 accepted // not checked
+        1 wa
+        2 timeout
     """
     if no_download:
         LOG.error('Remove --no-download flag to upload')
@@ -218,11 +222,12 @@ def upload_problem(prog: str, code: str, cookies: dict, token_uid: str = None,
                     if not quiet:
                         print(veredict['veredict'])
                     if veredict['veredict'] in ('AC', '100/100'):
-                        exit(0)
+                        return 0
                     else:
-                        exit(1)
+                        return 1
         LOG.error('Check timed out')
-        exit(2)
+        return 2
+    return 0
 
 
 def get_token_uid(code: str, cookies: dict, **kwargs):
