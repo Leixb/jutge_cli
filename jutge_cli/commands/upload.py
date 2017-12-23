@@ -38,7 +38,7 @@ LOG = getLogger('jutge.upload')
 
 def upload(prog: str, problem_set: 'Boolean', problem_sets: str,
            delay: int = 100, no_skip_accepted: 'Boolean' = False,
-           code: str = None, **kwargs):
+           code: str = None, quiet: 'Boolean' = False, **kwargs):
     """Loops through problems in problem set to upload by calling
     upload_problem
 
@@ -97,7 +97,7 @@ def upload(prog: str, problem_set: 'Boolean', problem_sets: str,
     token_uid = None
 
     for index, problem in enumerate(submit_queue):
-        problem_code = get_code(code=None, prog=problem, **kwargs)
+        problem_code = get_code(code=None, prog=problem, quiet=quiet, **kwargs)
 
         if token_uid is None:
             token_uid = get_token_uid(problem_code, **kwargs)
@@ -106,7 +106,8 @@ def upload(prog: str, problem_set: 'Boolean', problem_sets: str,
             print("Uploading {}/{}: {}   {} ...".format(
                 index, queue_len, problem_code, problem
                 ))
-        upload_problem(prog=problem, code=problem_code, token_uid=token_uid, **kwargs)
+        upload_problem(prog=problem, code=problem_code, token_uid=token_uid,
+                       quiet=quiet, **kwargs)
 
         sleep(delay/1000.0)
 
