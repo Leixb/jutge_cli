@@ -329,8 +329,8 @@ PARSER_UPLOAD.add_argument(
     '--check', action='store_true', default=False,
     help='wait for veredict after uploading')
 PARSER_UPLOAD.add_argument(
-    '--token-uuid', type=str, default=None,
-    help='Use this token_uuid to upload problem')
+    '--token-uid', type=str, default=None,
+    help='Use this token_uid to upload problem')
 
 def config_logger(verbosity, quiet):
     """Configure logger based on verbosity and quiet
