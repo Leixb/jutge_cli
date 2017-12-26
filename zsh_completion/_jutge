@@ -157,6 +157,7 @@ case $state in
                     '--no-skip-accepted[do not skip accepted problems when uploading a problem set]'\
                     '--check[wait for veredict from jutge]'\
                     \
+                    '--token-uuid[token uuid to use on upload]:token_uuid'\
                     + '(help)' {-h,--help}'[show help and exit]' \
                     + '(verbosity)' \
                         {-q,--quiet}'[supress output]'\
