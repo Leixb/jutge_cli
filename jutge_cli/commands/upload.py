@@ -38,7 +38,8 @@ LOG = getLogger('jutge.upload')
 
 def upload(prog: str, problem_set: 'Boolean', problem_sets: str,
            delay: int = 100, no_skip_accepted: 'Boolean' = False,
-           code: str = None, quiet: 'Boolean' = False, **kwargs):
+           code: str = None, quiet: 'Boolean' = False, token_uid: str = None,
+           **kwargs):
     """Loops through problems in problem set to upload by calling
     upload_problem
 
@@ -49,6 +50,7 @@ def upload(prog: str, problem_set: 'Boolean', problem_sets: str,
     :param no_skip_accepted: do not skip already accepted problems of problem
         set
     :param code: to remove code from kwargs so that check_problem() doesn't fail when called
+    :param token_uid: token_uid to use on upload
     """
 
     if problem_set:
@@ -59,7 +61,8 @@ def upload(prog: str, problem_set: 'Boolean', problem_sets: str,
             LOG.error('Problem set not found')
             exit(20)
     else:
-        exit(upload_problem(prog=prog, code=code, **kwargs))
+        exit(upload_problem(prog=prog, code=code,
+                            token_uid=token_uid, **kwargs))
 
     LOG.debug(problems)
 
@@ -92,8 +95,6 @@ def upload(prog: str, problem_set: 'Boolean', problem_sets: str,
             queue_len))
         if not input().lower() in ('y', 'ye', 'yes'):
             exit(130)
-
-    token_uid = None
 
     for index, problem in enumerate(submit_queue, start=1):
         problem_code = get_code(code=None, prog=problem, quiet=quiet, **kwargs)
