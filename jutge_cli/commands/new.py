@@ -50,7 +50,7 @@ def new(problem_set: 'Boolean', code: str, **kwargs):
     if problem_set:
         __new_problem_set__(set_name=code, **kwargs)
     else:
-        __new_standalone_file__(code=code, **kwargs)
+        exit(__new_standalone_file__(code=code, **kwargs))
 
 def __new_standalone_file__(code: str, title: str, extension: str,
         overwrite: 'Boolean' = False, quiet: 'Boolean' = False, **kwargs):
@@ -72,6 +72,9 @@ def __new_standalone_file__(code: str, title: str, extension: str,
                 new_file.write(TEMPLATES[extension])
     elif not quiet:
         print('File already exists:', file_name)
+        return 1
+
+    return 0
 
 def __new_problem_set__(set_name: str, problem_sets: dict, extension: str,
         overwrite: 'Boolean' = False, **kwargs):
