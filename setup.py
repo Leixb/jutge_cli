@@ -12,7 +12,7 @@ with open(path.join(CURRENT_PATH, 'README.rst'), encoding='utf-8') as f:
 
 setup(
     name='jutge_cli',
-    version='2.1.11',
+    version='2.2.0',
 
     description='CLI to automate tests for jutge.org problems',
     long_description=LONG_DESCRIPTION,
