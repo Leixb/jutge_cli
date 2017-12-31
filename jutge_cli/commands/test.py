@@ -133,7 +133,9 @@ def test(prog: str, code: str, database: str, no_color: 'Boolean' = False,
                                                     bin=prog_name)
         run_command = run_command.split()
     else:
-        if prog_name[0] not in ('.', '/'):
+        if prog_name[0] in ('.', '/'):
+            run_command = prog_name
+        else:
             run_command = './' + prog_name
 
     cont, cor = 0, 0
