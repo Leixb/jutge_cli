@@ -29,8 +29,8 @@ LOG = getLogger('jutge.archive')
 
 
 def archive(prog: "FileType('w')", code: str, title: str, folder: str,
-        problem_sets: 'Boolean' = None, overwrite: 'Boolean' = False,
-        copy: 'Boolean' = False, **kwargs):
+            problem_sets: 'Boolean' = None, overwrite: 'Boolean' = False,
+            copy: 'Boolean' = False, **kwargs):
     """Move file to the archive
 
     :param prog: program file to archive

@@ -36,7 +36,7 @@ LOG = getLogger('jutge.check_submissions')
 
 
 def check_submissions(code: str = None, no_download: 'Boolean' = False,
-        quiet: 'Boolean' = False, **kwargs):
+                      quiet: 'Boolean' = False, **kwargs):
     """Save copy of args to the class
 
     If it is called from jutge.py subcommand it will call method
@@ -91,6 +91,8 @@ def check_problem(code: str, cookies: dict, **kwargs) -> str:
         LOG.debug(contents)
         if contents.startswith('Problem'):
             return contents.split(':')[1].strip()
+
+    return None
 
 def check_last(cookies: dict, last=False, reverse=False, quiet=False,
                no_download=False, **kwargs) -> dict:

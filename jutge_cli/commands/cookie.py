@@ -34,7 +34,7 @@ LOG = getLogger('jutge.cookie')
 
 
 def get_cookie(cookie: str, no_download: 'Boolean',
-        skip_check: 'Boolean' = False, **kwargs) -> dict:
+               skip_check: 'Boolean' = False, **kwargs) -> dict:
     """Wrapper around Cookie class that returns cookie dict
 
     :param cookie: cookie value
@@ -57,7 +57,8 @@ class Cookie:
     """
 
     def __init__(self, cookie: str = None, no_download: 'Boolean' = False,
-            skip_check: 'Boolean' = False, subcmd: str = 'cookie', **kwargs):
+                 skip_check: 'Boolean' = False, subcmd: str = 'cookie',
+                 **kwargs):
         """Save args and initialize class variables
 
         :param cookie: cookie value
@@ -102,7 +103,7 @@ skip the check use --skip-check)')
     def make_file(self):
         """Save cookie to file: /tmp/jutge_cookie (or equivalent)
         """
-        LOG.debug('writing file ' + self.file_name)
+        LOG.debug('writing file %s', self.file_name)
         with open(self.file_name, 'w') as cookie_file:
             cookie_file.write(self.cookie + '\n')
 

@@ -36,7 +36,7 @@ LOG = getLogger('jutge.get_code')
 
 
 def __expand_subcode__(subcode: str, database: str, cookies: dict,
-        no_download: 'Boolean', **kwargs) -> str:
+                       no_download: 'Boolean', **kwargs) -> str:
     """Return code from subcode
 
     This function uses info from the database if available or connects
@@ -80,7 +80,8 @@ def __expand_subcode__(subcode: str, database: str, cookies: dict,
         if code == 'Error':
             LOG.error('Invalid code')
             return None
-        return code
+
+    return code
 
 
 def __match_regex__(regex: str, text: str) -> str:
@@ -103,7 +104,7 @@ def __match_regex__(regex: str, text: str) -> str:
 
 
 def get_code(database: str, regex: str, no_download: 'Boolean', code: str = None,
-        prog: str = None, **kwargs) -> str:
+             prog: str = None, **kwargs) -> str:
     """Return problem code
 
     :param database: database folder path

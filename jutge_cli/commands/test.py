@@ -40,9 +40,9 @@ __ANSI_COLORS__ = dict(
 
 
 def test(prog: str, code: str, database: str, no_color: 'Boolean' = False,
-        no_custom: 'Boolean' = False, inp_suffix: str = 'inp',
-        cor_suffix: str = 'cor', diff_prog: str = 'diff',
-        diff_flags: str = '-y', quiet: 'Boolean' = False, **kwargs) -> int:
+         no_custom: 'Boolean' = False, inp_suffix: str = 'inp',
+         cor_suffix: str = 'cor', diff_prog: str = 'diff',
+         diff_flags: str = '-y', quiet: 'Boolean' = False, **kwargs) -> int:
     """Test prog against test cases in database
 
     :param prog: program file
@@ -83,31 +83,31 @@ def test(prog: str, code: str, database: str, no_color: 'Boolean' = False,
         source_file = prog.name
 
     compiler = dict(
-            ada='gnat {src} -o {bin}',
-            bas='fbc {src} -o {bin}',
-            c='gcc -g {src} -o {bin}',
-            cc='g++ -std=c++11 -g {src} -o {bin}',
-            cpp='g++ -std=c++11 -g {src} -o {bin}',
-            d='gdc {src} -o {bin}',
-            f='gfortran {src} -o {bin}',
-            hs='ghc -O3 {src} -o {bin}',
-            pas='fpc -Sd -Co -Cr -Ct -Ci -v0 {src} -o {bin}',
-            rs='rustc {src} -o {bin}',
-            )
+        ada='gnat {src} -o {bin}',
+        bas='fbc {src} -o {bin}',
+        c='gcc -g {src} -o {bin}',
+        cc='g++ -std=c++11 -g {src} -o {bin}',
+        cpp='g++ -std=c++11 -g {src} -o {bin}',
+        d='gdc {src} -o {bin}',
+        f='gfortran {src} -o {bin}',
+        hs='ghc -O3 {src} -o {bin}',
+        pas='fpc -Sd -Co -Cr -Ct -Ci -v0 {src} -o {bin}',
+        rs='rustc {src} -o {bin}',
+        )
     interpreter = dict(
-            bf='beef {src}',
-            go='go run {src}',
-            js='node {src}',
-            lisp='clisp {src}',
-            lua='lua {src}',
-            php='php {src}',
-            pl='perl {src}',
-            py2='python2 {src}',
-            py3='python3 {src}',
-            py='python3 {src}',
-            r='Rscript {src}',
-            rb='ruby {src}',
-            )
+        bf='beef {src}',
+        go='go run {src}',
+        js='node {src}',
+        lisp='clisp {src}',
+        lua='lua {src}',
+        php='php {src}',
+        pl='perl {src}',
+        py2='python2 {src}',
+        py3='python3 {src}',
+        py='python3 {src}',
+        r='Rscript {src}',
+        rb='ruby {src}',
+        )
 
     extension = source_file.split('.')[-1]
     prog_name = '.'.join(source_file.split('.')[:-1]) + '.x'

@@ -60,7 +60,7 @@ def get_title(code: str, database: str, **kwargs) -> str:
 
 
 def show(code: str, mode: str, database: str, inp_suffix: str = 'inp',
-        cor_suffix: str = 'cor', html = False, **kwargs):
+         cor_suffix: str = 'cor', html=False, **kwargs):
     """Print title, test_cases or statement of given problem
 
     :param code: problem code

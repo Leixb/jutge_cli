@@ -237,7 +237,13 @@ def upload_problem(prog: str, code: str, cookies: dict, token_uid: str = None,
     return 0
 
 
-def get_token_uid(code: str, cookies: dict, **kwargs):
+def get_token_uid(code: str, cookies: dict, **kwargs) -> str:
+    """
+    Extract token_uid from jutge.org upload
+    exits on failure
+
+    :return: str containing token_uid
+    """
 
     web = 'https://jutge.org/problems/{}/submissions'.format(code)
     LOG.debug(web)

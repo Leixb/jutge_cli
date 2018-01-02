@@ -53,7 +53,8 @@ def new(problem_set: 'Boolean', code: str, **kwargs):
         exit(__new_standalone_file__(code=code, **kwargs))
 
 def __new_standalone_file__(code: str, title: str, extension: str,
-        overwrite: 'Boolean' = False, quiet: 'Boolean' = False, **kwargs):
+                            overwrite: 'Boolean' = False,
+                            quiet: 'Boolean' = False, **kwargs):
     """Create new file from code and title
 
     :param code: problem code
@@ -61,7 +62,6 @@ def __new_standalone_file__(code: str, title: str, extension: str,
     :param extension: file extension
     :param overwrite: overwrite existing files
     """
-    sub_code = code.split('_')[0]
 
     file_name = './{}.{}'.format(title, extension)
     if not isfile(file_name) or overwrite:
@@ -77,7 +77,7 @@ def __new_standalone_file__(code: str, title: str, extension: str,
     return 0
 
 def __new_problem_set__(set_name: str, problem_sets: dict, extension: str,
-        overwrite: 'Boolean' = False, **kwargs):
+                        overwrite: 'Boolean' = False, **kwargs):
     """Create all files in the problem set set_name
 
     :param set_name: problem set name

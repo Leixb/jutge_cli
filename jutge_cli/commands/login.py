@@ -31,7 +31,7 @@ LOG = getLogger('jutge.login')
 
 
 def login(email: str, password: str, prompt: 'Boolean', quiet: 'Boolean',
-        no_download: 'Boolean', **kwargs):
+          no_download: 'Boolean', **kwargs):
     """Login to jutge.org
 
     :param email: login email
