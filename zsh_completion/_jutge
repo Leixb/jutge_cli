@@ -198,7 +198,7 @@ case $state in
                         {-v,--verbosity}'[more verbose output]' \
                     + '(regex)' {-r,--regex}'[regex]:regex'\
                     + '(database)' {-d,--database}'[directory containing test cases]:database:_files -/'\
-                    + '(type)' {-t,--type}'[file extension]:ext'
+                    + '(extension)' {-e,--extension}'[file extension]:ext'
             ;;
             (download|down)
                 _arguments \
