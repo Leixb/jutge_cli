@@ -33,8 +33,10 @@ from .commands import add_test, archive, check_submissions, cookie,\
                       new, show, test, upload
 
 
-JUTGE_CLI_VERSION = pkg_resources.require("jutge_cli")[0].version
-# '2.2.0'
+try:
+    JUTGE_CLI_VERSION = pkg_resources.require("jutge_cli")[0].version
+except:
+    JUTGE_CLI_VERSION = '*unknown*'
 
 CONFIG = defaults.config()
 DEFAULT_PARAM = CONFIG['param']
