@@ -26,12 +26,15 @@ import logging
 from os.path import expanduser
 
 import argparse
+import pkg_resources
 
 from .commands import add_test, archive, check_submissions, cookie,\
                       defaults, download, get_code, import_zip, login,\
                       new, show, test, upload
 
-JUTGE_CLI_VERSION = '2.2.0'
+
+JUTGE_CLI_VERSION = pkg_resources.require("jutge_cli")[0].version
+# '2.2.0'
 
 CONFIG = defaults.config()
 DEFAULT_PARAM = CONFIG['param']
