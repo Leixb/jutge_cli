@@ -313,6 +313,11 @@ PARSER_UPLOAD.add_argument(
     metavar='COMPILER_ID',
     help='jutge.org compiler_id to use')
 PARSER_UPLOAD.add_argument(
+    '--annotation', type=str,
+    metavar='MESSAGE',
+    default='Uploaded using jutge_cli {}'.format(JUTGE_CLI_VERSION),
+    help='Annotation to send with upload')
+PARSER_UPLOAD.add_argument(
     '--problem-set', action='store_true', default=False,
     help='upload all files in problem set')
 PARSER_UPLOAD.add_argument(

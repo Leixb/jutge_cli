@@ -112,9 +112,10 @@ def upload(prog: str, problem_set: 'Boolean', problem_sets: str,
         sleep(delay/1000.0)
 
 def upload_problem(prog: str, code: str, cookies: dict, token_uid: str = None,
-                   compiler: str = None, check: 'Boolean' = True,
-                   no_download: 'Boolean' = False, skip_test: 'Boolean' = False,
-                   quiet: 'Boolean' = False, **kwargs):
+                   compiler: str = None, annotation: str = '',
+                   check: 'Boolean' = True, no_download: 'Boolean' = False,
+                   skip_test: 'Boolean' = False, quiet: 'Boolean' = False,
+                   **kwargs):
     """Upload program to problem identified by code
 
     :param prog: program file to upload
@@ -122,6 +123,7 @@ def upload_problem(prog: str, code: str, cookies: dict, token_uid: str = None,
     :param token_uid: token_uid to upload
     :param cookies: cookies used to connect to jutge.org
     :param compiler: compiler to use
+    :param annotation: annotation to send with upload
     :param check: check submission result
     :param no_download: do not connecto to jutge.org (fails immediately)
     :param skip_test: skip tests before upload
@@ -189,7 +191,7 @@ def upload_problem(prog: str, code: str, cookies: dict, token_uid: str = None,
         compilers[extension] = compiler
 
     data = {
-        'annotation' : 'Uploaded by jutge_cli',
+        'annotation' : annotation,
         'compiler_id' : compilers[extension],
         'submit' : 'submit',
         'token_uid' : token_uid

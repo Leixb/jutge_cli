@@ -151,6 +151,7 @@ case $state in
                 _arguments \
                     '1:filename:_files' \
                     '--compiler[compiler id to use]:compiler:_jutge_compilers'\
+                    '--annotation[Annotation to dend]:message'\
                     '--problem-set[upload all files from a problem set]'\
                     '--skip-test[do not test against public test cases before upload]'\
                     '--delay[delay between jutge-org upload requests]:milliseconds'\
