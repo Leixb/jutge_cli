@@ -43,7 +43,7 @@ def test(prog: str, code: str, database: str, no_color: 'Boolean' = False,
          no_custom: 'Boolean' = False, inp_suffix: str = 'inp',
          cor_suffix: str = 'cor', diff_prog: str = 'diff',
          diff_flags: str = '-y', quiet: 'Boolean' = False,
-         custom_compilers: dict = None, custom_interpreters: dict = None,
+         custom_compilers: dict = {}, custom_interpreters: dict = {},
          **kwargs) -> int:
     """Test prog against test cases in database
 
