@@ -115,6 +115,7 @@ def upload_problem(prog: str, code: str, cookies: dict, token_uid: str = None,
                    compiler: str = None, annotation: str = '',
                    check: 'Boolean' = True, no_download: 'Boolean' = False,
                    skip_test: 'Boolean' = False, quiet: 'Boolean' = False,
+                   upload_compilers: dict = {},
                    **kwargs):
     """Upload program to problem identified by code
 
@@ -186,6 +187,10 @@ def upload_problem(prog: str, code: str, cookies: dict, token_uid: str = None,
         v='Verilog',
         ws='WS',
     )
+
+    compiler = {**compiler, *upload_compilers}
+
+    LOG.debug{compiler}
 
     if compiler is not None:
         compilers[extension] = compiler

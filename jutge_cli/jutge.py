@@ -419,6 +419,8 @@ def main():
     args_dict['custom_compilers'] = DEFAULT_PARAM['compilers']
     args_dict['custom_interpreters'] = DEFAULT_PARAM['interpreters']
 
+    args_dict['upload_compilers'] = DEFAULT_PARAM['upload_compilers']
+
     log.debug(args_dict)
 
     args.subcommand(**args_dict)  # expand flags to kwargs

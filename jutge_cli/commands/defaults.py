@@ -55,7 +55,8 @@ def config() -> dict:
         'extension' : 'cc',
         'delay' : 100,
         'compilers' : dict(),
-        'interpreters' : dict()
+        'interpreters' : dict(),
+        'upload_compilers' : dict()
     }
 
     problem_sets = {}
