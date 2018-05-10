@@ -188,9 +188,9 @@ def upload_problem(prog: str, code: str, cookies: dict, token_uid: str = None,
         ws='WS',
     )
 
-    compiler = {**compiler, **upload_compilers}
+    compilers = {**compilers, **upload_compilers}
 
-    LOG.debug(compiler)
+    LOG.debug(compilers)
 
     if compiler is not None:
         compilers[extension] = compiler
