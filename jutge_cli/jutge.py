@@ -421,6 +421,8 @@ def main():
 
     args_dict['custom_interpreters'] = DEFAULT_PARAM['interpreters']
 
+    log.debug(args_dict)
+
     args.subcommand(**args_dict)  # expand flags to kwargs
 
 if __name__ == '__main__':
