@@ -203,7 +203,7 @@ PARSER_NEW.add_argument(
     'code', type=str,
     help='problem code')
 PARSER_NEW.add_argument(
-    '-e', '--extension', type=str, default='cpp',
+    '-e', '--extension', type=str, default=DEFAULT_PARAM['extension'],
     help='file extension')
 PARSER_NEW.add_argument(
     '--overwrite', action='store_true', default=False,
@@ -287,7 +287,7 @@ PARSER_IMPORT_ZIP.add_argument(
     default=DEFAULT_PARAM['folder'],
     help='archive folder')
 PARSER_IMPORT_ZIP.add_argument(
-    '--delay', type=int, default=100,
+    '--delay', type=int, default=DEFAULT_PARAM['delay'],
     metavar='milliseconds',
     help='delay between jutge.org GET requests')
 PARSER_IMPORT_ZIP.add_argument(
@@ -321,7 +321,7 @@ PARSER_UPLOAD.add_argument(
     '--problem-set', action='store_true', default=False,
     help='upload all files in problem set')
 PARSER_UPLOAD.add_argument(
-    '--delay', type=int, default=100,
+    '--delay', type=int, default=DEFAULT_PARAM['delay'],
     metavar='milliseconds',
     help='delay between jutge.org upload requests')
 PARSER_UPLOAD.add_argument(

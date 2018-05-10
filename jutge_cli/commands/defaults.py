@@ -51,7 +51,9 @@ def config() -> dict:
         'cor-suffix' : 'cor',
         'folder' : '~/Documents/jutge/Done',
         'email' : None,
-        'password' : None
+        'password' : None,
+        'extension' : 'cc',
+        'delay' : 100
     }
 
     problem_sets = {}
