@@ -418,8 +418,8 @@ def main():
 
     log.debug(args_dict)
 
-    args_dict['compilers'] = DEFAULT_PARAM['compilers']
-    args_dict['interpreters'] = DEFAULT_PARAM['interpreters']
+    args_dict['custom_compilers'] = DEFAULT_PARAM['compilers']
+    args_dict['custom_interpreters'] = DEFAULT_PARAM['interpreters']
 
     args.subcommand(**args_dict)  # expand flags to kwargs
 
