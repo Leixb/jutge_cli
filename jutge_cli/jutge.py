@@ -416,13 +416,12 @@ def main():
     if 'prog' not in args_dict:
         args_dict['prog'] = None
 
-    log.debug(args_dict)
-
     args_dict['custom_compilers'] = DEFAULT_PARAM['compilers']
     args_dict['custom_interpreters'] = DEFAULT_PARAM['interpreters']
 
-    args.subcommand(**args_dict)  # expand flags to kwargs
+    args_dict['custom_interpreters'] = DEFAULT_PARAM['interpreters']
 
+    args.subcommand(**args_dict)  # expand flags to kwargs
 
 if __name__ == '__main__':
     main()

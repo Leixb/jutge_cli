@@ -114,6 +114,8 @@ def test(prog: str, code: str, database: str, no_color: 'Boolean' = False,
         rb='ruby {src}',
         )
 
+    log.debug('custom_compilers =', custom_compilers)
+
     compiler = {**compiler, **custom_compilers}
     interpreter = {**interpreter, **custom_interpreters}
 
