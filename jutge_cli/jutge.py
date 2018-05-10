@@ -416,10 +416,14 @@ def main():
     if 'prog' not in args_dict:
         args_dict['prog'] = None
 
+    args_dict['custom_compilers'] = DEFAULT_PARAM['compilers']
+    args_dict['custom_interpreters'] = DEFAULT_PARAM['interpreters']
+
+    args_dict['upload_compilers'] = DEFAULT_PARAM['upload_compilers']
+
     log.debug(args_dict)
 
     args.subcommand(**args_dict)  # expand flags to kwargs
-
 
 if __name__ == '__main__':
     main()

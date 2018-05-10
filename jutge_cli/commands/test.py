@@ -42,7 +42,9 @@ __ANSI_COLORS__ = dict(
 def test(prog: str, code: str, database: str, no_color: 'Boolean' = False,
          no_custom: 'Boolean' = False, inp_suffix: str = 'inp',
          cor_suffix: str = 'cor', diff_prog: str = 'diff',
-         diff_flags: str = '-y', quiet: 'Boolean' = False, **kwargs) -> int:
+         diff_flags: str = '-y', quiet: 'Boolean' = False,
+         custom_compilers: dict = {}, custom_interpreters: dict = {},
+         **kwargs) -> int:
     """Test prog against test cases in database
 
     :param prog: program file
@@ -55,6 +57,9 @@ def test(prog: str, code: str, database: str, no_color: 'Boolean' = False,
     :param diff_prog: diff program to use
     :param diff_flags: diff flags to use
     :param quiet: supress output
+
+    :param custom_compilers: user defined compilers
+    :param custom_interpreters: user defined interpreter
 
     :return: number of failed tests
     """
@@ -108,6 +113,11 @@ def test(prog: str, code: str, database: str, no_color: 'Boolean' = False,
         r='Rscript {src}',
         rb='ruby {src}',
         )
+
+    LOG.debug(custom_compilers)
+
+    compiler = {**compiler, **custom_compilers}
+    interpreter = {**interpreter, **custom_interpreters}
 
     extension = source_file.split('.')[-1]
     prog_name = '.'.join(source_file.split('.')[:-1]) + '.x'
