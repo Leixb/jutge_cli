@@ -188,7 +188,7 @@ def upload_problem(prog: str, code: str, cookies: dict, token_uid: str = None,
         ws='WS',
     )
 
-    compiler = {**compiler, *upload_compilers}
+    compiler = {**compiler, **upload_compilers}
 
     LOG.debug{compiler}
 
