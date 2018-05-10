@@ -53,7 +53,9 @@ def config() -> dict:
         'email' : None,
         'password' : None,
         'extension' : 'cc',
-        'delay' : 100
+        'delay' : 100,
+        'compilers' : None,
+        'interpreters' : None
     }
 
     problem_sets = {}
