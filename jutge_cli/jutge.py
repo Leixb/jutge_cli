@@ -280,7 +280,7 @@ PARSER_IMPORT_ZIP = SUBPARSERS.add_parser(
     parents=[PARENT_PARSER])
 PARSER_IMPORT_ZIP.set_defaults(subcommand=import_zip.import_zip)
 PARSER_IMPORT_ZIP.add_argument(
-    'zip', type=argparse.FileType('r'),
+    'zip_file', type=argparse.FileType('r'),
     help='zip file containing the problems')
 PARSER_IMPORT_ZIP.add_argument(
     '-f', '--folder', type=str,
